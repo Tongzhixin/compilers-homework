@@ -9,12 +9,13 @@
   */
 %{
 
-//#include <seal-parse.h>
+#include <seal-parse.h>
 #include <stringtab.h>
 #include <utilities.h>
 #include <stdint.h>
 #include <stdlib.h>
-
+#include <string>
+#include <sstream>
 /* The compiler assumes these identifiers. */
 #define yylval seal_yylval
 #define yylex  seal_yylex
@@ -45,10 +46,16 @@ extern YYSTYPE seal_yylval;
 /*
  *  Add Your own definitions here
  */
-
+char* hex2Dec (char* hex) {
+  int number;
+  char* res = new char[MAX_STR_CONST];
+  number = std::stoi(hex, nullptr, 16);
+  sprintf(res, "%d", number);
+  return res;
+}
 
 %}
-
+%option noyywrap
  /*
   * Define names for regular expressions here.
   */
@@ -60,82 +67,86 @@ BREAK break
 CONTINUE continue 
 FUNC func 
 RETURN return
+VAR var
+STRUCT struct
 
 OBJECTID [a-z][a-zA-Z0-9_]*
-TYPEID [A-Z][a-zA-Z0-9_]*
+TYPEID   (Int|Float|String|Bool|Void)
 TRUE true
 FALSE false
+INT (0|[1-9][0-9]*)
+INT_HEX  0[Xx][a-fA-F0-9]+
+FLOAT (0|[1-9][0-9]*).[0-9]+
 
-VAR var
+
 AND &&
-OR ||
+
 EQUAL ==
+NE !=
 GE >=
 LE <=
 WHITESPACE [\f\r\t\v]+
 NEWLINE \n
 SYMBOLS [+/\-*=<~,;:(){}%>&!\^|]
-INVALID					[^a-zA-Z0-9_ \f\r\t\v\n+/\-*=<.~,;:()@{}]
+INVALID		[^a-zA-Z0-9_ \f\r\t\v\n+/\-*=<~,;:(){}%>&!\^|]
+
 %x COMMENT
 %x INLINE_COMMENT
 %x STRING
 
 %%
 
-/*	
+ /*	
  *	Add Rules here. Error function has been given.
  */
-/*
-  *  Nested comments
-  */
-"(*"										{ BEGIN(COMMENT); }
-"*)" {
-	cool_yylval.error_msg = "Unmatched *)";
-	return ERROR;
-}
-<COMMENT><<EOF>> {
-	BEGIN(INITIAL);
-	cool_yylval.error_msg = "EOF in comment";
-	return ERROR;
-}
-<COMMENT>[^*\n]*				{}
-<COMMENT>"*"+[^"*)"\n]*	{}
-<COMMENT>\n							{ curr_lineno++; }
-<COMMENT>"*"+")"        { BEGIN(INITIAL); }
 
- /*
-  * Inline comments
-  */
-"--"	{ BEGIN(INLINE_COMMENT); }
-<INLINE_COMMENT><<EOF>> {
-	BEGIN(INITIAL);
-	cool_yylval.error_msg = "EOF in comment";
-	return ERROR;
-}
-<INLINE_COMMENT>[^\n]*	{}
-<INLINE_COMMENT>\n {
-	curr_lineno++;
-	BEGIN(INITIAL);
-}
 
  /*
   *  The multiple-character operators.
   */
 {INT} {
-	cool_yylval.symbol = inttable.add_string(yytext);
-	return INT_CONST;
+	seal_yylval.symbol = inttable.add_string(yytext);
+	return CONST_INT;
+}
+{INT_HEX} {
+	char* dec_number = hex2Dec(yytext);
+	seal_yylval.symbol = inttable.add_string(dec_number);
+	return CONST_INT;
 }
 {TRUE} {
-	cool_yylval.boolean = true;
-	return BOOL_CONST;
+	seal_yylval.boolean = true;
+	return CONST_BOOL;
 }
 {FALSE} {
-	cool_yylval.boolean = false;
-	return BOOL_CONST;
+	seal_yylval.boolean = false;
+	return CONST_BOOL;
 }
-{DARROW}		{ return (DARROW); }
-{LE}				{ return (LE); }
-{ASSIGN}		{ return (ASSIGN); }
+{IF}				{ return IF; }
+{ELSE}			{ return ELSE; }
+{WHILE}			{ return WHILE; }
+{FOR}           { return FOR; }
+{BREAK}         { return BREAK; }
+{CONTINUE}      { return CONTINUE; } 
+{RETURN}        { return RETURN; }
+{FUNC}          { return FUNC; }
+{VAR}           { return VAR; }
+{STRUCT}        { return STRUCT; }
+{AND}           { return AND; }
+"||"            { return OR; }
+
+{NE}            { return NE; }
+{GE}            { return GE; }
+{LE}            { return LE; }
+"=="         { return EQUAL; }
+{FLOAT}  {
+	seal_yylval.symbol = floattable.add_string(yytext);
+	return CONST_FLOAT;
+}
+
+
+
+
+
 {WHITESPACE}	{}
 {NEWLINE}		{ curr_lineno++; }
 {SYMBOLS} 	{ return int(yytext[0]); }
@@ -145,31 +156,17 @@ INVALID					[^a-zA-Z0-9_ \f\r\t\v\n+/\-*=<.~,;:()@{}]
   * Keywords are -insensitive except for the values true and false,
   * which must begin with a lower- letter.
   */
-{CLASS}			{ return (CLASS); }
-{ELSE}			{ return (ELSE); }
-{FI}				{ return (FI); }
-{IF}				{ return (IF); }
-{IN}				{ return (IN); }
-{INHERITS}	{ return (INHERITS); }
-{ISVOID}		{ return (ISVOID); }
-{LET}				{ return (LET); }
-{LOOP}			{ return (LOOP); }
-{POOL}			{ return (POOL); }
-{THEN}			{ return (THEN); }
-{WHILE}			{ return (WHILE); }
-{CASE}			{ return (CASE); }
-{ESAC}			{ return (ESAC); }
-{NEW}				{ return (NEW); }
-{OF}				{ return (OF); }
-{NOT}				{ return (NOT); }
+
+
+
 
 {TYPEID} {
-	cool_yylval.symbol = idtable.add_string(yytext);
-	return (TYPEID);
+	seal_yylval.symbol = idtable.add_string(yytext);
+	return TYPEID;
 }
 {OBJECTID} {
-	cool_yylval.symbol = idtable.add_string(yytext);
-	return (OBJECTID);
+	seal_yylval.symbol = idtable.add_string(yytext);
+	return OBJECTID;
 }
  /*
   *  String constants (C syntax)
@@ -177,90 +174,38 @@ INVALID					[^a-zA-Z0-9_ \f\r\t\v\n+/\-*=<.~,;:()@{}]
   *  \n \t \b \f, the result is c.
   *
   */
-\" {
-	string_buf_ptr = string_buf;
-	BEGIN(STRING);
-}
-<STRING><<EOF>> {
-	BEGIN(INITIAL);
-	cool_yylval.error_msg = "EOF in string constant";
+"/*"	{ BEGIN COMMENT; }
+"*/" {
+	seal_yylval.error_msg = "Unmatched */";
 	return ERROR;
 }
-<STRING>\n {
+<COMMENT><<EOF>> {
+	BEGIN INITIAL;
+	seal_yylval.error_msg = "EOF in comment";
+	return ERROR;
+}
+<COMMENT>[^*\n]*				{}
+<COMMENT>"*"+[^"*/"\n]*	{}
+<COMMENT>\n							{ curr_lineno++; }
+<COMMENT>"*"+"/"        { BEGIN INITIAL; }
+
+ /*
+  * Inline comments
+  */
+"//"	{ BEGIN INLINE_COMMENT; }
+<INLINE_COMMENT><<EOF>> {
+	BEGIN INITIAL;
+	seal_yylval.error_msg = "EOF in comment";
+	return ERROR;
+}
+<INLINE_COMMENT>[^\n]*	{}
+<INLINE_COMMENT>\n {
 	curr_lineno++;
-	BEGIN(INITIAL);
-	cool_yylval.error_msg = "Unterminated string constant";
-	return ERROR;
-}
-<STRING>\0 {
-	BEGIN(INITIAL);
-	cool_yylval.error_msg = "String contains null character";
-	return ERROR;
-}
-<STRING>\"	{
-	BEGIN(INITIAL);
-	*string_buf_ptr = '\0';
-	cool_yylval.symbol = stringtable.add_string(string_buf);
-	return STR_CONST;
-}
-<STRING>\\n  {
-	if ((string_buf_ptr - 1) == &string_buf[MAX_STR_CONST-1]) {
-		BEGIN(INITIAL);
-		cool_yylval.error_msg = "String constant too long";
-		return ERROR;
-	}
-	*string_buf_ptr++ = '\n';
-}
-<STRING>\\t  {
-	if ((string_buf_ptr - 1) == &string_buf[MAX_STR_CONST-1]) {
-		BEGIN(INITIAL);
-		cool_yylval.error_msg = "String constant too long";
-		return ERROR;
-	}
-	*string_buf_ptr++ = '\t';
-}
-<STRING>\\b  {
-	if ((string_buf_ptr - 1) == &string_buf[MAX_STR_CONST-1]) {
-		BEGIN(INITIAL);
-		cool_yylval.error_msg = "String constant too long";
-		return ERROR;
-	}
-	*string_buf_ptr++ = '\b';
-}
-<STRING>\\f  {
-	if ((string_buf_ptr - 1) == &string_buf[MAX_STR_CONST-1]) {
-		BEGIN(INITIAL);
-		cool_yylval.error_msg = "String constant too long";
-		return ERROR;
-	}
-	*string_buf_ptr++ = '\f';
-}
-<STRING>\\(.|\n)	{
-	if ((string_buf_ptr - 1) == &string_buf[MAX_STR_CONST-1]) {
-		BEGIN(INITIAL);
-		cool_yylval.error_msg = "String constant too long";
-		return ERROR;
-	}
-	*string_buf_ptr++ = yytext[1];
-}
-<STRING>[^\\\n\"]+ {
-	char *yptr = yytext;
-	while ( *yptr ) {
-		if ((string_buf_ptr - 1) == &string_buf[MAX_STR_CONST-1]) {
-			BEGIN(INITIAL);
-			cool_yylval.error_msg = "String constant too long";
-			return ERROR;
-		}
-		*string_buf_ptr++ = *yptr++;
-	}
-}
-{INVALID} {
-	cool_yylval.error_msg = yytext;
-	return ERROR;
+	BEGIN INITIAL;
 }
 .	{
 	strcpy(seal_yylval.error_msg, yytext); 
-	return (ERROR); 
+	return ERROR; 
 }
 
 %%
