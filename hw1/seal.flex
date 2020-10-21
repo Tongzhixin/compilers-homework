@@ -46,12 +46,15 @@ extern YYSTYPE seal_yylval;
 /*
  *  Add Your own definitions here
  */
-char* hex2Dec (char* hex) {
-  int number;
-  char* res = new char[MAX_STR_CONST];
-  number = std::stoi(hex, nullptr, 16);
-  sprintf(res, "%d", number);
-  return res;
+char* hex_to_decimal(char* hex_str){
+	char* tmp = new char[MAX_STR_CONST];
+	int x;
+	std::stringstream ss;
+	ss << std::hex << hex_str;  
+	ss >> x;
+	ss << x;
+	ss >> tmp;
+	return tmp;
 }
 
 %}
@@ -85,7 +88,7 @@ EQUAL ==
 NE !=
 GE >=
 LE <=
-WHITESPACE [\f\r\t\v]+
+WHITESPACE [ \f\r\t\v]+
 NEWLINE \n
 SYMBOLS [+/\-*=<~,;:(){}%>&!\^|]
 INVALID		[^a-zA-Z0-9_ \f\r\t\v\n+/\-*=<~,;:(){}%>&!\^|]
@@ -93,7 +96,7 @@ INVALID		[^a-zA-Z0-9_ \f\r\t\v\n+/\-*=<~,;:(){}%>&!\^|]
 %x COMMENT
 %x INLINE_COMMENT
 %x STRING
-
+%x STRING_SPE
 %%
 
  /*	
@@ -109,7 +112,7 @@ INVALID		[^a-zA-Z0-9_ \f\r\t\v\n+/\-*=<~,;:(){}%>&!\^|]
 	return CONST_INT;
 }
 {INT_HEX} {
-	char* dec_number = hex2Dec(yytext);
+	char* dec_number = hex_to_decimal(yytext);
 	seal_yylval.symbol = inttable.add_string(dec_number);
 	return CONST_INT;
 }
@@ -176,12 +179,12 @@ INVALID		[^a-zA-Z0-9_ \f\r\t\v\n+/\-*=<~,;:(){}%>&!\^|]
   */
 "/*"	{ BEGIN COMMENT; }
 "*/" {
-	seal_yylval.error_msg = "Unmatched */";
+	strcpy(seal_yylval.error_msg, "Unmatched */");
 	return ERROR;
 }
 <COMMENT><<EOF>> {
 	BEGIN INITIAL;
-	seal_yylval.error_msg = "EOF in comment";
+	strcpy(seal_yylval.error_msg, "EOF in comment");
 	return ERROR;
 }
 <COMMENT>[^*\n]*				{}
@@ -195,13 +198,134 @@ INVALID		[^a-zA-Z0-9_ \f\r\t\v\n+/\-*=<~,;:(){}%>&!\^|]
 "//"	{ BEGIN INLINE_COMMENT; }
 <INLINE_COMMENT><<EOF>> {
 	BEGIN INITIAL;
-	seal_yylval.error_msg = "EOF in comment";
+	strcpy(seal_yylval.error_msg, "EOF in comment");
 	return ERROR;
 }
 <INLINE_COMMENT>[^\n]*	{}
 <INLINE_COMMENT>\n {
 	curr_lineno++;
 	BEGIN INITIAL;
+}
+\" {
+	string_buf_ptr = string_buf;
+	BEGIN(STRING);
+}
+<STRING><<EOF>> {
+	BEGIN INITIAL;
+	strcpy(seal_yylval.error_msg, "EOF in string constant");
+	return ERROR;
+}
+<STRING>\n {
+	curr_lineno++;
+	BEGIN INITIAL;
+	strcpy(seal_yylval.error_msg, "Unterminated string constant");
+	return ERROR;
+}
+<STRING>\0 {
+	BEGIN INITIAL;
+	strcpy(seal_yylval.error_msg, "String contains null character");
+	return ERROR;
+}
+<STRING>\"	{
+	BEGIN INITIAL;
+	*string_buf_ptr = '\0';
+	seal_yylval.symbol = stringtable.add_string(string_buf);
+	return CONST_STRING;
+}
+<STRING>\\n  {
+	if ((string_buf_ptr - 1) == &string_buf[MAX_STR_CONST-1]) {
+		BEGIN INITIAL;
+		strcpy(seal_yylval.error_msg, "String constant too long");
+		return ERROR;
+	}
+	*string_buf_ptr++ = '\n';
+}
+<STRING>\\t  {
+	if ((string_buf_ptr - 1) == &string_buf[MAX_STR_CONST-1]) {
+		BEGIN INITIAL;
+		strcpy(seal_yylval.error_msg, "String constant too long");
+		return ERROR;
+	}
+	*string_buf_ptr++ = '\t';
+}
+<STRING>\\b  {
+	if ((string_buf_ptr - 1) == &string_buf[MAX_STR_CONST-1]) {
+		BEGIN INITIAL;
+		strcpy(seal_yylval.error_msg, "String constant too long");
+		return ERROR;
+	}
+	*string_buf_ptr++ = '\b';
+}
+<STRING>\\f  {
+	if ((string_buf_ptr - 1) == &string_buf[MAX_STR_CONST-1]) {
+		BEGIN INITIAL;
+		strcpy(seal_yylval.error_msg, "String constant too long");
+		return ERROR;
+	}
+	*string_buf_ptr++ = '\f';
+}
+<STRING>\\\n	{
+	if ((string_buf_ptr - 1) == &string_buf[MAX_STR_CONST-1]) {
+		BEGIN INITIAL;
+		strcpy(seal_yylval.error_msg, "String constant too long");
+		return ERROR;
+	}
+	*string_buf_ptr++ = yytext[1];
+	curr_lineno++;
+}
+<STRING>[^\\\n\"]+ {
+	char *yptr = yytext;
+	while ( *yptr ) {
+		if ((string_buf_ptr - 1) == &string_buf[MAX_STR_CONST-1]) {
+			BEGIN INITIAL;
+			strcpy(seal_yylval.error_msg, "String constant too long");
+			return ERROR;
+		}
+		*string_buf_ptr++ = *yptr++;
+	}
+}
+<STRING>\\[^\n] {
+	*string_buf_ptr++ = yytext[1];
+}
+` {
+	string_buf_ptr = string_buf;
+	BEGIN STRING_SPE;
+}
+<STRING_SPE><<EOF>> {
+	BEGIN INITIAL;
+	strcpy(seal_yylval.error_msg, "EOF in string constant");
+	return ERROR;
+}
+<STRING_SPE>\n {
+	
+	if ((string_buf_ptr - 1) == &string_buf[MAX_STR_CONST-1]) {
+		BEGIN INITIAL;
+		strcpy(seal_yylval.error_msg, "String constant too long");
+		return ERROR;
+	}
+	*string_buf_ptr++ = '\n';
+	curr_lineno++;
+}
+<STRING_SPE>`	{
+	BEGIN INITIAL;
+	*string_buf_ptr = '\0';
+	seal_yylval.symbol = stringtable.add_string(string_buf);
+	return CONST_STRING;
+}
+<STRING_SPE>[^\n`]+ {
+	char *yptr = yytext;
+	while ( *yptr ) {
+		if ((string_buf_ptr - 1) == &string_buf[MAX_STR_CONST-1]) {
+			BEGIN INITIAL;
+			strcpy(seal_yylval.error_msg, "String constant too long");
+			return ERROR;
+		}
+		*string_buf_ptr++ = *yptr++;
+	}
+}
+{INVALID} {
+	strcpy(seal_yylval.error_msg, yytext);
+	return ERROR;
 }
 .	{
 	strcpy(seal_yylval.error_msg, yytext); 
