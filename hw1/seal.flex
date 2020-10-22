@@ -97,10 +97,11 @@ INVALID		[^a-zA-Z0-9_ \f\r\t\v\n+/\-*=<~,;:(){}%>&!\^|]
 %%
 
  /*	
- *	Add Rules here. Error function has been given.
+ *	Add Rules here. Error function has been given. https://zhuanlan.zhihu.com/p/108167693z
+ *  important reference resources of rules .
  */
   /*
-  * Keywords
+  * Keywords 
   */
 {IF}			{ return IF; }
 {ELSE}			{ return ELSE; }
