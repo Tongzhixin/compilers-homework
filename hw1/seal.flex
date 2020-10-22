@@ -42,20 +42,20 @@ extern int curr_lineno;
 extern int verbose_flag;
 
 extern YYSTYPE seal_yylval;
-
 /*
  *  Add Your own definitions here
  */
 char* hex_to_decimal(char* hex_str){
-	char* tmp = new char[MAX_STR_CONST];
 	int x;
+	std::string str = hex_str;
 	std::stringstream ss;
-	ss << std::hex << hex_str;  
+	ss << std::hex << str;  
 	ss >> x;
-	ss << x;
-	ss >> tmp;
+	std::string str1 = std::to_string(x);
+	char* tmp = (char*)str1.data(); 
 	return tmp;
 }
+bool flag = true;
 
 %}
 %option noyywrap
@@ -80,11 +80,7 @@ FALSE false
 INT (0|[1-9][0-9]*)
 INT_HEX  0[Xx][a-fA-F0-9]+
 FLOAT (0|[1-9][0-9]*).[0-9]+
-
-
 AND &&
-
-EQUAL ==
 NE !=
 GE >=
 LE <=
@@ -97,34 +93,16 @@ INVALID		[^a-zA-Z0-9_ \f\r\t\v\n+/\-*=<~,;:(){}%>&!\^|]
 %x INLINE_COMMENT
 %x STRING
 %x STRING_SPE
+
 %%
 
  /*	
  *	Add Rules here. Error function has been given.
  */
-
-
- /*
-  *  The multiple-character operators.
+  /*
+  * Keywords
   */
-{INT} {
-	seal_yylval.symbol = inttable.add_string(yytext);
-	return CONST_INT;
-}
-{INT_HEX} {
-	char* dec_number = hex_to_decimal(yytext);
-	seal_yylval.symbol = inttable.add_string(dec_number);
-	return CONST_INT;
-}
-{TRUE} {
-	seal_yylval.boolean = true;
-	return CONST_BOOL;
-}
-{FALSE} {
-	seal_yylval.boolean = false;
-	return CONST_BOOL;
-}
-{IF}				{ return IF; }
+{IF}			{ return IF; }
 {ELSE}			{ return ELSE; }
 {WHILE}			{ return WHILE; }
 {FOR}           { return FOR; }
@@ -136,33 +114,32 @@ INVALID		[^a-zA-Z0-9_ \f\r\t\v\n+/\-*=<~,;:(){}%>&!\^|]
 {STRUCT}        { return STRUCT; }
 {AND}           { return AND; }
 "||"            { return OR; }
-
 {NE}            { return NE; }
 {GE}            { return GE; }
 {LE}            { return LE; }
-"=="         { return EQUAL; }
+"=="            { return EQUAL; }
+
+{INT} {
+	seal_yylval.symbol = inttable.add_string(yytext);
+	return CONST_INT;
+}
+{INT_HEX} {
+	char* dec_number = hex_to_decimal(yytext);
+	seal_yylval.symbol = inttable.add_string(dec_number);
+	return CONST_INT;
+}
 {FLOAT}  {
 	seal_yylval.symbol = floattable.add_string(yytext);
 	return CONST_FLOAT;
 }
-
-
-
-
-
-{WHITESPACE}	{}
-{NEWLINE}		{ curr_lineno++; }
-{SYMBOLS} 	{ return int(yytext[0]); }
-
-
- /*
-  * Keywords are -insensitive except for the values true and false,
-  * which must begin with a lower- letter.
-  */
-
-
-
-
+{TRUE} {
+	seal_yylval.boolean = true;
+	return CONST_BOOL;
+}
+{FALSE} {
+	seal_yylval.boolean = false;
+	return CONST_BOOL;
+}
 {TYPEID} {
 	seal_yylval.symbol = idtable.add_string(yytext);
 	return TYPEID;
@@ -171,12 +148,14 @@ INVALID		[^a-zA-Z0-9_ \f\r\t\v\n+/\-*=<~,;:(){}%>&!\^|]
 	seal_yylval.symbol = idtable.add_string(yytext);
 	return OBJECTID;
 }
+{WHITESPACE}	{}
+{NEWLINE}		{ curr_lineno++; }
+{SYMBOLS} 		{ return int(yytext[0]); }
+
  /*
-  *  String constants (C syntax)
-  *  Escape sequence \c is accepted for all characters c. Except for
-  *  \n \t \b \f, the result is c.
-  *
+  *  COMMENT
   */
+
 "/*"	{ BEGIN COMMENT; }
 "*/" {
 	strcpy(seal_yylval.error_msg, "Unmatched */");
@@ -191,7 +170,6 @@ INVALID		[^a-zA-Z0-9_ \f\r\t\v\n+/\-*=<~,;:(){}%>&!\^|]
 <COMMENT>"*"+[^"*/"\n]*	{}
 <COMMENT>\n							{ curr_lineno++; }
 <COMMENT>"*"+"/"        { BEGIN INITIAL; }
-
  /*
   * Inline comments
   */
@@ -206,6 +184,10 @@ INVALID		[^a-zA-Z0-9_ \f\r\t\v\n+/\-*=<~,;:(){}%>&!\^|]
 	curr_lineno++;
 	BEGIN INITIAL;
 }
+ /* 
+  *  String constants ,contain string and string `
+  *  a series of rules
+  */
 \" {
 	string_buf_ptr = string_buf;
 	BEGIN(STRING);
@@ -218,19 +200,24 @@ INVALID		[^a-zA-Z0-9_ \f\r\t\v\n+/\-*=<~,;:(){}%>&!\^|]
 <STRING>\n {
 	curr_lineno++;
 	BEGIN INITIAL;
-	strcpy(seal_yylval.error_msg, "Unterminated string constant");
+	strcpy(seal_yylval.error_msg, "newline in quotation must use a '\\'");
 	return ERROR;
 }
-<STRING>\0 {
-	BEGIN INITIAL;
-	strcpy(seal_yylval.error_msg, "String contains null character");
-	return ERROR;
+<STRING>\\0 {
+	strcpy(seal_yylval.error_msg, "String contains null character '\\0'");	
+	flag = false;	
 }
 <STRING>\"	{
-	BEGIN INITIAL;
-	*string_buf_ptr = '\0';
-	seal_yylval.symbol = stringtable.add_string(string_buf);
-	return CONST_STRING;
+	if (flag){
+		BEGIN INITIAL;
+		*string_buf_ptr = '\0';
+		seal_yylval.symbol = stringtable.add_string(string_buf);
+		return CONST_STRING;
+	} else{
+		flag = true;
+		BEGIN INITIAL;
+		return ERROR;
+	}
 }
 <STRING>\\n  {
 	if ((string_buf_ptr - 1) == &string_buf[MAX_STR_CONST-1]) {
@@ -285,6 +272,11 @@ INVALID		[^a-zA-Z0-9_ \f\r\t\v\n+/\-*=<~,;:(){}%>&!\^|]
 	}
 }
 <STRING>\\[^\n] {
+	if ((string_buf_ptr - 1) == &string_buf[MAX_STR_CONST-1]) {
+		BEGIN INITIAL;
+		strcpy(seal_yylval.error_msg, "String constant too long");
+		return ERROR;
+	}
 	*string_buf_ptr++ = yytext[1];
 }
 ` {
