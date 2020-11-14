@@ -480,9 +480,6 @@ Expr not_(Expr);        // !Bool
 Expr bitand_(Expr, Expr);  // Int & int
 Expr bitor_(Expr, Expr);   // Int | Int
 Expr bitnot(Expr);         // ~Int
-Expr unary_and(Expr);      // &Int
-Expr unary_or(Expr);       // |Int
-Expr unary_xor(Expr);      // ^Int
 Expr object(Symbol);
 Call call(Symbol, Actuals);
 Actuals actuals(Exprs);

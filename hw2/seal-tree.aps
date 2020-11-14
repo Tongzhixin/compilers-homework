@@ -114,15 +114,15 @@ module SEAL[] begin
 
   constructor or_(a1:Expr; a2:Expr):Expr;
 
-  constructor not_(a1:Expr; a2:Expr):Expr;
+  constructor not_(a1:Expr):Expr;
 
   constructor bitnot(a1:Expr):Expr;
 
-  constructor bitand_(a1:Expr):Expr;
+  constructor bitand_(a1:Expr; a2:Expr):Expr;
 
-  constructor bitor_(a1:Expr):Expr;
+  constructor bitor_(a1:Expr; a2:Expr):Expr;
 
-  constructor xor_(a1:Expr):Expr;
+  constructor xor_(a1:Expr; a2:Expr):Expr;
 
   constructor call(name: Symbol; paras: Actuals): Call;
 
