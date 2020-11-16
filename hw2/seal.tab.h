@@ -70,9 +70,8 @@ extern int seal_yydebug;
     CONST_FLOAT = 270,
     OBJECTID = 284,
     TYPEID = 285,
-    UMINUS = 288,
-    OBJECT = 286,
-    minus1 = 289
+    UMINUS = 287,
+    minus1 = 288
   };
 #endif
 /* Tokens.  */
@@ -97,9 +96,8 @@ extern int seal_yydebug;
 #define CONST_FLOAT 270
 #define OBJECTID 284
 #define TYPEID 285
-#define UMINUS 288
-#define OBJECT 286
-#define minus1 289
+#define UMINUS 287
+#define minus1 288
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -135,7 +133,7 @@ union YYSTYPE
       char *error_msg;
     
 
-#line 139 "seal.tab.h"
+#line 137 "seal.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
