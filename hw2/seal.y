@@ -164,12 +164,9 @@
     %type <continueStmt> continuestmt
     %type <breakStmt> breakstmt
     %type <expr> expr
-    //%type <exprs> expr_list
-    %type <expr> constant
     %type <call> call
     %type <actual> actual
     %type <actuals> actual_list
-    // %type <variable> variable
 	// Add more here
 
     /* Precedence declarations go here. */
@@ -231,14 +228,14 @@
     | stmt_list  stmt { $$ = append_Stmts($1, single_Stmts($2)); }
     ;
     stmt : ';' { $$ = no_expr(); }
-    | expr ';' { $$ = Stmt($1); }
-    | ifstmt { $$ = Stmt($1); }
-    | whilestmt { $$ = Stmt($1); }
-    | forstmt { $$ = Stmt($1); }
-    | breakstmt { $$ = Stmt($1); }
-    | continuestmt { $$ = Stmt($1); }
-    | returnstmt { $$ = Stmt($1); }
-    | stmtblock { $$ = Stmt($1); }
+    | expr ';' 
+    | ifstmt 
+    | whilestmt 
+    | forstmt 
+    | breakstmt 
+    | continuestmt 
+    | returnstmt 
+    | stmtblock 
     ;
     ifstmt : IF expr stmtblock { $$ = ifstmt($2, $3, stmtBlock(nil_VariableDecls(), nil_Stmts())); }
     | IF expr stmtblock ELSE stmtblock { $$ = ifstmt($2, $3, $5); }
@@ -261,7 +258,10 @@
     breakstmt : BREAK ';' { $$ = breakstmt(); }
     ;
     expr : OBJECTID '=' expr { $$ = assign($1, $3); }
-    | constant 
+    | CONST_BOOL { $$ = const_bool($1); }
+    | CONST_INT { $$ = const_int($1); }
+    | CONST_FLOAT { $$ = const_float($1); }
+    | CONST_STRING { $$ = const_string($1); }
     | call
     | '(' expr ')' { $$ = $2; }
     | OBJECTID { $$ = object($1); }
@@ -294,11 +294,6 @@
     | actual_list ',' actual { $$ = append_Actuals($1, single_Actuals($3)); }
     ;
     actual : expr { $$ = actual($1); }
-    constant : CONST_BOOL { $$ = const_bool($1); }
-    | CONST_INT { $$ = const_int($1); }
-    | CONST_FLOAT { $$ = const_float($1); }
-    | CONST_STRING { $$ = const_string($1); }
-    ;
     
     /* end of grammar */
 %%
