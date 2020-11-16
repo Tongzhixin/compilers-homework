@@ -181,8 +181,10 @@
 	 
     %left '+' '-'
     %left '*' '/' '%'
+    %nonassoc '!'
     %left minus1
-    %left minus2
+    %nonassoc '~' '&' '|' '^'
+    
 
 	// Add more here
     
@@ -210,34 +212,33 @@
 
     variable : OBJECTID TYPEID { $$ = variable($1,$2); }
     ;
-    variable_list : { $$ = nil_Variables(); }
-    | variable { single_Variables($1); }
+    
+    calldecl : FUNC OBJECTID '(' variable_list ')' TYPEID stmtblock { callDecl($2, $4, $6, $7); }
+    | FUNC OBJECTID '(' ')' TYPEID stmtblock { callDecl($2, nil_Variables(), $5, $6); }
+    ;
+    variable_list : variable { single_Variables($1); }
     | variable_list ',' variable { $$ = append_Variables($1, single_Variables($3)); }
     ;
-    calldecl : FUNC OBJECTID '(' variable_list ')' TYPEID stmtblock {
-      callDecl($2, $4, $6, $7);
-    }
-    ;
-    
     stmtblock : '{' variabledecl_list stmt_list '}' { stmtBlock($2, $3); }
+    | '{' '}' { stmtBlock(nil_VariableDecls(), nil_Stmts()); }
+    | '{' variabledecl_list '}' { stmtBlock($2, nil_Stmts()); }
+    | '{' stmt_list '}' { stmtBlock(nil_VariableDecls(), $2); }
     ;
-    variabledecl_list : { $$ = nil_VariableDecls(); }
-    | variabledecl { single_VariableDecls($1); }
+    variabledecl_list : variabledecl { single_VariableDecls($1); }
     | variabledecl_list  variabledecl { $$ = append_VariableDecls($1, VariableDecls($2)); }
     ;
-    stmt_list : { $$ = nil_Stmts(); }
-    | stmt { single_Stmts($1); }
+    stmt_list :  stmt { single_Stmts($1); }
     | stmt_list  stmt { $$ = append_Stmts($1, single_Stmts($2)); }
     ;
     stmt : ';' { $$ = no_expr(); }
-    | expr ';' 
-    | ifstmt 
-    | whilestmt
-    | forstmt
-    | breakstmt
-    | continuestmt
-    | returnstmt
-    | stmtblock
+    | expr ';' { $$ = Stmt($1); }
+    | ifstmt { $$ = Stmt($1); }
+    | whilestmt { $$ = Stmt($1); }
+    | forstmt { $$ = Stmt($1); }
+    | breakstmt { $$ = Stmt($1); }
+    | continuestmt { $$ = Stmt($1); }
+    | returnstmt { $$ = Stmt($1); }
+    | stmtblock { $$ = Stmt($1); }
     ;
     ifstmt : IF expr stmtblock { $$ = ifstmt($2, $3, stmtBlock(nil_VariableDecls(), nil_Stmts())); }
     | IF expr stmtblock ELSE stmtblock { $$ = ifstmt($2, $3, $5); }
@@ -278,26 +279,26 @@
     | expr '>' expr { $$ = gt($1, $3); }
     | expr AND expr { $$ = and_($1, $3); }
     | expr OR expr { $$ = or_($1, $3); }
-    | expr '^' expr %prec minus2 { $$ = xor_($1, $3); }
-    | '!' expr %prec minus1 { $$ = not_($2); }
-    | '~' expr %prec minus2 { $$ = bitnot($2); }
-    | expr '&' expr %prec minus2 { $$ = bitand_($1, $3); }
-    | expr '|' expr %prec minus2 { $$ = bitor_($1, $3); }
+    | expr '^' expr  { $$ = xor_($1, $3); }
+    | '!' expr { $$ = not_($2); }
+    | '~' expr { $$ = bitnot($2); }
+    | expr '&' expr { $$ = bitand_($1, $3); }
+    | expr '|' expr { $$ = bitor_($1, $3); }
     ;
+
+    call : OBJECTID '(' actual_list ')' { $$ = call($1, $3); }
+    | OBJECTID '(' ')' { $$ = call($1, nil_Actuals()); }
+    ;
+  
+    actual_list : actual { single_Actuals($1); }
+    | actual_list ',' actual { $$ = append_Actuals($1, single_Actuals($3)); }
+    ;
+    actual : expr { $$ = actual($1); }
     constant : CONST_BOOL { $$ = const_bool($1); }
     | CONST_INT { $$ = const_int($1); }
     | CONST_FLOAT { $$ = const_float($1); }
     | CONST_STRING { $$ = const_string($1); }
     ;
-    call : OBJECTID '(' actual_list ')' { $$ = call($1, $3); }
-    ;
-  
-    actual_list :  { $$ = nil_Actuals(); }
-    | actual { single_Actuals($1); }
-    | actual_list ',' actual { $$ = append_Actuals($1, single_Actuals($3)); }
-    ;
-    actual : expr { $$ = actual($1); }
-    
     
     /* end of grammar */
 %%

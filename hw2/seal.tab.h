@@ -71,8 +71,7 @@ extern int seal_yydebug;
     OBJECTID = 284,
     TYPEID = 285,
     UMINUS = 287,
-    minus1 = 288,
-    minus2 = 289
+    minus1 = 288
   };
 #endif
 /* Tokens.  */
@@ -99,7 +98,6 @@ extern int seal_yydebug;
 #define TYPEID 285
 #define UMINUS 287
 #define minus1 288
-#define minus2 289
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -135,7 +133,7 @@ union YYSTYPE
       char *error_msg;
     
 
-#line 139 "seal.tab.h"
+#line 137 "seal.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
