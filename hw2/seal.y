@@ -143,7 +143,7 @@
     documentation for details). */
     
     /* Declare types for the grammar's non-terminals. */
-    %token <symbol>  OBJECT 286
+    //%token <symbol>  OBJECT 286
     %type <program> program
     %type <decls> decl_list
     %type <decl> decl
@@ -164,7 +164,7 @@
     %type <continueStmt> continuestmt
     %type <breakStmt> breakstmt
     %type <expr> expr
-    %type <exprs> expr_list
+    //%type <exprs> expr_list
     %type <expr> constant
     %type <call> call
     %type <actual> actual
@@ -229,7 +229,7 @@
     | stmt { single_Stmts($1); }
     | stmt_list  stmt { $$ = append_Stmts($1, single_Stmts($2)); }
     ;
-    stmt : ';' 
+    stmt : ';' { $$ = no_expr(); }
     | expr ';' 
     | ifstmt 
     | whilestmt
@@ -263,7 +263,7 @@
     | constant 
     | call
     | '(' expr ')' { $$ = $2; }
-    | OBJECTID
+    | OBJECTID { $$ = object($1); }
     | expr '+' expr { $$ = add($1, $3); }
     | expr '-' expr { $$ = minus($1, $3); }
     | expr '*' expr { $$ = multi($1, $3); }
