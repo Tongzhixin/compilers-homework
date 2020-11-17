@@ -301,15 +301,11 @@
     call : OBJECTID '(' actual_list ')' { $$ = call($1, $3); }
     | OBJECTID '(' ')' { $$ = call($1, nil_Actuals()); }
     ;
-
     actual : expr { $$ = actual($1); }
     ;
-
     actual_list : actual { $$ = single_Actuals($1); }
     | actual_list ',' actual { $$ = append_Actuals($1, single_Actuals($3)); }
     ;
-    
-    
     /* end of grammar */
 %%
     
