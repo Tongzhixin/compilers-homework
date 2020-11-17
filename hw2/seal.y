@@ -215,13 +215,13 @@
     ;
     
     stmtblock : '{' variabledecl_list stmt_list '}' { $$ = stmtBlock($2, $3); }
-    | '{' '}' { $$ = stmtBlock(nil_VariableDecls(), nil_Stmts()); }
     | '{' variabledecl_list '}' { $$ = stmtBlock($2, nil_Stmts()); }
     | '{' stmt_list '}' { $$ = stmtBlock(nil_VariableDecls(), $2); }
+    | '{' '}' { $$ = stmtBlock(nil_VariableDecls(), nil_Stmts()); }
     ;
     
     variabledecl_list : variabledecl { $$ = single_VariableDecls($1); }
-    | variabledecl_list  variabledecl { $$ = append_VariableDecls($1, VariableDecls($2)); }
+    | variabledecl_list  variabledecl { $$ = append_VariableDecls($1, single_VariableDecls($2)); }
     ;
 
     variabledecl : VAR variable ';' { $$ = variableDecl($2); }
