@@ -143,21 +143,18 @@
     documentation for details). */
     
     /* Declare types for the grammar's non-terminals. */
-    //%token <symbol>  OBJECT 286
     %type <program> program
     %type <decls> decl_list
     %type <decl> decl
     %type <variable> variable
     %type <variables> variable_list
-    %type <variables> option_variable_list
     %type <variableDecl> variabledecl
     %type <variableDecls> variabledecl_list
-    %type <variableDecls> option_variabledecl_list
     %type <callDecl> calldecl
     %type <stmtBlock> stmtblock
     %type <stmt> stmt
     %type <stmts> stmt_list
-    %type <stmts> option_stmt_list
+
     
     %type <ifStmt> ifstmt
     %type <whileStmt> whilestmt
@@ -167,11 +164,9 @@
     %type <continueStmt> continuestmt
     %type <breakStmt> breakstmt
     %type <expr> expr
-    %type <expr> option_expr
     %type <call> call
     %type <actual> actual
     %type <actuals> actual_list
-    %type <actuals> option_actual_list
 	// Add more here
 
     /* Precedence declarations go here. */
@@ -183,8 +178,7 @@
 	 
     %left '+' '-'
     %left '*' '/' '%'
-    %nonassoc '!'
-    %left minus1
+    %nonassoc '!' minus1
     %left '~' '&' '|' '^'
     
 
@@ -208,36 +202,35 @@
     decl : variabledecl { $$ = $1; }
     | calldecl { $$ = $1; }
     ;
-
     
     variable : OBJECTID TYPEID { $$ = variable($1, $2); }
     ;
+    
+    calldecl : FUNC OBJECTID '(' ')' TYPEID stmtblock { $$ = callDecl($2, nil_Variables(), $5, $6); }
+    | FUNC OBJECTID '(' variable_list ')' TYPEID stmtblock { $$ = callDecl($2, $4, $6, $7); }
+    ;
+
     variable_list : variable { $$ = single_Variables($1); }
     | variable_list ',' variable { $$ = append_Variables($1, single_Variables($3)); }
     ;
-    option_variable_list : { $$ = nil_Variables(); }
-    | variable_list { $$ = $1; }
-    ;
     
-    calldecl : FUNC OBJECTID '(' variable_list ')' TYPEID stmtblock { $$ = callDecl($2, $4, $6, $7); }
-    | FUNC OBJECTID '('  ')' TYPEID stmtblock { $$ = callDecl($2, nil_Variables(), $5, $6); }
-    ;
-    
-    
-    stmtblock : '{' option_variabledecl_list option_stmt_list '}' { $$ = stmtBlock($2, $3); }
-    ;
-    
-    variabledecl : VAR variable ';' { $$ = variableDecl($2); }
+    stmtblock : '{' variabledecl_list stmt_list '}' { $$ = stmtBlock($2, $3); }
+    | '{' '}' { $$ = stmtBlock(nil_VariableDecls(), nil_Stmts()); }
+    | '{' variabledecl_list '}' { $$ = stmtBlock($2, nil_Stmts()); }
+    | '{' stmt_list '}' { $$ = stmtBlock(nil_VariableDecls(), $2); }
     ;
     
     variabledecl_list : variabledecl { $$ = single_VariableDecls($1); }
     | variabledecl_list  variabledecl { $$ = append_VariableDecls($1, VariableDecls($2)); }
     ;
-    option_variabledecl_list : { $$ = nil_VariableDecls(); }
-    | variabledecl_list { $$ = $1; }
+
+    variabledecl : VAR variable ';' { $$ = variableDecl($2); }
     ;
     
-    
+    stmt_list :  stmt { $$ = single_Stmts($1); }
+    | stmt_list  stmt { $$ = append_Stmts($1, single_Stmts($2)); }
+    ;
+
     stmt : ';' { $$ = no_expr(); }
     | expr ';' { $$ = $1; }
     | ifstmt { $$ = $1; }
@@ -248,27 +241,34 @@
     | returnstmt { $$ = $1; }
     | stmtblock { $$ = $1; }
     ;
-    option_stmt_list : { $$ = nil_Stmts(); }
-    | stmt_list { $$ = $1; }
-    ;
-    stmt_list :  stmt { $$ = single_Stmts($1); }
-    | stmt_list  stmt { $$ = append_Stmts($1, single_Stmts($2)); }
-    ;
+
     ifstmt : IF expr stmtblock { $$ = ifstmt($2, $3, stmtBlock(nil_VariableDecls(), nil_Stmts())); }
     | IF expr stmtblock ELSE stmtblock { $$ = ifstmt($2, $3, $5); }
     ;
+
     whilestmt : WHILE expr stmtblock { $$ = whilestmt($2, $3); }
-    forstmt : FOR option_expr ';' option_expr ';' option_expr stmtblock { $$ = forstmt($2, $4, $6, $7); }
     ;
-    option_expr : { $$ = no_expr(); }
-    | expr { $$ = $1; }
+
+    forstmt : FOR ';' ';' stmtblock { $$ = forstmt(no_expr(), no_expr(), no_expr(), $4); }
+    | FOR expr ';' ';' stmtblock { $$ = forstmt($2, no_expr(), no_expr(), $5); }
+    | FOR ';' expr ';' stmtblock { $$ = forstmt(no_expr(), $3 , no_expr(), $5); }
+    | FOR ';' ';' expr stmtblock { $$ = forstmt(no_expr(), $4, no_expr(), $5); }
+    | FOR expr ';' expr ';' stmtblock { $$ = forstmt($2, $4, no_expr(), $6); }
+    | FOR ';' expr ';' expr stmtblock { $$ = forstmt(no_expr(), $3, $5, $6); }
+    | FOR expr ';'  ';' expr stmtblock { $$ = forstmt($2, no_expr(), $5, $6); }
+    | FOR expr ';' expr ';' expr stmtblock { $$ = forstmt($2, $4, $6, $7); }
     ;
-    returnstmt : RETURN option_expr ';' { $$ = returnstmt($2); } 
+    
+    returnstmt : RETURN ';' { $$ = returnstmt(no_expr()); }
+    | RETURN expr ';' { $$ = returnstmt($2); }
     ;
+
     continuestmt : CONTINUE ';' { $$ = continuestmt(); }
     ;
+
     breakstmt : BREAK ';' { $$ = breakstmt(); }
     ;
+
     expr : OBJECTID '=' expr { $$ = assign($1, $3); }
     | CONST_BOOL { $$ = const_bool($1); }
     | CONST_INT { $$ = const_int($1); }
@@ -298,14 +298,15 @@
     | expr '|' expr { $$ = bitor_($1, $3); }
     ;
 
-    call : OBJECTID '(' option_actual_list ')' { $$ = call($1, $3); }
+    call : OBJECTID '(' actual_list ')' { $$ = call($1, $3); }
+    | OBJECTID '(' ')' { $$ = call($1, nil_Actuals()); }
     ;
+
     actual : expr { $$ = actual($1); }
+    ;
+
     actual_list : actual { $$ = single_Actuals($1); }
     | actual_list ',' actual { $$ = append_Actuals($1, single_Actuals($3)); }
-    ;
-    option_actual_list : { $$ = nil_Actuals(); }
-    | actual_list { $$ = $1; }
     ;
     
     

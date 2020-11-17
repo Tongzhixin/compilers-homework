@@ -1,17 +1,6 @@
-非终结语词在文法中无用
-
-    option_variable_list
-
-
 终端机在文法中未使用
 
     UMINUS
-
-
-语法中的规则无效
-
-   72 option_variable_list: %empty
-   73                     | variable_list
 
 
 语法
@@ -28,137 +17,137 @@
 
     6 variable: OBJECTID TYPEID
 
-    7 variable_list: variable
-    8              | variable_list ',' variable
+    7 calldecl: FUNC OBJECTID '(' ')' TYPEID stmtblock
+    8         | FUNC OBJECTID '(' variable_list ')' TYPEID stmtblock
 
-    9 calldecl: FUNC OBJECTID '(' variable_list ')' TYPEID stmtblock
-   10         | FUNC OBJECTID '(' ')' TYPEID stmtblock
+    9 variable_list: variable
+   10              | variable_list ',' variable
 
-   11 stmtblock: '{' option_variabledecl_list option_stmt_list '}'
+   11 stmtblock: '{' variabledecl_list stmt_list '}'
+   12          | '{' '}'
+   13          | '{' variabledecl_list '}'
+   14          | '{' stmt_list '}'
 
-   12 variabledecl: VAR variable ';'
+   15 variabledecl_list: variabledecl
+   16                  | variabledecl_list variabledecl
 
-   13 variabledecl_list: variabledecl
-   14                  | variabledecl_list variabledecl
+   17 variabledecl: VAR variable ';'
 
-   15 option_variabledecl_list: %empty
-   16                         | variabledecl_list
+   18 stmt_list: stmt
+   19          | stmt_list stmt
 
-   17 stmt: ';'
-   18     | expr ';'
-   19     | ifstmt
-   20     | whilestmt
-   21     | forstmt
-   22     | breakstmt
-   23     | continuestmt
-   24     | returnstmt
-   25     | stmtblock
+   20 stmt: ';'
+   21     | expr ';'
+   22     | ifstmt
+   23     | whilestmt
+   24     | forstmt
+   25     | breakstmt
+   26     | continuestmt
+   27     | returnstmt
+   28     | stmtblock
 
-   26 option_stmt_list: %empty
-   27                 | stmt_list
+   29 ifstmt: IF expr stmtblock
+   30       | IF expr stmtblock ELSE stmtblock
 
-   28 stmt_list: stmt
-   29          | stmt_list stmt
+   31 whilestmt: WHILE expr stmtblock
 
-   30 ifstmt: IF expr stmtblock
-   31       | IF expr stmtblock ELSE stmtblock
+   32 forstmt: FOR ';' ';' stmtblock
+   33        | FOR expr ';' ';' stmtblock
+   34        | FOR ';' expr ';' stmtblock
+   35        | FOR ';' ';' expr stmtblock
+   36        | FOR expr ';' expr ';' stmtblock
+   37        | FOR ';' expr ';' expr stmtblock
+   38        | FOR expr ';' ';' expr stmtblock
+   39        | FOR expr ';' expr ';' expr stmtblock
 
-   32 whilestmt: WHILE expr stmtblock
+   40 returnstmt: RETURN ';'
+   41           | RETURN expr ';'
 
-   33 forstmt: FOR option_expr ';' option_expr ';' option_expr stmtblock
+   42 continuestmt: CONTINUE ';'
 
-   34 option_expr: %empty
-   35            | expr
+   43 breakstmt: BREAK ';'
 
-   36 returnstmt: RETURN option_expr ';'
+   44 expr: OBJECTID '=' expr
+   45     | CONST_BOOL
+   46     | CONST_INT
+   47     | CONST_FLOAT
+   48     | CONST_STRING
+   49     | call
+   50     | '(' expr ')'
+   51     | OBJECTID
+   52     | expr '+' expr
+   53     | expr '-' expr
+   54     | expr '*' expr
+   55     | expr '/' expr
+   56     | expr '%' expr
+   57     | '-' expr
+   58     | expr '<' expr
+   59     | expr LE expr
+   60     | expr EQUAL expr
+   61     | expr NE expr
+   62     | expr GE expr
+   63     | expr '>' expr
+   64     | expr AND expr
+   65     | expr OR expr
+   66     | expr '^' expr
+   67     | '!' expr
+   68     | '~' expr
+   69     | expr '&' expr
+   70     | expr '|' expr
 
-   37 continuestmt: CONTINUE ';'
+   71 call: OBJECTID '(' actual_list ')'
+   72     | OBJECTID '(' ')'
 
-   38 breakstmt: BREAK ';'
+   73 actual: expr
 
-   39 expr: OBJECTID '=' expr
-   40     | CONST_BOOL
-   41     | CONST_INT
-   42     | CONST_FLOAT
-   43     | CONST_STRING
-   44     | call
-   45     | '(' expr ')'
-   46     | OBJECTID
-   47     | expr '+' expr
-   48     | expr '-' expr
-   49     | expr '*' expr
-   50     | expr '/' expr
-   51     | expr '%' expr
-   52     | '-' expr
-   53     | expr '<' expr
-   54     | expr LE expr
-   55     | expr EQUAL expr
-   56     | expr NE expr
-   57     | expr GE expr
-   58     | expr '>' expr
-   59     | expr AND expr
-   60     | expr OR expr
-   61     | expr '^' expr
-   62     | '!' expr
-   63     | '~' expr
-   64     | expr '&' expr
-   65     | expr '|' expr
-
-   66 call: OBJECTID '(' option_actual_list ')'
-
-   67 actual: expr
-
-   68 actual_list: actual
-   69            | actual_list ',' actual
-
-   70 option_actual_list: %empty
-   71                   | actual_list
+   74 actual_list: actual
+   75            | actual_list ',' actual
 
 
 终结语词，附有它们出现处的规则
 
     $end (0) 0
-    '!' (33) 62
-    '%' (37) 51
-    '&' (38) 64
-    '(' (40) 9 10 45 66
-    ')' (41) 9 10 45 66
-    '*' (42) 49
-    '+' (43) 47
-    ',' (44) 8 69
-    '-' (45) 48 52
-    '/' (47) 50
-    ';' (59) 12 17 18 33 36 37 38
-    '<' (60) 53
-    '=' (61) 39
-    '>' (62) 58
-    '^' (94) 61
-    '{' (123) 11
-    '|' (124) 65
-    '}' (125) 11
-    '~' (126) 63
+    '!' (33) 67
+    '%' (37) 56
+    '&' (38) 69
+    '(' (40) 7 8 50 71 72
+    ')' (41) 7 8 50 71 72
+    '*' (42) 54
+    '+' (43) 52
+    ',' (44) 10 75
+    '-' (45) 53 57
+    '/' (47) 55
+    ';' (59) 17 20 21 32 33 34 35 36 37 38 39 40 41 42 43
+    '<' (60) 58
+    '=' (61) 44
+    '>' (62) 63
+    '^' (94) 66
+    '{' (123) 11 12 13 14
+    '|' (124) 70
+    '}' (125) 11 12 13 14
+    '~' (126) 68
     error (256)
-    IF (258) 30 31
-    ELSE (260) 31
-    WHILE (261) 32
-    FOR (262) 33
-    BREAK (263) 38
-    CONTINUE (264) 37
-    FUNC (265) 9 10
-    RETURN (266) 36
-    CONST_BOOL <boolean> (267) 40
-    CONST_INT <symbol> (268) 41
-    CONST_STRING <symbol> (269) 43
-    CONST_FLOAT <symbol> (270) 42
-    VAR (271) 12
-    AND (274) 59
-    OR (275) 60
-    EQUAL (276) 55
-    NE (277) 56
-    GE (278) 57
-    LE (279) 54
-    OBJECTID <symbol> (284) 6 9 10 39 46 66
-    TYPEID <symbol> (285) 6 9 10
+    IF (258) 29 30
+    ELSE (260) 30
+    WHILE (261) 31
+    FOR (262) 32 33 34 35 36 37 38 39
+    BREAK (263) 43
+    CONTINUE (264) 42
+    FUNC (265) 7 8
+    RETURN (266) 40 41
+    CONST_BOOL <boolean> (267) 45
+    CONST_INT <symbol> (268) 46
+    CONST_STRING <symbol> (269) 48
+    CONST_FLOAT <symbol> (270) 47
+    VAR (271) 17
+    AND (274) 64
+    OR (275) 65
+    EQUAL (276) 60
+    NE (277) 61
+    GE (278) 62
+    LE (279) 59
+    OBJECTID <symbol> (284) 6 7 8 44 51 71 72
+    TYPEID <symbol> (285) 6 7 8
     UMINUS (287)
     minus1 (288)
 
@@ -178,70 +167,58 @@
         on right: 2 3
     variable <variable> (49)
         on left: 6
-        on right: 7 8 12
-    variable_list <variables> (50)
+        on right: 9 10 17
+    calldecl <callDecl> (50)
         on left: 7 8
-        on right: 8 9
-    calldecl <callDecl> (51)
-        on left: 9 10
         on right: 5
+    variable_list <variables> (51)
+        on left: 9 10
+        on right: 8 10
     stmtblock <stmtBlock> (52)
-        on left: 11
-        on right: 9 10 25 30 31 32 33
-    variabledecl <variableDecl> (53)
-        on left: 12
-        on right: 4 13 14
-    variabledecl_list <variableDecls> (54)
-        on left: 13 14
-        on right: 14 16
-    option_variabledecl_list <variableDecls> (55)
+        on left: 11 12 13 14
+        on right: 7 8 28 29 30 31 32 33 34 35 36 37 38 39
+    variabledecl_list <variableDecls> (53)
         on left: 15 16
-        on right: 11
+        on right: 11 13 16
+    variabledecl <variableDecl> (54)
+        on left: 17
+        on right: 4 15 16
+    stmt_list <stmts> (55)
+        on left: 18 19
+        on right: 11 14 19
     stmt <stmt> (56)
-        on left: 17 18 19 20 21 22 23 24 25
-        on right: 28 29
-    option_stmt_list <stmts> (57)
-        on left: 26 27
-        on right: 11
-    stmt_list <stmts> (58)
-        on left: 28 29
-        on right: 27 29
-    ifstmt <ifStmt> (59)
-        on left: 30 31
-        on right: 19
-    whilestmt <whileStmt> (60)
-        on left: 32
-        on right: 20
-    forstmt <forStmt> (61)
-        on left: 33
-        on right: 21
-    option_expr <expr> (62)
-        on left: 34 35
-        on right: 33 36
-    returnstmt <returnStmt> (63)
-        on left: 36
-        on right: 24
-    continuestmt <continueStmt> (64)
-        on left: 37
-        on right: 23
-    breakstmt <breakStmt> (65)
-        on left: 38
+        on left: 20 21 22 23 24 25 26 27 28
+        on right: 18 19
+    ifstmt <ifStmt> (57)
+        on left: 29 30
         on right: 22
-    expr <expr> (66)
-        on left: 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65
-        on right: 18 30 31 32 35 39 45 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 67
-    call <call> (67)
-        on left: 66
-        on right: 44
-    actual <actual> (68)
-        on left: 67
-        on right: 68 69
-    actual_list <actuals> (69)
-        on left: 68 69
-        on right: 69 71
-    option_actual_list <actuals> (70)
-        on left: 70 71
-        on right: 66
+    whilestmt <whileStmt> (58)
+        on left: 31
+        on right: 23
+    forstmt <forStmt> (59)
+        on left: 32 33 34 35 36 37 38 39
+        on right: 24
+    returnstmt <returnStmt> (60)
+        on left: 40 41
+        on right: 27
+    continuestmt <continueStmt> (61)
+        on left: 42
+        on right: 26
+    breakstmt <breakStmt> (62)
+        on left: 43
+        on right: 25
+    expr <expr> (63)
+        on left: 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70
+        on right: 21 29 30 31 33 34 35 36 37 38 39 41 44 50 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 73
+    call <call> (64)
+        on left: 71 72
+        on right: 49
+    actual <actual> (65)
+        on left: 73
+        on right: 74 75
+    actual_list <actuals> (66)
+        on left: 74 75
+        on right: 71 75
 
 
 状态 0
@@ -260,15 +237,15 @@
 
 状态 1
 
-    9 calldecl: FUNC . OBJECTID '(' variable_list ')' TYPEID stmtblock
-   10         | FUNC . OBJECTID '(' ')' TYPEID stmtblock
+    7 calldecl: FUNC . OBJECTID '(' ')' TYPEID stmtblock
+    8         | FUNC . OBJECTID '(' variable_list ')' TYPEID stmtblock
 
     OBJECTID  偏移，并进入状态 8
 
 
 状态 2
 
-   12 variabledecl: VAR . variable ';'
+   17 variabledecl: VAR . variable ';'
 
     OBJECTID  偏移，并进入状态 9
 
@@ -320,8 +297,8 @@
 
 状态 8
 
-    9 calldecl: FUNC OBJECTID . '(' variable_list ')' TYPEID stmtblock
-   10         | FUNC OBJECTID . '(' ')' TYPEID stmtblock
+    7 calldecl: FUNC OBJECTID . '(' ')' TYPEID stmtblock
+    8         | FUNC OBJECTID . '(' variable_list ')' TYPEID stmtblock
 
     '('  偏移，并进入状态 13
 
@@ -335,7 +312,7 @@
 
 状态 10
 
-   12 variabledecl: VAR variable . ';'
+   17 variabledecl: VAR variable . ';'
 
     ';'  偏移，并进入状态 15
 
@@ -356,8 +333,8 @@
 
 状态 13
 
-    9 calldecl: FUNC OBJECTID '(' . variable_list ')' TYPEID stmtblock
-   10         | FUNC OBJECTID '(' . ')' TYPEID stmtblock
+    7 calldecl: FUNC OBJECTID '(' . ')' TYPEID stmtblock
+    8         | FUNC OBJECTID '(' . variable_list ')' TYPEID stmtblock
 
     OBJECTID  偏移，并进入状态 9
     ')'       偏移，并进入状态 16
@@ -375,37 +352,37 @@
 
 状态 15
 
-   12 variabledecl: VAR variable ';' .
+   17 variabledecl: VAR variable ';' .
 
-    $default  使用规则 12 以归约 (variabledecl)
+    $default  使用规则 17 以归约 (variabledecl)
 
 
 状态 16
 
-   10 calldecl: FUNC OBJECTID '(' ')' . TYPEID stmtblock
+    7 calldecl: FUNC OBJECTID '(' ')' . TYPEID stmtblock
 
     TYPEID  偏移，并进入状态 19
 
 
 状态 17
 
-    7 variable_list: variable .
+    9 variable_list: variable .
 
-    $default  使用规则 7 以归约 (variable_list)
+    $default  使用规则 9 以归约 (variable_list)
 
 
 状态 18
 
-    8 variable_list: variable_list . ',' variable
-    9 calldecl: FUNC OBJECTID '(' variable_list . ')' TYPEID stmtblock
+    8 calldecl: FUNC OBJECTID '(' variable_list . ')' TYPEID stmtblock
+   10 variable_list: variable_list . ',' variable
 
-    ','  偏移，并进入状态 20
-    ')'  偏移，并进入状态 21
+    ')'  偏移，并进入状态 20
+    ','  偏移，并进入状态 21
 
 
 状态 19
 
-   10 calldecl: FUNC OBJECTID '(' ')' TYPEID . stmtblock
+    7 calldecl: FUNC OBJECTID '(' ')' TYPEID . stmtblock
 
     '{'  偏移，并进入状态 22
 
@@ -414,1554 +391,1706 @@
 
 状态 20
 
-    8 variable_list: variable_list ',' . variable
+    8 calldecl: FUNC OBJECTID '(' variable_list ')' . TYPEID stmtblock
 
-    OBJECTID  偏移，并进入状态 9
-
-    variable  转到状态 24
+    TYPEID  偏移，并进入状态 24
 
 
 状态 21
 
-    9 calldecl: FUNC OBJECTID '(' variable_list ')' . TYPEID stmtblock
+   10 variable_list: variable_list ',' . variable
 
-    TYPEID  偏移，并进入状态 25
+    OBJECTID  偏移，并进入状态 9
+
+    variable  转到状态 25
 
 
 状态 22
 
-   11 stmtblock: '{' . option_variabledecl_list option_stmt_list '}'
+   11 stmtblock: '{' . variabledecl_list stmt_list '}'
+   12          | '{' . '}'
+   13          | '{' . variabledecl_list '}'
+   14          | '{' . stmt_list '}'
 
-    VAR  偏移，并进入状态 2
+    IF            偏移，并进入状态 26
+    WHILE         偏移，并进入状态 27
+    FOR           偏移，并进入状态 28
+    BREAK         偏移，并进入状态 29
+    CONTINUE      偏移，并进入状态 30
+    RETURN        偏移，并进入状态 31
+    VAR           偏移，并进入状态 2
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+    '{'           偏移，并进入状态 22
+    '}'           偏移，并进入状态 41
+    ';'           偏移，并进入状态 42
 
-    $default  使用规则 15 以归约 (option_variabledecl_list)
-
-    variabledecl              转到状态 26
-    variabledecl_list         转到状态 27
-    option_variabledecl_list  转到状态 28
+    stmtblock          转到状态 43
+    variabledecl_list  转到状态 44
+    variabledecl       转到状态 45
+    stmt_list          转到状态 46
+    stmt               转到状态 47
+    ifstmt             转到状态 48
+    whilestmt          转到状态 49
+    forstmt            转到状态 50
+    returnstmt         转到状态 51
+    continuestmt       转到状态 52
+    breakstmt          转到状态 53
+    expr               转到状态 54
+    call               转到状态 55
 
 
 状态 23
 
-   10 calldecl: FUNC OBJECTID '(' ')' TYPEID stmtblock .
+    7 calldecl: FUNC OBJECTID '(' ')' TYPEID stmtblock .
 
-    $default  使用规则 10 以归约 (calldecl)
+    $default  使用规则 7 以归约 (calldecl)
 
 
 状态 24
 
-    8 variable_list: variable_list ',' variable .
+    8 calldecl: FUNC OBJECTID '(' variable_list ')' TYPEID . stmtblock
 
-    $default  使用规则 8 以归约 (variable_list)
+    '{'  偏移，并进入状态 22
+
+    stmtblock  转到状态 56
 
 
 状态 25
 
-    9 calldecl: FUNC OBJECTID '(' variable_list ')' TYPEID . stmtblock
+   10 variable_list: variable_list ',' variable .
 
-    '{'  偏移，并进入状态 22
-
-    stmtblock  转到状态 29
+    $default  使用规则 10 以归约 (variable_list)
 
 
 状态 26
 
-   13 variabledecl_list: variabledecl .
+   29 ifstmt: IF . expr stmtblock
+   30       | IF . expr stmtblock ELSE stmtblock
 
-    $default  使用规则 13 以归约 (variabledecl_list)
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+
+    expr  转到状态 57
+    call  转到状态 55
 
 
 状态 27
 
-   14 variabledecl_list: variabledecl_list . variabledecl
-   16 option_variabledecl_list: variabledecl_list .
+   31 whilestmt: WHILE . expr stmtblock
 
-    VAR  偏移，并进入状态 2
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
 
-    $default  使用规则 16 以归约 (option_variabledecl_list)
-
-    variabledecl  转到状态 30
+    expr  转到状态 58
+    call  转到状态 55
 
 
 状态 28
 
-   11 stmtblock: '{' option_variabledecl_list . option_stmt_list '}'
+   32 forstmt: FOR . ';' ';' stmtblock
+   33        | FOR . expr ';' ';' stmtblock
+   34        | FOR . ';' expr ';' stmtblock
+   35        | FOR . ';' ';' expr stmtblock
+   36        | FOR . expr ';' expr ';' stmtblock
+   37        | FOR . ';' expr ';' expr stmtblock
+   38        | FOR . expr ';' ';' expr stmtblock
+   39        | FOR . expr ';' expr ';' expr stmtblock
 
-    IF            偏移，并进入状态 31
-    WHILE         偏移，并进入状态 32
-    FOR           偏移，并进入状态 33
-    BREAK         偏移，并进入状态 34
-    CONTINUE      偏移，并进入状态 35
-    RETURN        偏移，并进入状态 36
-    CONST_BOOL    偏移，并进入状态 37
-    CONST_INT     偏移，并进入状态 38
-    CONST_STRING  偏移，并进入状态 39
-    CONST_FLOAT   偏移，并进入状态 40
-    OBJECTID      偏移，并进入状态 41
-    '-'           偏移，并进入状态 42
-    '!'           偏移，并进入状态 43
-    '~'           偏移，并进入状态 44
-    '('           偏移，并进入状态 45
-    '{'           偏移，并进入状态 22
-    ';'           偏移，并进入状态 46
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+    ';'           偏移，并进入状态 59
 
-    $default  使用规则 26 以归约 (option_stmt_list)
-
-    stmtblock         转到状态 47
-    stmt              转到状态 48
-    option_stmt_list  转到状态 49
-    stmt_list         转到状态 50
-    ifstmt            转到状态 51
-    whilestmt         转到状态 52
-    forstmt           转到状态 53
-    returnstmt        转到状态 54
-    continuestmt      转到状态 55
-    breakstmt         转到状态 56
-    expr              转到状态 57
-    call              转到状态 58
+    expr  转到状态 60
+    call  转到状态 55
 
 
 状态 29
 
-    9 calldecl: FUNC OBJECTID '(' variable_list ')' TYPEID stmtblock .
+   43 breakstmt: BREAK . ';'
 
-    $default  使用规则 9 以归约 (calldecl)
+    ';'  偏移，并进入状态 61
 
 
 状态 30
 
-   14 variabledecl_list: variabledecl_list variabledecl .
+   42 continuestmt: CONTINUE . ';'
 
-    $default  使用规则 14 以归约 (variabledecl_list)
+    ';'  偏移，并进入状态 62
 
 
 状态 31
 
-   30 ifstmt: IF . expr stmtblock
-   31       | IF . expr stmtblock ELSE stmtblock
+   40 returnstmt: RETURN . ';'
+   41           | RETURN . expr ';'
 
-    CONST_BOOL    偏移，并进入状态 37
-    CONST_INT     偏移，并进入状态 38
-    CONST_STRING  偏移，并进入状态 39
-    CONST_FLOAT   偏移，并进入状态 40
-    OBJECTID      偏移，并进入状态 41
-    '-'           偏移，并进入状态 42
-    '!'           偏移，并进入状态 43
-    '~'           偏移，并进入状态 44
-    '('           偏移，并进入状态 45
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+    ';'           偏移，并进入状态 63
 
-    expr  转到状态 59
-    call  转到状态 58
+    expr  转到状态 64
+    call  转到状态 55
 
 
 状态 32
 
-   32 whilestmt: WHILE . expr stmtblock
-
-    CONST_BOOL    偏移，并进入状态 37
-    CONST_INT     偏移，并进入状态 38
-    CONST_STRING  偏移，并进入状态 39
-    CONST_FLOAT   偏移，并进入状态 40
-    OBJECTID      偏移，并进入状态 41
-    '-'           偏移，并进入状态 42
-    '!'           偏移，并进入状态 43
-    '~'           偏移，并进入状态 44
-    '('           偏移，并进入状态 45
-
-    expr  转到状态 60
-    call  转到状态 58
-
-
-状态 33
-
-   33 forstmt: FOR . option_expr ';' option_expr ';' option_expr stmtblock
-
-    CONST_BOOL    偏移，并进入状态 37
-    CONST_INT     偏移，并进入状态 38
-    CONST_STRING  偏移，并进入状态 39
-    CONST_FLOAT   偏移，并进入状态 40
-    OBJECTID      偏移，并进入状态 41
-    '-'           偏移，并进入状态 42
-    '!'           偏移，并进入状态 43
-    '~'           偏移，并进入状态 44
-    '('           偏移，并进入状态 45
-
-    $default  使用规则 34 以归约 (option_expr)
-
-    option_expr  转到状态 61
-    expr         转到状态 62
-    call         转到状态 58
-
-
-状态 34
-
-   38 breakstmt: BREAK . ';'
-
-    ';'  偏移，并进入状态 63
-
-
-状态 35
-
-   37 continuestmt: CONTINUE . ';'
-
-    ';'  偏移，并进入状态 64
-
-
-状态 36
-
-   36 returnstmt: RETURN . option_expr ';'
-
-    CONST_BOOL    偏移，并进入状态 37
-    CONST_INT     偏移，并进入状态 38
-    CONST_STRING  偏移，并进入状态 39
-    CONST_FLOAT   偏移，并进入状态 40
-    OBJECTID      偏移，并进入状态 41
-    '-'           偏移，并进入状态 42
-    '!'           偏移，并进入状态 43
-    '~'           偏移，并进入状态 44
-    '('           偏移，并进入状态 45
-
-    $default  使用规则 34 以归约 (option_expr)
-
-    option_expr  转到状态 65
-    expr         转到状态 62
-    call         转到状态 58
-
-
-状态 37
-
-   40 expr: CONST_BOOL .
-
-    $default  使用规则 40 以归约 (expr)
-
-
-状态 38
-
-   41 expr: CONST_INT .
-
-    $default  使用规则 41 以归约 (expr)
-
-
-状态 39
-
-   43 expr: CONST_STRING .
-
-    $default  使用规则 43 以归约 (expr)
-
-
-状态 40
-
-   42 expr: CONST_FLOAT .
-
-    $default  使用规则 42 以归约 (expr)
-
-
-状态 41
-
-   39 expr: OBJECTID . '=' expr
-   46     | OBJECTID .
-   66 call: OBJECTID . '(' option_actual_list ')'
-
-    '='  偏移，并进入状态 66
-    '('  偏移，并进入状态 67
-
-    $default  使用规则 46 以归约 (expr)
-
-
-状态 42
-
-   52 expr: '-' . expr
-
-    CONST_BOOL    偏移，并进入状态 37
-    CONST_INT     偏移，并进入状态 38
-    CONST_STRING  偏移，并进入状态 39
-    CONST_FLOAT   偏移，并进入状态 40
-    OBJECTID      偏移，并进入状态 41
-    '-'           偏移，并进入状态 42
-    '!'           偏移，并进入状态 43
-    '~'           偏移，并进入状态 44
-    '('           偏移，并进入状态 45
-
-    expr  转到状态 68
-    call  转到状态 58
-
-
-状态 43
-
-   62 expr: '!' . expr
-
-    CONST_BOOL    偏移，并进入状态 37
-    CONST_INT     偏移，并进入状态 38
-    CONST_STRING  偏移，并进入状态 39
-    CONST_FLOAT   偏移，并进入状态 40
-    OBJECTID      偏移，并进入状态 41
-    '-'           偏移，并进入状态 42
-    '!'           偏移，并进入状态 43
-    '~'           偏移，并进入状态 44
-    '('           偏移，并进入状态 45
-
-    expr  转到状态 69
-    call  转到状态 58
-
-
-状态 44
-
-   63 expr: '~' . expr
-
-    CONST_BOOL    偏移，并进入状态 37
-    CONST_INT     偏移，并进入状态 38
-    CONST_STRING  偏移，并进入状态 39
-    CONST_FLOAT   偏移，并进入状态 40
-    OBJECTID      偏移，并进入状态 41
-    '-'           偏移，并进入状态 42
-    '!'           偏移，并进入状态 43
-    '~'           偏移，并进入状态 44
-    '('           偏移，并进入状态 45
-
-    expr  转到状态 70
-    call  转到状态 58
-
-
-状态 45
-
-   45 expr: '(' . expr ')'
-
-    CONST_BOOL    偏移，并进入状态 37
-    CONST_INT     偏移，并进入状态 38
-    CONST_STRING  偏移，并进入状态 39
-    CONST_FLOAT   偏移，并进入状态 40
-    OBJECTID      偏移，并进入状态 41
-    '-'           偏移，并进入状态 42
-    '!'           偏移，并进入状态 43
-    '~'           偏移，并进入状态 44
-    '('           偏移，并进入状态 45
-
-    expr  转到状态 71
-    call  转到状态 58
-
-
-状态 46
-
-   17 stmt: ';' .
-
-    $default  使用规则 17 以归约 (stmt)
-
-
-状态 47
-
-   25 stmt: stmtblock .
-
-    $default  使用规则 25 以归约 (stmt)
-
-
-状态 48
-
-   28 stmt_list: stmt .
-
-    $default  使用规则 28 以归约 (stmt_list)
-
-
-状态 49
-
-   11 stmtblock: '{' option_variabledecl_list option_stmt_list . '}'
-
-    '}'  偏移，并进入状态 72
-
-
-状态 50
-
-   27 option_stmt_list: stmt_list .
-   29 stmt_list: stmt_list . stmt
-
-    IF            偏移，并进入状态 31
-    WHILE         偏移，并进入状态 32
-    FOR           偏移，并进入状态 33
-    BREAK         偏移，并进入状态 34
-    CONTINUE      偏移，并进入状态 35
-    RETURN        偏移，并进入状态 36
-    CONST_BOOL    偏移，并进入状态 37
-    CONST_INT     偏移，并进入状态 38
-    CONST_STRING  偏移，并进入状态 39
-    CONST_FLOAT   偏移，并进入状态 40
-    OBJECTID      偏移，并进入状态 41
-    '-'           偏移，并进入状态 42
-    '!'           偏移，并进入状态 43
-    '~'           偏移，并进入状态 44
-    '('           偏移，并进入状态 45
-    '{'           偏移，并进入状态 22
-    ';'           偏移，并进入状态 46
-
-    $default  使用规则 27 以归约 (option_stmt_list)
-
-    stmtblock     转到状态 47
-    stmt          转到状态 73
-    ifstmt        转到状态 51
-    whilestmt     转到状态 52
-    forstmt       转到状态 53
-    returnstmt    转到状态 54
-    continuestmt  转到状态 55
-    breakstmt     转到状态 56
-    expr          转到状态 57
-    call          转到状态 58
-
-
-状态 51
-
-   19 stmt: ifstmt .
-
-    $default  使用规则 19 以归约 (stmt)
-
-
-状态 52
-
-   20 stmt: whilestmt .
-
-    $default  使用规则 20 以归约 (stmt)
-
-
-状态 53
-
-   21 stmt: forstmt .
-
-    $default  使用规则 21 以归约 (stmt)
-
-
-状态 54
-
-   24 stmt: returnstmt .
-
-    $default  使用规则 24 以归约 (stmt)
-
-
-状态 55
-
-   23 stmt: continuestmt .
-
-    $default  使用规则 23 以归约 (stmt)
-
-
-状态 56
-
-   22 stmt: breakstmt .
-
-    $default  使用规则 22 以归约 (stmt)
-
-
-状态 57
-
-   18 stmt: expr . ';'
-   47 expr: expr . '+' expr
-   48     | expr . '-' expr
-   49     | expr . '*' expr
-   50     | expr . '/' expr
-   51     | expr . '%' expr
-   53     | expr . '<' expr
-   54     | expr . LE expr
-   55     | expr . EQUAL expr
-   56     | expr . NE expr
-   57     | expr . GE expr
-   58     | expr . '>' expr
-   59     | expr . AND expr
-   60     | expr . OR expr
-   61     | expr . '^' expr
-   64     | expr . '&' expr
-   65     | expr . '|' expr
-
-    AND    偏移，并进入状态 74
-    OR     偏移，并进入状态 75
-    EQUAL  偏移，并进入状态 76
-    NE     偏移，并进入状态 77
-    GE     偏移，并进入状态 78
-    LE     偏移，并进入状态 79
-    '<'    偏移，并进入状态 80
-    '>'    偏移，并进入状态 81
-    '+'    偏移，并进入状态 82
-    '-'    偏移，并进入状态 83
-    '*'    偏移，并进入状态 84
-    '/'    偏移，并进入状态 85
-    '%'    偏移，并进入状态 86
-    '&'    偏移，并进入状态 87
-    '|'    偏移，并进入状态 88
-    '^'    偏移，并进入状态 89
-    ';'    偏移，并进入状态 90
-
-
-状态 58
-
-   44 expr: call .
-
-    $default  使用规则 44 以归约 (expr)
-
-
-状态 59
-
-   30 ifstmt: IF expr . stmtblock
-   31       | IF expr . stmtblock ELSE stmtblock
-   47 expr: expr . '+' expr
-   48     | expr . '-' expr
-   49     | expr . '*' expr
-   50     | expr . '/' expr
-   51     | expr . '%' expr
-   53     | expr . '<' expr
-   54     | expr . LE expr
-   55     | expr . EQUAL expr
-   56     | expr . NE expr
-   57     | expr . GE expr
-   58     | expr . '>' expr
-   59     | expr . AND expr
-   60     | expr . OR expr
-   61     | expr . '^' expr
-   64     | expr . '&' expr
-   65     | expr . '|' expr
-
-    AND    偏移，并进入状态 74
-    OR     偏移，并进入状态 75
-    EQUAL  偏移，并进入状态 76
-    NE     偏移，并进入状态 77
-    GE     偏移，并进入状态 78
-    LE     偏移，并进入状态 79
-    '<'    偏移，并进入状态 80
-    '>'    偏移，并进入状态 81
-    '+'    偏移，并进入状态 82
-    '-'    偏移，并进入状态 83
-    '*'    偏移，并进入状态 84
-    '/'    偏移，并进入状态 85
-    '%'    偏移，并进入状态 86
-    '&'    偏移，并进入状态 87
-    '|'    偏移，并进入状态 88
-    '^'    偏移，并进入状态 89
-    '{'    偏移，并进入状态 22
-
-    stmtblock  转到状态 91
-
-
-状态 60
-
-   32 whilestmt: WHILE expr . stmtblock
-   47 expr: expr . '+' expr
-   48     | expr . '-' expr
-   49     | expr . '*' expr
-   50     | expr . '/' expr
-   51     | expr . '%' expr
-   53     | expr . '<' expr
-   54     | expr . LE expr
-   55     | expr . EQUAL expr
-   56     | expr . NE expr
-   57     | expr . GE expr
-   58     | expr . '>' expr
-   59     | expr . AND expr
-   60     | expr . OR expr
-   61     | expr . '^' expr
-   64     | expr . '&' expr
-   65     | expr . '|' expr
-
-    AND    偏移，并进入状态 74
-    OR     偏移，并进入状态 75
-    EQUAL  偏移，并进入状态 76
-    NE     偏移，并进入状态 77
-    GE     偏移，并进入状态 78
-    LE     偏移，并进入状态 79
-    '<'    偏移，并进入状态 80
-    '>'    偏移，并进入状态 81
-    '+'    偏移，并进入状态 82
-    '-'    偏移，并进入状态 83
-    '*'    偏移，并进入状态 84
-    '/'    偏移，并进入状态 85
-    '%'    偏移，并进入状态 86
-    '&'    偏移，并进入状态 87
-    '|'    偏移，并进入状态 88
-    '^'    偏移，并进入状态 89
-    '{'    偏移，并进入状态 22
-
-    stmtblock  转到状态 92
-
-
-状态 61
-
-   33 forstmt: FOR option_expr . ';' option_expr ';' option_expr stmtblock
-
-    ';'  偏移，并进入状态 93
-
-
-状态 62
-
-   35 option_expr: expr .
-   47 expr: expr . '+' expr
-   48     | expr . '-' expr
-   49     | expr . '*' expr
-   50     | expr . '/' expr
-   51     | expr . '%' expr
-   53     | expr . '<' expr
-   54     | expr . LE expr
-   55     | expr . EQUAL expr
-   56     | expr . NE expr
-   57     | expr . GE expr
-   58     | expr . '>' expr
-   59     | expr . AND expr
-   60     | expr . OR expr
-   61     | expr . '^' expr
-   64     | expr . '&' expr
-   65     | expr . '|' expr
-
-    AND    偏移，并进入状态 74
-    OR     偏移，并进入状态 75
-    EQUAL  偏移，并进入状态 76
-    NE     偏移，并进入状态 77
-    GE     偏移，并进入状态 78
-    LE     偏移，并进入状态 79
-    '<'    偏移，并进入状态 80
-    '>'    偏移，并进入状态 81
-    '+'    偏移，并进入状态 82
-    '-'    偏移，并进入状态 83
-    '*'    偏移，并进入状态 84
-    '/'    偏移，并进入状态 85
-    '%'    偏移，并进入状态 86
-    '&'    偏移，并进入状态 87
-    '|'    偏移，并进入状态 88
-    '^'    偏移，并进入状态 89
-
-    $default  使用规则 35 以归约 (option_expr)
-
-
-状态 63
-
-   38 breakstmt: BREAK ';' .
-
-    $default  使用规则 38 以归约 (breakstmt)
-
-
-状态 64
-
-   37 continuestmt: CONTINUE ';' .
-
-    $default  使用规则 37 以归约 (continuestmt)
-
-
-状态 65
-
-   36 returnstmt: RETURN option_expr . ';'
-
-    ';'  偏移，并进入状态 94
-
-
-状态 66
-
-   39 expr: OBJECTID '=' . expr
-
-    CONST_BOOL    偏移，并进入状态 37
-    CONST_INT     偏移，并进入状态 38
-    CONST_STRING  偏移，并进入状态 39
-    CONST_FLOAT   偏移，并进入状态 40
-    OBJECTID      偏移，并进入状态 41
-    '-'           偏移，并进入状态 42
-    '!'           偏移，并进入状态 43
-    '~'           偏移，并进入状态 44
-    '('           偏移，并进入状态 45
-
-    expr  转到状态 95
-    call  转到状态 58
-
-
-状态 67
-
-   66 call: OBJECTID '(' . option_actual_list ')'
-
-    CONST_BOOL    偏移，并进入状态 37
-    CONST_INT     偏移，并进入状态 38
-    CONST_STRING  偏移，并进入状态 39
-    CONST_FLOAT   偏移，并进入状态 40
-    OBJECTID      偏移，并进入状态 41
-    '-'           偏移，并进入状态 42
-    '!'           偏移，并进入状态 43
-    '~'           偏移，并进入状态 44
-    '('           偏移，并进入状态 45
-
-    $default  使用规则 70 以归约 (option_actual_list)
-
-    expr                转到状态 96
-    call                转到状态 58
-    actual              转到状态 97
-    actual_list         转到状态 98
-    option_actual_list  转到状态 99
-
-
-状态 68
-
-   47 expr: expr . '+' expr
-   48     | expr . '-' expr
-   49     | expr . '*' expr
-   50     | expr . '/' expr
-   51     | expr . '%' expr
-   52     | '-' expr .
-   53     | expr . '<' expr
-   54     | expr . LE expr
-   55     | expr . EQUAL expr
-   56     | expr . NE expr
-   57     | expr . GE expr
-   58     | expr . '>' expr
-   59     | expr . AND expr
-   60     | expr . OR expr
-   61     | expr . '^' expr
-   64     | expr . '&' expr
-   65     | expr . '|' expr
-
-    '&'  偏移，并进入状态 87
-    '|'  偏移，并进入状态 88
-    '^'  偏移，并进入状态 89
-
-    $default  使用规则 52 以归约 (expr)
-
-
-状态 69
-
-   47 expr: expr . '+' expr
-   48     | expr . '-' expr
-   49     | expr . '*' expr
-   50     | expr . '/' expr
-   51     | expr . '%' expr
-   53     | expr . '<' expr
-   54     | expr . LE expr
-   55     | expr . EQUAL expr
-   56     | expr . NE expr
-   57     | expr . GE expr
-   58     | expr . '>' expr
-   59     | expr . AND expr
-   60     | expr . OR expr
-   61     | expr . '^' expr
-   62     | '!' expr .
-   64     | expr . '&' expr
-   65     | expr . '|' expr
-
-    '&'  偏移，并进入状态 87
-    '|'  偏移，并进入状态 88
-    '^'  偏移，并进入状态 89
-
-    $default  使用规则 62 以归约 (expr)
-
-
-状态 70
-
-   47 expr: expr . '+' expr
-   48     | expr . '-' expr
-   49     | expr . '*' expr
-   50     | expr . '/' expr
-   51     | expr . '%' expr
-   53     | expr . '<' expr
-   54     | expr . LE expr
-   55     | expr . EQUAL expr
-   56     | expr . NE expr
-   57     | expr . GE expr
-   58     | expr . '>' expr
-   59     | expr . AND expr
-   60     | expr . OR expr
-   61     | expr . '^' expr
-   63     | '~' expr .
-   64     | expr . '&' expr
-   65     | expr . '|' expr
-
-    $default  使用规则 63 以归约 (expr)
-
-
-状态 71
-
-   45 expr: '(' expr . ')'
-   47     | expr . '+' expr
-   48     | expr . '-' expr
-   49     | expr . '*' expr
-   50     | expr . '/' expr
-   51     | expr . '%' expr
-   53     | expr . '<' expr
-   54     | expr . LE expr
-   55     | expr . EQUAL expr
-   56     | expr . NE expr
-   57     | expr . GE expr
-   58     | expr . '>' expr
-   59     | expr . AND expr
-   60     | expr . OR expr
-   61     | expr . '^' expr
-   64     | expr . '&' expr
-   65     | expr . '|' expr
-
-    AND    偏移，并进入状态 74
-    OR     偏移，并进入状态 75
-    EQUAL  偏移，并进入状态 76
-    NE     偏移，并进入状态 77
-    GE     偏移，并进入状态 78
-    LE     偏移，并进入状态 79
-    '<'    偏移，并进入状态 80
-    '>'    偏移，并进入状态 81
-    '+'    偏移，并进入状态 82
-    '-'    偏移，并进入状态 83
-    '*'    偏移，并进入状态 84
-    '/'    偏移，并进入状态 85
-    '%'    偏移，并进入状态 86
-    '&'    偏移，并进入状态 87
-    '|'    偏移，并进入状态 88
-    '^'    偏移，并进入状态 89
-    ')'    偏移，并进入状态 100
-
-
-状态 72
-
-   11 stmtblock: '{' option_variabledecl_list option_stmt_list '}' .
-
-    $default  使用规则 11 以归约 (stmtblock)
-
-
-状态 73
-
-   29 stmt_list: stmt_list stmt .
-
-    $default  使用规则 29 以归约 (stmt_list)
-
-
-状态 74
-
-   59 expr: expr AND . expr
-
-    CONST_BOOL    偏移，并进入状态 37
-    CONST_INT     偏移，并进入状态 38
-    CONST_STRING  偏移，并进入状态 39
-    CONST_FLOAT   偏移，并进入状态 40
-    OBJECTID      偏移，并进入状态 41
-    '-'           偏移，并进入状态 42
-    '!'           偏移，并进入状态 43
-    '~'           偏移，并进入状态 44
-    '('           偏移，并进入状态 45
-
-    expr  转到状态 101
-    call  转到状态 58
-
-
-状态 75
-
-   60 expr: expr OR . expr
-
-    CONST_BOOL    偏移，并进入状态 37
-    CONST_INT     偏移，并进入状态 38
-    CONST_STRING  偏移，并进入状态 39
-    CONST_FLOAT   偏移，并进入状态 40
-    OBJECTID      偏移，并进入状态 41
-    '-'           偏移，并进入状态 42
-    '!'           偏移，并进入状态 43
-    '~'           偏移，并进入状态 44
-    '('           偏移，并进入状态 45
-
-    expr  转到状态 102
-    call  转到状态 58
-
-
-状态 76
-
-   55 expr: expr EQUAL . expr
-
-    CONST_BOOL    偏移，并进入状态 37
-    CONST_INT     偏移，并进入状态 38
-    CONST_STRING  偏移，并进入状态 39
-    CONST_FLOAT   偏移，并进入状态 40
-    OBJECTID      偏移，并进入状态 41
-    '-'           偏移，并进入状态 42
-    '!'           偏移，并进入状态 43
-    '~'           偏移，并进入状态 44
-    '('           偏移，并进入状态 45
-
-    expr  转到状态 103
-    call  转到状态 58
-
-
-状态 77
-
-   56 expr: expr NE . expr
-
-    CONST_BOOL    偏移，并进入状态 37
-    CONST_INT     偏移，并进入状态 38
-    CONST_STRING  偏移，并进入状态 39
-    CONST_FLOAT   偏移，并进入状态 40
-    OBJECTID      偏移，并进入状态 41
-    '-'           偏移，并进入状态 42
-    '!'           偏移，并进入状态 43
-    '~'           偏移，并进入状态 44
-    '('           偏移，并进入状态 45
-
-    expr  转到状态 104
-    call  转到状态 58
-
-
-状态 78
-
-   57 expr: expr GE . expr
-
-    CONST_BOOL    偏移，并进入状态 37
-    CONST_INT     偏移，并进入状态 38
-    CONST_STRING  偏移，并进入状态 39
-    CONST_FLOAT   偏移，并进入状态 40
-    OBJECTID      偏移，并进入状态 41
-    '-'           偏移，并进入状态 42
-    '!'           偏移，并进入状态 43
-    '~'           偏移，并进入状态 44
-    '('           偏移，并进入状态 45
-
-    expr  转到状态 105
-    call  转到状态 58
-
-
-状态 79
-
-   54 expr: expr LE . expr
-
-    CONST_BOOL    偏移，并进入状态 37
-    CONST_INT     偏移，并进入状态 38
-    CONST_STRING  偏移，并进入状态 39
-    CONST_FLOAT   偏移，并进入状态 40
-    OBJECTID      偏移，并进入状态 41
-    '-'           偏移，并进入状态 42
-    '!'           偏移，并进入状态 43
-    '~'           偏移，并进入状态 44
-    '('           偏移，并进入状态 45
-
-    expr  转到状态 106
-    call  转到状态 58
-
-
-状态 80
-
-   53 expr: expr '<' . expr
-
-    CONST_BOOL    偏移，并进入状态 37
-    CONST_INT     偏移，并进入状态 38
-    CONST_STRING  偏移，并进入状态 39
-    CONST_FLOAT   偏移，并进入状态 40
-    OBJECTID      偏移，并进入状态 41
-    '-'           偏移，并进入状态 42
-    '!'           偏移，并进入状态 43
-    '~'           偏移，并进入状态 44
-    '('           偏移，并进入状态 45
-
-    expr  转到状态 107
-    call  转到状态 58
-
-
-状态 81
-
-   58 expr: expr '>' . expr
-
-    CONST_BOOL    偏移，并进入状态 37
-    CONST_INT     偏移，并进入状态 38
-    CONST_STRING  偏移，并进入状态 39
-    CONST_FLOAT   偏移，并进入状态 40
-    OBJECTID      偏移，并进入状态 41
-    '-'           偏移，并进入状态 42
-    '!'           偏移，并进入状态 43
-    '~'           偏移，并进入状态 44
-    '('           偏移，并进入状态 45
-
-    expr  转到状态 108
-    call  转到状态 58
-
-
-状态 82
-
-   47 expr: expr '+' . expr
-
-    CONST_BOOL    偏移，并进入状态 37
-    CONST_INT     偏移，并进入状态 38
-    CONST_STRING  偏移，并进入状态 39
-    CONST_FLOAT   偏移，并进入状态 40
-    OBJECTID      偏移，并进入状态 41
-    '-'           偏移，并进入状态 42
-    '!'           偏移，并进入状态 43
-    '~'           偏移，并进入状态 44
-    '('           偏移，并进入状态 45
-
-    expr  转到状态 109
-    call  转到状态 58
-
-
-状态 83
-
-   48 expr: expr '-' . expr
-
-    CONST_BOOL    偏移，并进入状态 37
-    CONST_INT     偏移，并进入状态 38
-    CONST_STRING  偏移，并进入状态 39
-    CONST_FLOAT   偏移，并进入状态 40
-    OBJECTID      偏移，并进入状态 41
-    '-'           偏移，并进入状态 42
-    '!'           偏移，并进入状态 43
-    '~'           偏移，并进入状态 44
-    '('           偏移，并进入状态 45
-
-    expr  转到状态 110
-    call  转到状态 58
-
-
-状态 84
-
-   49 expr: expr '*' . expr
-
-    CONST_BOOL    偏移，并进入状态 37
-    CONST_INT     偏移，并进入状态 38
-    CONST_STRING  偏移，并进入状态 39
-    CONST_FLOAT   偏移，并进入状态 40
-    OBJECTID      偏移，并进入状态 41
-    '-'           偏移，并进入状态 42
-    '!'           偏移，并进入状态 43
-    '~'           偏移，并进入状态 44
-    '('           偏移，并进入状态 45
-
-    expr  转到状态 111
-    call  转到状态 58
-
-
-状态 85
-
-   50 expr: expr '/' . expr
-
-    CONST_BOOL    偏移，并进入状态 37
-    CONST_INT     偏移，并进入状态 38
-    CONST_STRING  偏移，并进入状态 39
-    CONST_FLOAT   偏移，并进入状态 40
-    OBJECTID      偏移，并进入状态 41
-    '-'           偏移，并进入状态 42
-    '!'           偏移，并进入状态 43
-    '~'           偏移，并进入状态 44
-    '('           偏移，并进入状态 45
-
-    expr  转到状态 112
-    call  转到状态 58
-
-
-状态 86
-
-   51 expr: expr '%' . expr
-
-    CONST_BOOL    偏移，并进入状态 37
-    CONST_INT     偏移，并进入状态 38
-    CONST_STRING  偏移，并进入状态 39
-    CONST_FLOAT   偏移，并进入状态 40
-    OBJECTID      偏移，并进入状态 41
-    '-'           偏移，并进入状态 42
-    '!'           偏移，并进入状态 43
-    '~'           偏移，并进入状态 44
-    '('           偏移，并进入状态 45
-
-    expr  转到状态 113
-    call  转到状态 58
-
-
-状态 87
-
-   64 expr: expr '&' . expr
-
-    CONST_BOOL    偏移，并进入状态 37
-    CONST_INT     偏移，并进入状态 38
-    CONST_STRING  偏移，并进入状态 39
-    CONST_FLOAT   偏移，并进入状态 40
-    OBJECTID      偏移，并进入状态 41
-    '-'           偏移，并进入状态 42
-    '!'           偏移，并进入状态 43
-    '~'           偏移，并进入状态 44
-    '('           偏移，并进入状态 45
-
-    expr  转到状态 114
-    call  转到状态 58
-
-
-状态 88
-
-   65 expr: expr '|' . expr
-
-    CONST_BOOL    偏移，并进入状态 37
-    CONST_INT     偏移，并进入状态 38
-    CONST_STRING  偏移，并进入状态 39
-    CONST_FLOAT   偏移，并进入状态 40
-    OBJECTID      偏移，并进入状态 41
-    '-'           偏移，并进入状态 42
-    '!'           偏移，并进入状态 43
-    '~'           偏移，并进入状态 44
-    '('           偏移，并进入状态 45
-
-    expr  转到状态 115
-    call  转到状态 58
-
-
-状态 89
-
-   61 expr: expr '^' . expr
-
-    CONST_BOOL    偏移，并进入状态 37
-    CONST_INT     偏移，并进入状态 38
-    CONST_STRING  偏移，并进入状态 39
-    CONST_FLOAT   偏移，并进入状态 40
-    OBJECTID      偏移，并进入状态 41
-    '-'           偏移，并进入状态 42
-    '!'           偏移，并进入状态 43
-    '~'           偏移，并进入状态 44
-    '('           偏移，并进入状态 45
-
-    expr  转到状态 116
-    call  转到状态 58
-
-
-状态 90
-
-   18 stmt: expr ';' .
-
-    $default  使用规则 18 以归约 (stmt)
-
-
-状态 91
-
-   30 ifstmt: IF expr stmtblock .
-   31       | IF expr stmtblock . ELSE stmtblock
-
-    ELSE  偏移，并进入状态 117
-
-    $default  使用规则 30 以归约 (ifstmt)
-
-
-状态 92
-
-   32 whilestmt: WHILE expr stmtblock .
-
-    $default  使用规则 32 以归约 (whilestmt)
-
-
-状态 93
-
-   33 forstmt: FOR option_expr ';' . option_expr ';' option_expr stmtblock
-
-    CONST_BOOL    偏移，并进入状态 37
-    CONST_INT     偏移，并进入状态 38
-    CONST_STRING  偏移，并进入状态 39
-    CONST_FLOAT   偏移，并进入状态 40
-    OBJECTID      偏移，并进入状态 41
-    '-'           偏移，并进入状态 42
-    '!'           偏移，并进入状态 43
-    '~'           偏移，并进入状态 44
-    '('           偏移，并进入状态 45
-
-    $default  使用规则 34 以归约 (option_expr)
-
-    option_expr  转到状态 118
-    expr         转到状态 62
-    call         转到状态 58
-
-
-状态 94
-
-   36 returnstmt: RETURN option_expr ';' .
-
-    $default  使用规则 36 以归约 (returnstmt)
-
-
-状态 95
-
-   39 expr: OBJECTID '=' expr .
-   47     | expr . '+' expr
-   48     | expr . '-' expr
-   49     | expr . '*' expr
-   50     | expr . '/' expr
-   51     | expr . '%' expr
-   53     | expr . '<' expr
-   54     | expr . LE expr
-   55     | expr . EQUAL expr
-   56     | expr . NE expr
-   57     | expr . GE expr
-   58     | expr . '>' expr
-   59     | expr . AND expr
-   60     | expr . OR expr
-   61     | expr . '^' expr
-   64     | expr . '&' expr
-   65     | expr . '|' expr
-
-    AND    偏移，并进入状态 74
-    OR     偏移，并进入状态 75
-    EQUAL  偏移，并进入状态 76
-    NE     偏移，并进入状态 77
-    GE     偏移，并进入状态 78
-    LE     偏移，并进入状态 79
-    '<'    偏移，并进入状态 80
-    '>'    偏移，并进入状态 81
-    '+'    偏移，并进入状态 82
-    '-'    偏移，并进入状态 83
-    '*'    偏移，并进入状态 84
-    '/'    偏移，并进入状态 85
-    '%'    偏移，并进入状态 86
-    '&'    偏移，并进入状态 87
-    '|'    偏移，并进入状态 88
-    '^'    偏移，并进入状态 89
-
-    $default  使用规则 39 以归约 (expr)
-
-
-状态 96
-
-   47 expr: expr . '+' expr
-   48     | expr . '-' expr
-   49     | expr . '*' expr
-   50     | expr . '/' expr
-   51     | expr . '%' expr
-   53     | expr . '<' expr
-   54     | expr . LE expr
-   55     | expr . EQUAL expr
-   56     | expr . NE expr
-   57     | expr . GE expr
-   58     | expr . '>' expr
-   59     | expr . AND expr
-   60     | expr . OR expr
-   61     | expr . '^' expr
-   64     | expr . '&' expr
-   65     | expr . '|' expr
-   67 actual: expr .
-
-    AND    偏移，并进入状态 74
-    OR     偏移，并进入状态 75
-    EQUAL  偏移，并进入状态 76
-    NE     偏移，并进入状态 77
-    GE     偏移，并进入状态 78
-    LE     偏移，并进入状态 79
-    '<'    偏移，并进入状态 80
-    '>'    偏移，并进入状态 81
-    '+'    偏移，并进入状态 82
-    '-'    偏移，并进入状态 83
-    '*'    偏移，并进入状态 84
-    '/'    偏移，并进入状态 85
-    '%'    偏移，并进入状态 86
-    '&'    偏移，并进入状态 87
-    '|'    偏移，并进入状态 88
-    '^'    偏移，并进入状态 89
-
-    $default  使用规则 67 以归约 (actual)
-
-
-状态 97
-
-   68 actual_list: actual .
-
-    $default  使用规则 68 以归约 (actual_list)
-
-
-状态 98
-
-   69 actual_list: actual_list . ',' actual
-   71 option_actual_list: actual_list .
-
-    ','  偏移，并进入状态 119
-
-    $default  使用规则 71 以归约 (option_actual_list)
-
-
-状态 99
-
-   66 call: OBJECTID '(' option_actual_list . ')'
-
-    ')'  偏移，并进入状态 120
-
-
-状态 100
-
-   45 expr: '(' expr ')' .
+   45 expr: CONST_BOOL .
 
     $default  使用规则 45 以归约 (expr)
 
 
-状态 101
+状态 33
 
-   47 expr: expr . '+' expr
-   48     | expr . '-' expr
-   49     | expr . '*' expr
-   50     | expr . '/' expr
-   51     | expr . '%' expr
-   53     | expr . '<' expr
-   54     | expr . LE expr
-   55     | expr . EQUAL expr
-   56     | expr . NE expr
-   57     | expr . GE expr
-   58     | expr . '>' expr
-   59     | expr . AND expr
-   59     | expr AND expr .
-   60     | expr . OR expr
-   61     | expr . '^' expr
-   64     | expr . '&' expr
-   65     | expr . '|' expr
+   46 expr: CONST_INT .
 
-    AND    偏移，并进入状态 74
-    EQUAL  偏移，并进入状态 76
-    NE     偏移，并进入状态 77
-    GE     偏移，并进入状态 78
-    LE     偏移，并进入状态 79
-    '<'    偏移，并进入状态 80
-    '>'    偏移，并进入状态 81
-    '+'    偏移，并进入状态 82
-    '-'    偏移，并进入状态 83
-    '*'    偏移，并进入状态 84
-    '/'    偏移，并进入状态 85
-    '%'    偏移，并进入状态 86
-    '&'    偏移，并进入状态 87
-    '|'    偏移，并进入状态 88
-    '^'    偏移，并进入状态 89
-
-    $default  使用规则 59 以归约 (expr)
+    $default  使用规则 46 以归约 (expr)
 
 
-状态 102
+状态 34
 
-   47 expr: expr . '+' expr
-   48     | expr . '-' expr
-   49     | expr . '*' expr
-   50     | expr . '/' expr
-   51     | expr . '%' expr
-   53     | expr . '<' expr
-   54     | expr . LE expr
-   55     | expr . EQUAL expr
-   56     | expr . NE expr
-   57     | expr . GE expr
-   58     | expr . '>' expr
-   59     | expr . AND expr
-   60     | expr . OR expr
-   60     | expr OR expr .
-   61     | expr . '^' expr
-   64     | expr . '&' expr
-   65     | expr . '|' expr
+   48 expr: CONST_STRING .
 
-    AND    偏移，并进入状态 74
-    OR     偏移，并进入状态 75
-    EQUAL  偏移，并进入状态 76
-    NE     偏移，并进入状态 77
-    GE     偏移，并进入状态 78
-    LE     偏移，并进入状态 79
-    '<'    偏移，并进入状态 80
-    '>'    偏移，并进入状态 81
-    '+'    偏移，并进入状态 82
-    '-'    偏移，并进入状态 83
-    '*'    偏移，并进入状态 84
-    '/'    偏移，并进入状态 85
-    '%'    偏移，并进入状态 86
-    '&'    偏移，并进入状态 87
-    '|'    偏移，并进入状态 88
-    '^'    偏移，并进入状态 89
-
-    $default  使用规则 60 以归约 (expr)
+    $default  使用规则 48 以归约 (expr)
 
 
-状态 103
+状态 35
 
-   47 expr: expr . '+' expr
-   48     | expr . '-' expr
-   49     | expr . '*' expr
-   50     | expr . '/' expr
-   51     | expr . '%' expr
-   53     | expr . '<' expr
-   54     | expr . LE expr
-   55     | expr . EQUAL expr
-   55     | expr EQUAL expr .
-   56     | expr . NE expr
-   57     | expr . GE expr
-   58     | expr . '>' expr
-   59     | expr . AND expr
-   60     | expr . OR expr
-   61     | expr . '^' expr
-   64     | expr . '&' expr
-   65     | expr . '|' expr
+   47 expr: CONST_FLOAT .
 
-    GE   偏移，并进入状态 78
-    LE   偏移，并进入状态 79
-    '<'  偏移，并进入状态 80
-    '>'  偏移，并进入状态 81
-    '+'  偏移，并进入状态 82
-    '-'  偏移，并进入状态 83
-    '*'  偏移，并进入状态 84
-    '/'  偏移，并进入状态 85
-    '%'  偏移，并进入状态 86
-    '&'  偏移，并进入状态 87
-    '|'  偏移，并进入状态 88
-    '^'  偏移，并进入状态 89
-
-    EQUAL  错误 (非相联的)
-    NE     错误 (非相联的)
-
-    $default  使用规则 55 以归约 (expr)
+    $default  使用规则 47 以归约 (expr)
 
 
-状态 104
+状态 36
 
-   47 expr: expr . '+' expr
-   48     | expr . '-' expr
-   49     | expr . '*' expr
-   50     | expr . '/' expr
-   51     | expr . '%' expr
-   53     | expr . '<' expr
-   54     | expr . LE expr
-   55     | expr . EQUAL expr
-   56     | expr . NE expr
-   56     | expr NE expr .
-   57     | expr . GE expr
-   58     | expr . '>' expr
-   59     | expr . AND expr
-   60     | expr . OR expr
-   61     | expr . '^' expr
-   64     | expr . '&' expr
-   65     | expr . '|' expr
+   44 expr: OBJECTID . '=' expr
+   51     | OBJECTID .
+   71 call: OBJECTID . '(' actual_list ')'
+   72     | OBJECTID . '(' ')'
 
-    GE   偏移，并进入状态 78
-    LE   偏移，并进入状态 79
-    '<'  偏移，并进入状态 80
-    '>'  偏移，并进入状态 81
-    '+'  偏移，并进入状态 82
-    '-'  偏移，并进入状态 83
-    '*'  偏移，并进入状态 84
-    '/'  偏移，并进入状态 85
-    '%'  偏移，并进入状态 86
-    '&'  偏移，并进入状态 87
-    '|'  偏移，并进入状态 88
-    '^'  偏移，并进入状态 89
+    '='  偏移，并进入状态 65
+    '('  偏移，并进入状态 66
 
-    EQUAL  错误 (非相联的)
-    NE     错误 (非相联的)
-
-    $default  使用规则 56 以归约 (expr)
+    $default  使用规则 51 以归约 (expr)
 
 
-状态 105
+状态 37
 
-   47 expr: expr . '+' expr
-   48     | expr . '-' expr
-   49     | expr . '*' expr
-   50     | expr . '/' expr
-   51     | expr . '%' expr
-   53     | expr . '<' expr
-   54     | expr . LE expr
-   55     | expr . EQUAL expr
-   56     | expr . NE expr
-   57     | expr . GE expr
-   57     | expr GE expr .
-   58     | expr . '>' expr
-   59     | expr . AND expr
-   60     | expr . OR expr
-   61     | expr . '^' expr
-   64     | expr . '&' expr
-   65     | expr . '|' expr
+   57 expr: '-' . expr
 
-    '+'  偏移，并进入状态 82
-    '-'  偏移，并进入状态 83
-    '*'  偏移，并进入状态 84
-    '/'  偏移，并进入状态 85
-    '%'  偏移，并进入状态 86
-    '&'  偏移，并进入状态 87
-    '|'  偏移，并进入状态 88
-    '^'  偏移，并进入状态 89
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
 
-    GE   错误 (非相联的)
-    LE   错误 (非相联的)
-    '<'  错误 (非相联的)
-    '>'  错误 (非相联的)
+    expr  转到状态 67
+    call  转到状态 55
+
+
+状态 38
+
+   67 expr: '!' . expr
+
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+
+    expr  转到状态 68
+    call  转到状态 55
+
+
+状态 39
+
+   68 expr: '~' . expr
+
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+
+    expr  转到状态 69
+    call  转到状态 55
+
+
+状态 40
+
+   50 expr: '(' . expr ')'
+
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+
+    expr  转到状态 70
+    call  转到状态 55
+
+
+状态 41
+
+   12 stmtblock: '{' '}' .
+
+    $default  使用规则 12 以归约 (stmtblock)
+
+
+状态 42
+
+   20 stmt: ';' .
+
+    $default  使用规则 20 以归约 (stmt)
+
+
+状态 43
+
+   28 stmt: stmtblock .
+
+    $default  使用规则 28 以归约 (stmt)
+
+
+状态 44
+
+   11 stmtblock: '{' variabledecl_list . stmt_list '}'
+   13          | '{' variabledecl_list . '}'
+   16 variabledecl_list: variabledecl_list . variabledecl
+
+    IF            偏移，并进入状态 26
+    WHILE         偏移，并进入状态 27
+    FOR           偏移，并进入状态 28
+    BREAK         偏移，并进入状态 29
+    CONTINUE      偏移，并进入状态 30
+    RETURN        偏移，并进入状态 31
+    VAR           偏移，并进入状态 2
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+    '{'           偏移，并进入状态 22
+    '}'           偏移，并进入状态 71
+    ';'           偏移，并进入状态 42
+
+    stmtblock     转到状态 43
+    variabledecl  转到状态 72
+    stmt_list     转到状态 73
+    stmt          转到状态 47
+    ifstmt        转到状态 48
+    whilestmt     转到状态 49
+    forstmt       转到状态 50
+    returnstmt    转到状态 51
+    continuestmt  转到状态 52
+    breakstmt     转到状态 53
+    expr          转到状态 54
+    call          转到状态 55
+
+
+状态 45
+
+   15 variabledecl_list: variabledecl .
+
+    $default  使用规则 15 以归约 (variabledecl_list)
+
+
+状态 46
+
+   14 stmtblock: '{' stmt_list . '}'
+   19 stmt_list: stmt_list . stmt
+
+    IF            偏移，并进入状态 26
+    WHILE         偏移，并进入状态 27
+    FOR           偏移，并进入状态 28
+    BREAK         偏移，并进入状态 29
+    CONTINUE      偏移，并进入状态 30
+    RETURN        偏移，并进入状态 31
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+    '{'           偏移，并进入状态 22
+    '}'           偏移，并进入状态 74
+    ';'           偏移，并进入状态 42
+
+    stmtblock     转到状态 43
+    stmt          转到状态 75
+    ifstmt        转到状态 48
+    whilestmt     转到状态 49
+    forstmt       转到状态 50
+    returnstmt    转到状态 51
+    continuestmt  转到状态 52
+    breakstmt     转到状态 53
+    expr          转到状态 54
+    call          转到状态 55
+
+
+状态 47
+
+   18 stmt_list: stmt .
+
+    $default  使用规则 18 以归约 (stmt_list)
+
+
+状态 48
+
+   22 stmt: ifstmt .
+
+    $default  使用规则 22 以归约 (stmt)
+
+
+状态 49
+
+   23 stmt: whilestmt .
+
+    $default  使用规则 23 以归约 (stmt)
+
+
+状态 50
+
+   24 stmt: forstmt .
+
+    $default  使用规则 24 以归约 (stmt)
+
+
+状态 51
+
+   27 stmt: returnstmt .
+
+    $default  使用规则 27 以归约 (stmt)
+
+
+状态 52
+
+   26 stmt: continuestmt .
+
+    $default  使用规则 26 以归约 (stmt)
+
+
+状态 53
+
+   25 stmt: breakstmt .
+
+    $default  使用规则 25 以归约 (stmt)
+
+
+状态 54
+
+   21 stmt: expr . ';'
+   52 expr: expr . '+' expr
+   53     | expr . '-' expr
+   54     | expr . '*' expr
+   55     | expr . '/' expr
+   56     | expr . '%' expr
+   58     | expr . '<' expr
+   59     | expr . LE expr
+   60     | expr . EQUAL expr
+   61     | expr . NE expr
+   62     | expr . GE expr
+   63     | expr . '>' expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . '^' expr
+   69     | expr . '&' expr
+   70     | expr . '|' expr
+
+    AND    偏移，并进入状态 76
+    OR     偏移，并进入状态 77
+    EQUAL  偏移，并进入状态 78
+    NE     偏移，并进入状态 79
+    GE     偏移，并进入状态 80
+    LE     偏移，并进入状态 81
+    '<'    偏移，并进入状态 82
+    '>'    偏移，并进入状态 83
+    '+'    偏移，并进入状态 84
+    '-'    偏移，并进入状态 85
+    '*'    偏移，并进入状态 86
+    '/'    偏移，并进入状态 87
+    '%'    偏移，并进入状态 88
+    '&'    偏移，并进入状态 89
+    '|'    偏移，并进入状态 90
+    '^'    偏移，并进入状态 91
+    ';'    偏移，并进入状态 92
+
+
+状态 55
+
+   49 expr: call .
+
+    $default  使用规则 49 以归约 (expr)
+
+
+状态 56
+
+    8 calldecl: FUNC OBJECTID '(' variable_list ')' TYPEID stmtblock .
+
+    $default  使用规则 8 以归约 (calldecl)
+
+
+状态 57
+
+   29 ifstmt: IF expr . stmtblock
+   30       | IF expr . stmtblock ELSE stmtblock
+   52 expr: expr . '+' expr
+   53     | expr . '-' expr
+   54     | expr . '*' expr
+   55     | expr . '/' expr
+   56     | expr . '%' expr
+   58     | expr . '<' expr
+   59     | expr . LE expr
+   60     | expr . EQUAL expr
+   61     | expr . NE expr
+   62     | expr . GE expr
+   63     | expr . '>' expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . '^' expr
+   69     | expr . '&' expr
+   70     | expr . '|' expr
+
+    AND    偏移，并进入状态 76
+    OR     偏移，并进入状态 77
+    EQUAL  偏移，并进入状态 78
+    NE     偏移，并进入状态 79
+    GE     偏移，并进入状态 80
+    LE     偏移，并进入状态 81
+    '<'    偏移，并进入状态 82
+    '>'    偏移，并进入状态 83
+    '+'    偏移，并进入状态 84
+    '-'    偏移，并进入状态 85
+    '*'    偏移，并进入状态 86
+    '/'    偏移，并进入状态 87
+    '%'    偏移，并进入状态 88
+    '&'    偏移，并进入状态 89
+    '|'    偏移，并进入状态 90
+    '^'    偏移，并进入状态 91
+    '{'    偏移，并进入状态 22
+
+    stmtblock  转到状态 93
+
+
+状态 58
+
+   31 whilestmt: WHILE expr . stmtblock
+   52 expr: expr . '+' expr
+   53     | expr . '-' expr
+   54     | expr . '*' expr
+   55     | expr . '/' expr
+   56     | expr . '%' expr
+   58     | expr . '<' expr
+   59     | expr . LE expr
+   60     | expr . EQUAL expr
+   61     | expr . NE expr
+   62     | expr . GE expr
+   63     | expr . '>' expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . '^' expr
+   69     | expr . '&' expr
+   70     | expr . '|' expr
+
+    AND    偏移，并进入状态 76
+    OR     偏移，并进入状态 77
+    EQUAL  偏移，并进入状态 78
+    NE     偏移，并进入状态 79
+    GE     偏移，并进入状态 80
+    LE     偏移，并进入状态 81
+    '<'    偏移，并进入状态 82
+    '>'    偏移，并进入状态 83
+    '+'    偏移，并进入状态 84
+    '-'    偏移，并进入状态 85
+    '*'    偏移，并进入状态 86
+    '/'    偏移，并进入状态 87
+    '%'    偏移，并进入状态 88
+    '&'    偏移，并进入状态 89
+    '|'    偏移，并进入状态 90
+    '^'    偏移，并进入状态 91
+    '{'    偏移，并进入状态 22
+
+    stmtblock  转到状态 94
+
+
+状态 59
+
+   32 forstmt: FOR ';' . ';' stmtblock
+   34        | FOR ';' . expr ';' stmtblock
+   35        | FOR ';' . ';' expr stmtblock
+   37        | FOR ';' . expr ';' expr stmtblock
+
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+    ';'           偏移，并进入状态 95
+
+    expr  转到状态 96
+    call  转到状态 55
+
+
+状态 60
+
+   33 forstmt: FOR expr . ';' ';' stmtblock
+   36        | FOR expr . ';' expr ';' stmtblock
+   38        | FOR expr . ';' ';' expr stmtblock
+   39        | FOR expr . ';' expr ';' expr stmtblock
+   52 expr: expr . '+' expr
+   53     | expr . '-' expr
+   54     | expr . '*' expr
+   55     | expr . '/' expr
+   56     | expr . '%' expr
+   58     | expr . '<' expr
+   59     | expr . LE expr
+   60     | expr . EQUAL expr
+   61     | expr . NE expr
+   62     | expr . GE expr
+   63     | expr . '>' expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . '^' expr
+   69     | expr . '&' expr
+   70     | expr . '|' expr
+
+    AND    偏移，并进入状态 76
+    OR     偏移，并进入状态 77
+    EQUAL  偏移，并进入状态 78
+    NE     偏移，并进入状态 79
+    GE     偏移，并进入状态 80
+    LE     偏移，并进入状态 81
+    '<'    偏移，并进入状态 82
+    '>'    偏移，并进入状态 83
+    '+'    偏移，并进入状态 84
+    '-'    偏移，并进入状态 85
+    '*'    偏移，并进入状态 86
+    '/'    偏移，并进入状态 87
+    '%'    偏移，并进入状态 88
+    '&'    偏移，并进入状态 89
+    '|'    偏移，并进入状态 90
+    '^'    偏移，并进入状态 91
+    ';'    偏移，并进入状态 97
+
+
+状态 61
+
+   43 breakstmt: BREAK ';' .
+
+    $default  使用规则 43 以归约 (breakstmt)
+
+
+状态 62
+
+   42 continuestmt: CONTINUE ';' .
+
+    $default  使用规则 42 以归约 (continuestmt)
+
+
+状态 63
+
+   40 returnstmt: RETURN ';' .
+
+    $default  使用规则 40 以归约 (returnstmt)
+
+
+状态 64
+
+   41 returnstmt: RETURN expr . ';'
+   52 expr: expr . '+' expr
+   53     | expr . '-' expr
+   54     | expr . '*' expr
+   55     | expr . '/' expr
+   56     | expr . '%' expr
+   58     | expr . '<' expr
+   59     | expr . LE expr
+   60     | expr . EQUAL expr
+   61     | expr . NE expr
+   62     | expr . GE expr
+   63     | expr . '>' expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . '^' expr
+   69     | expr . '&' expr
+   70     | expr . '|' expr
+
+    AND    偏移，并进入状态 76
+    OR     偏移，并进入状态 77
+    EQUAL  偏移，并进入状态 78
+    NE     偏移，并进入状态 79
+    GE     偏移，并进入状态 80
+    LE     偏移，并进入状态 81
+    '<'    偏移，并进入状态 82
+    '>'    偏移，并进入状态 83
+    '+'    偏移，并进入状态 84
+    '-'    偏移，并进入状态 85
+    '*'    偏移，并进入状态 86
+    '/'    偏移，并进入状态 87
+    '%'    偏移，并进入状态 88
+    '&'    偏移，并进入状态 89
+    '|'    偏移，并进入状态 90
+    '^'    偏移，并进入状态 91
+    ';'    偏移，并进入状态 98
+
+
+状态 65
+
+   44 expr: OBJECTID '=' . expr
+
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+
+    expr  转到状态 99
+    call  转到状态 55
+
+
+状态 66
+
+   71 call: OBJECTID '(' . actual_list ')'
+   72     | OBJECTID '(' . ')'
+
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+    ')'           偏移，并进入状态 100
+
+    expr         转到状态 101
+    call         转到状态 55
+    actual       转到状态 102
+    actual_list  转到状态 103
+
+
+状态 67
+
+   52 expr: expr . '+' expr
+   53     | expr . '-' expr
+   54     | expr . '*' expr
+   55     | expr . '/' expr
+   56     | expr . '%' expr
+   57     | '-' expr .
+   58     | expr . '<' expr
+   59     | expr . LE expr
+   60     | expr . EQUAL expr
+   61     | expr . NE expr
+   62     | expr . GE expr
+   63     | expr . '>' expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . '^' expr
+   69     | expr . '&' expr
+   70     | expr . '|' expr
+
+    '&'  偏移，并进入状态 89
+    '|'  偏移，并进入状态 90
+    '^'  偏移，并进入状态 91
 
     $default  使用规则 57 以归约 (expr)
 
 
+状态 68
+
+   52 expr: expr . '+' expr
+   53     | expr . '-' expr
+   54     | expr . '*' expr
+   55     | expr . '/' expr
+   56     | expr . '%' expr
+   58     | expr . '<' expr
+   59     | expr . LE expr
+   60     | expr . EQUAL expr
+   61     | expr . NE expr
+   62     | expr . GE expr
+   63     | expr . '>' expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . '^' expr
+   67     | '!' expr .
+   69     | expr . '&' expr
+   70     | expr . '|' expr
+
+    '&'  偏移，并进入状态 89
+    '|'  偏移，并进入状态 90
+    '^'  偏移，并进入状态 91
+
+    $default  使用规则 67 以归约 (expr)
+
+
+状态 69
+
+   52 expr: expr . '+' expr
+   53     | expr . '-' expr
+   54     | expr . '*' expr
+   55     | expr . '/' expr
+   56     | expr . '%' expr
+   58     | expr . '<' expr
+   59     | expr . LE expr
+   60     | expr . EQUAL expr
+   61     | expr . NE expr
+   62     | expr . GE expr
+   63     | expr . '>' expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . '^' expr
+   68     | '~' expr .
+   69     | expr . '&' expr
+   70     | expr . '|' expr
+
+    $default  使用规则 68 以归约 (expr)
+
+
+状态 70
+
+   50 expr: '(' expr . ')'
+   52     | expr . '+' expr
+   53     | expr . '-' expr
+   54     | expr . '*' expr
+   55     | expr . '/' expr
+   56     | expr . '%' expr
+   58     | expr . '<' expr
+   59     | expr . LE expr
+   60     | expr . EQUAL expr
+   61     | expr . NE expr
+   62     | expr . GE expr
+   63     | expr . '>' expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . '^' expr
+   69     | expr . '&' expr
+   70     | expr . '|' expr
+
+    AND    偏移，并进入状态 76
+    OR     偏移，并进入状态 77
+    EQUAL  偏移，并进入状态 78
+    NE     偏移，并进入状态 79
+    GE     偏移，并进入状态 80
+    LE     偏移，并进入状态 81
+    '<'    偏移，并进入状态 82
+    '>'    偏移，并进入状态 83
+    '+'    偏移，并进入状态 84
+    '-'    偏移，并进入状态 85
+    '*'    偏移，并进入状态 86
+    '/'    偏移，并进入状态 87
+    '%'    偏移，并进入状态 88
+    '&'    偏移，并进入状态 89
+    '|'    偏移，并进入状态 90
+    '^'    偏移，并进入状态 91
+    ')'    偏移，并进入状态 104
+
+
+状态 71
+
+   13 stmtblock: '{' variabledecl_list '}' .
+
+    $default  使用规则 13 以归约 (stmtblock)
+
+
+状态 72
+
+   16 variabledecl_list: variabledecl_list variabledecl .
+
+    $default  使用规则 16 以归约 (variabledecl_list)
+
+
+状态 73
+
+   11 stmtblock: '{' variabledecl_list stmt_list . '}'
+   19 stmt_list: stmt_list . stmt
+
+    IF            偏移，并进入状态 26
+    WHILE         偏移，并进入状态 27
+    FOR           偏移，并进入状态 28
+    BREAK         偏移，并进入状态 29
+    CONTINUE      偏移，并进入状态 30
+    RETURN        偏移，并进入状态 31
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+    '{'           偏移，并进入状态 22
+    '}'           偏移，并进入状态 105
+    ';'           偏移，并进入状态 42
+
+    stmtblock     转到状态 43
+    stmt          转到状态 75
+    ifstmt        转到状态 48
+    whilestmt     转到状态 49
+    forstmt       转到状态 50
+    returnstmt    转到状态 51
+    continuestmt  转到状态 52
+    breakstmt     转到状态 53
+    expr          转到状态 54
+    call          转到状态 55
+
+
+状态 74
+
+   14 stmtblock: '{' stmt_list '}' .
+
+    $default  使用规则 14 以归约 (stmtblock)
+
+
+状态 75
+
+   19 stmt_list: stmt_list stmt .
+
+    $default  使用规则 19 以归约 (stmt_list)
+
+
+状态 76
+
+   64 expr: expr AND . expr
+
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+
+    expr  转到状态 106
+    call  转到状态 55
+
+
+状态 77
+
+   65 expr: expr OR . expr
+
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+
+    expr  转到状态 107
+    call  转到状态 55
+
+
+状态 78
+
+   60 expr: expr EQUAL . expr
+
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+
+    expr  转到状态 108
+    call  转到状态 55
+
+
+状态 79
+
+   61 expr: expr NE . expr
+
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+
+    expr  转到状态 109
+    call  转到状态 55
+
+
+状态 80
+
+   62 expr: expr GE . expr
+
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+
+    expr  转到状态 110
+    call  转到状态 55
+
+
+状态 81
+
+   59 expr: expr LE . expr
+
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+
+    expr  转到状态 111
+    call  转到状态 55
+
+
+状态 82
+
+   58 expr: expr '<' . expr
+
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+
+    expr  转到状态 112
+    call  转到状态 55
+
+
+状态 83
+
+   63 expr: expr '>' . expr
+
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+
+    expr  转到状态 113
+    call  转到状态 55
+
+
+状态 84
+
+   52 expr: expr '+' . expr
+
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+
+    expr  转到状态 114
+    call  转到状态 55
+
+
+状态 85
+
+   53 expr: expr '-' . expr
+
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+
+    expr  转到状态 115
+    call  转到状态 55
+
+
+状态 86
+
+   54 expr: expr '*' . expr
+
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+
+    expr  转到状态 116
+    call  转到状态 55
+
+
+状态 87
+
+   55 expr: expr '/' . expr
+
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+
+    expr  转到状态 117
+    call  转到状态 55
+
+
+状态 88
+
+   56 expr: expr '%' . expr
+
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+
+    expr  转到状态 118
+    call  转到状态 55
+
+
+状态 89
+
+   69 expr: expr '&' . expr
+
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+
+    expr  转到状态 119
+    call  转到状态 55
+
+
+状态 90
+
+   70 expr: expr '|' . expr
+
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+
+    expr  转到状态 120
+    call  转到状态 55
+
+
+状态 91
+
+   66 expr: expr '^' . expr
+
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+
+    expr  转到状态 121
+    call  转到状态 55
+
+
+状态 92
+
+   21 stmt: expr ';' .
+
+    $default  使用规则 21 以归约 (stmt)
+
+
+状态 93
+
+   29 ifstmt: IF expr stmtblock .
+   30       | IF expr stmtblock . ELSE stmtblock
+
+    ELSE  偏移，并进入状态 122
+
+    $default  使用规则 29 以归约 (ifstmt)
+
+
+状态 94
+
+   31 whilestmt: WHILE expr stmtblock .
+
+    $default  使用规则 31 以归约 (whilestmt)
+
+
+状态 95
+
+   32 forstmt: FOR ';' ';' . stmtblock
+   35        | FOR ';' ';' . expr stmtblock
+
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+    '{'           偏移，并进入状态 22
+
+    stmtblock  转到状态 123
+    expr       转到状态 124
+    call       转到状态 55
+
+
+状态 96
+
+   34 forstmt: FOR ';' expr . ';' stmtblock
+   37        | FOR ';' expr . ';' expr stmtblock
+   52 expr: expr . '+' expr
+   53     | expr . '-' expr
+   54     | expr . '*' expr
+   55     | expr . '/' expr
+   56     | expr . '%' expr
+   58     | expr . '<' expr
+   59     | expr . LE expr
+   60     | expr . EQUAL expr
+   61     | expr . NE expr
+   62     | expr . GE expr
+   63     | expr . '>' expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . '^' expr
+   69     | expr . '&' expr
+   70     | expr . '|' expr
+
+    AND    偏移，并进入状态 76
+    OR     偏移，并进入状态 77
+    EQUAL  偏移，并进入状态 78
+    NE     偏移，并进入状态 79
+    GE     偏移，并进入状态 80
+    LE     偏移，并进入状态 81
+    '<'    偏移，并进入状态 82
+    '>'    偏移，并进入状态 83
+    '+'    偏移，并进入状态 84
+    '-'    偏移，并进入状态 85
+    '*'    偏移，并进入状态 86
+    '/'    偏移，并进入状态 87
+    '%'    偏移，并进入状态 88
+    '&'    偏移，并进入状态 89
+    '|'    偏移，并进入状态 90
+    '^'    偏移，并进入状态 91
+    ';'    偏移，并进入状态 125
+
+
+状态 97
+
+   33 forstmt: FOR expr ';' . ';' stmtblock
+   36        | FOR expr ';' . expr ';' stmtblock
+   38        | FOR expr ';' . ';' expr stmtblock
+   39        | FOR expr ';' . expr ';' expr stmtblock
+
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+    ';'           偏移，并进入状态 126
+
+    expr  转到状态 127
+    call  转到状态 55
+
+
+状态 98
+
+   41 returnstmt: RETURN expr ';' .
+
+    $default  使用规则 41 以归约 (returnstmt)
+
+
+状态 99
+
+   44 expr: OBJECTID '=' expr .
+   52     | expr . '+' expr
+   53     | expr . '-' expr
+   54     | expr . '*' expr
+   55     | expr . '/' expr
+   56     | expr . '%' expr
+   58     | expr . '<' expr
+   59     | expr . LE expr
+   60     | expr . EQUAL expr
+   61     | expr . NE expr
+   62     | expr . GE expr
+   63     | expr . '>' expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . '^' expr
+   69     | expr . '&' expr
+   70     | expr . '|' expr
+
+    AND    偏移，并进入状态 76
+    OR     偏移，并进入状态 77
+    EQUAL  偏移，并进入状态 78
+    NE     偏移，并进入状态 79
+    GE     偏移，并进入状态 80
+    LE     偏移，并进入状态 81
+    '<'    偏移，并进入状态 82
+    '>'    偏移，并进入状态 83
+    '+'    偏移，并进入状态 84
+    '-'    偏移，并进入状态 85
+    '*'    偏移，并进入状态 86
+    '/'    偏移，并进入状态 87
+    '%'    偏移，并进入状态 88
+    '&'    偏移，并进入状态 89
+    '|'    偏移，并进入状态 90
+    '^'    偏移，并进入状态 91
+
+    $default  使用规则 44 以归约 (expr)
+
+
+状态 100
+
+   72 call: OBJECTID '(' ')' .
+
+    $default  使用规则 72 以归约 (call)
+
+
+状态 101
+
+   52 expr: expr . '+' expr
+   53     | expr . '-' expr
+   54     | expr . '*' expr
+   55     | expr . '/' expr
+   56     | expr . '%' expr
+   58     | expr . '<' expr
+   59     | expr . LE expr
+   60     | expr . EQUAL expr
+   61     | expr . NE expr
+   62     | expr . GE expr
+   63     | expr . '>' expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . '^' expr
+   69     | expr . '&' expr
+   70     | expr . '|' expr
+   73 actual: expr .
+
+    AND    偏移，并进入状态 76
+    OR     偏移，并进入状态 77
+    EQUAL  偏移，并进入状态 78
+    NE     偏移，并进入状态 79
+    GE     偏移，并进入状态 80
+    LE     偏移，并进入状态 81
+    '<'    偏移，并进入状态 82
+    '>'    偏移，并进入状态 83
+    '+'    偏移，并进入状态 84
+    '-'    偏移，并进入状态 85
+    '*'    偏移，并进入状态 86
+    '/'    偏移，并进入状态 87
+    '%'    偏移，并进入状态 88
+    '&'    偏移，并进入状态 89
+    '|'    偏移，并进入状态 90
+    '^'    偏移，并进入状态 91
+
+    $default  使用规则 73 以归约 (actual)
+
+
+状态 102
+
+   74 actual_list: actual .
+
+    $default  使用规则 74 以归约 (actual_list)
+
+
+状态 103
+
+   71 call: OBJECTID '(' actual_list . ')'
+   75 actual_list: actual_list . ',' actual
+
+    ')'  偏移，并进入状态 128
+    ','  偏移，并进入状态 129
+
+
+状态 104
+
+   50 expr: '(' expr ')' .
+
+    $default  使用规则 50 以归约 (expr)
+
+
+状态 105
+
+   11 stmtblock: '{' variabledecl_list stmt_list '}' .
+
+    $default  使用规则 11 以归约 (stmtblock)
+
+
 状态 106
 
-   47 expr: expr . '+' expr
-   48     | expr . '-' expr
-   49     | expr . '*' expr
-   50     | expr . '/' expr
-   51     | expr . '%' expr
-   53     | expr . '<' expr
-   54     | expr . LE expr
-   54     | expr LE expr .
-   55     | expr . EQUAL expr
-   56     | expr . NE expr
-   57     | expr . GE expr
-   58     | expr . '>' expr
-   59     | expr . AND expr
-   60     | expr . OR expr
-   61     | expr . '^' expr
-   64     | expr . '&' expr
-   65     | expr . '|' expr
+   52 expr: expr . '+' expr
+   53     | expr . '-' expr
+   54     | expr . '*' expr
+   55     | expr . '/' expr
+   56     | expr . '%' expr
+   58     | expr . '<' expr
+   59     | expr . LE expr
+   60     | expr . EQUAL expr
+   61     | expr . NE expr
+   62     | expr . GE expr
+   63     | expr . '>' expr
+   64     | expr . AND expr
+   64     | expr AND expr .
+   65     | expr . OR expr
+   66     | expr . '^' expr
+   69     | expr . '&' expr
+   70     | expr . '|' expr
 
-    '+'  偏移，并进入状态 82
-    '-'  偏移，并进入状态 83
-    '*'  偏移，并进入状态 84
-    '/'  偏移，并进入状态 85
-    '%'  偏移，并进入状态 86
-    '&'  偏移，并进入状态 87
-    '|'  偏移，并进入状态 88
-    '^'  偏移，并进入状态 89
+    AND    偏移，并进入状态 76
+    EQUAL  偏移，并进入状态 78
+    NE     偏移，并进入状态 79
+    GE     偏移，并进入状态 80
+    LE     偏移，并进入状态 81
+    '<'    偏移，并进入状态 82
+    '>'    偏移，并进入状态 83
+    '+'    偏移，并进入状态 84
+    '-'    偏移，并进入状态 85
+    '*'    偏移，并进入状态 86
+    '/'    偏移，并进入状态 87
+    '%'    偏移，并进入状态 88
+    '&'    偏移，并进入状态 89
+    '|'    偏移，并进入状态 90
+    '^'    偏移，并进入状态 91
 
-    GE   错误 (非相联的)
-    LE   错误 (非相联的)
-    '<'  错误 (非相联的)
-    '>'  错误 (非相联的)
-
-    $default  使用规则 54 以归约 (expr)
+    $default  使用规则 64 以归约 (expr)
 
 
 状态 107
 
-   47 expr: expr . '+' expr
-   48     | expr . '-' expr
-   49     | expr . '*' expr
-   50     | expr . '/' expr
-   51     | expr . '%' expr
-   53     | expr . '<' expr
-   53     | expr '<' expr .
-   54     | expr . LE expr
-   55     | expr . EQUAL expr
-   56     | expr . NE expr
-   57     | expr . GE expr
-   58     | expr . '>' expr
-   59     | expr . AND expr
-   60     | expr . OR expr
-   61     | expr . '^' expr
-   64     | expr . '&' expr
-   65     | expr . '|' expr
+   52 expr: expr . '+' expr
+   53     | expr . '-' expr
+   54     | expr . '*' expr
+   55     | expr . '/' expr
+   56     | expr . '%' expr
+   58     | expr . '<' expr
+   59     | expr . LE expr
+   60     | expr . EQUAL expr
+   61     | expr . NE expr
+   62     | expr . GE expr
+   63     | expr . '>' expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   65     | expr OR expr .
+   66     | expr . '^' expr
+   69     | expr . '&' expr
+   70     | expr . '|' expr
 
-    '+'  偏移，并进入状态 82
-    '-'  偏移，并进入状态 83
-    '*'  偏移，并进入状态 84
-    '/'  偏移，并进入状态 85
-    '%'  偏移，并进入状态 86
-    '&'  偏移，并进入状态 87
-    '|'  偏移，并进入状态 88
-    '^'  偏移，并进入状态 89
+    AND    偏移，并进入状态 76
+    OR     偏移，并进入状态 77
+    EQUAL  偏移，并进入状态 78
+    NE     偏移，并进入状态 79
+    GE     偏移，并进入状态 80
+    LE     偏移，并进入状态 81
+    '<'    偏移，并进入状态 82
+    '>'    偏移，并进入状态 83
+    '+'    偏移，并进入状态 84
+    '-'    偏移，并进入状态 85
+    '*'    偏移，并进入状态 86
+    '/'    偏移，并进入状态 87
+    '%'    偏移，并进入状态 88
+    '&'    偏移，并进入状态 89
+    '|'    偏移，并进入状态 90
+    '^'    偏移，并进入状态 91
+
+    $default  使用规则 65 以归约 (expr)
+
+
+状态 108
+
+   52 expr: expr . '+' expr
+   53     | expr . '-' expr
+   54     | expr . '*' expr
+   55     | expr . '/' expr
+   56     | expr . '%' expr
+   58     | expr . '<' expr
+   59     | expr . LE expr
+   60     | expr . EQUAL expr
+   60     | expr EQUAL expr .
+   61     | expr . NE expr
+   62     | expr . GE expr
+   63     | expr . '>' expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . '^' expr
+   69     | expr . '&' expr
+   70     | expr . '|' expr
+
+    GE   偏移，并进入状态 80
+    LE   偏移，并进入状态 81
+    '<'  偏移，并进入状态 82
+    '>'  偏移，并进入状态 83
+    '+'  偏移，并进入状态 84
+    '-'  偏移，并进入状态 85
+    '*'  偏移，并进入状态 86
+    '/'  偏移，并进入状态 87
+    '%'  偏移，并进入状态 88
+    '&'  偏移，并进入状态 89
+    '|'  偏移，并进入状态 90
+    '^'  偏移，并进入状态 91
+
+    EQUAL  错误 (非相联的)
+    NE     错误 (非相联的)
+
+    $default  使用规则 60 以归约 (expr)
+
+
+状态 109
+
+   52 expr: expr . '+' expr
+   53     | expr . '-' expr
+   54     | expr . '*' expr
+   55     | expr . '/' expr
+   56     | expr . '%' expr
+   58     | expr . '<' expr
+   59     | expr . LE expr
+   60     | expr . EQUAL expr
+   61     | expr . NE expr
+   61     | expr NE expr .
+   62     | expr . GE expr
+   63     | expr . '>' expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . '^' expr
+   69     | expr . '&' expr
+   70     | expr . '|' expr
+
+    GE   偏移，并进入状态 80
+    LE   偏移，并进入状态 81
+    '<'  偏移，并进入状态 82
+    '>'  偏移，并进入状态 83
+    '+'  偏移，并进入状态 84
+    '-'  偏移，并进入状态 85
+    '*'  偏移，并进入状态 86
+    '/'  偏移，并进入状态 87
+    '%'  偏移，并进入状态 88
+    '&'  偏移，并进入状态 89
+    '|'  偏移，并进入状态 90
+    '^'  偏移，并进入状态 91
+
+    EQUAL  错误 (非相联的)
+    NE     错误 (非相联的)
+
+    $default  使用规则 61 以归约 (expr)
+
+
+状态 110
+
+   52 expr: expr . '+' expr
+   53     | expr . '-' expr
+   54     | expr . '*' expr
+   55     | expr . '/' expr
+   56     | expr . '%' expr
+   58     | expr . '<' expr
+   59     | expr . LE expr
+   60     | expr . EQUAL expr
+   61     | expr . NE expr
+   62     | expr . GE expr
+   62     | expr GE expr .
+   63     | expr . '>' expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . '^' expr
+   69     | expr . '&' expr
+   70     | expr . '|' expr
+
+    '+'  偏移，并进入状态 84
+    '-'  偏移，并进入状态 85
+    '*'  偏移，并进入状态 86
+    '/'  偏移，并进入状态 87
+    '%'  偏移，并进入状态 88
+    '&'  偏移，并进入状态 89
+    '|'  偏移，并进入状态 90
+    '^'  偏移，并进入状态 91
 
     GE   错误 (非相联的)
     LE   错误 (非相联的)
     '<'  错误 (非相联的)
     '>'  错误 (非相联的)
 
-    $default  使用规则 53 以归约 (expr)
+    $default  使用规则 62 以归约 (expr)
 
 
-状态 108
+状态 111
 
-   47 expr: expr . '+' expr
-   48     | expr . '-' expr
-   49     | expr . '*' expr
-   50     | expr . '/' expr
-   51     | expr . '%' expr
-   53     | expr . '<' expr
-   54     | expr . LE expr
-   55     | expr . EQUAL expr
-   56     | expr . NE expr
-   57     | expr . GE expr
-   58     | expr . '>' expr
-   58     | expr '>' expr .
-   59     | expr . AND expr
-   60     | expr . OR expr
-   61     | expr . '^' expr
-   64     | expr . '&' expr
-   65     | expr . '|' expr
+   52 expr: expr . '+' expr
+   53     | expr . '-' expr
+   54     | expr . '*' expr
+   55     | expr . '/' expr
+   56     | expr . '%' expr
+   58     | expr . '<' expr
+   59     | expr . LE expr
+   59     | expr LE expr .
+   60     | expr . EQUAL expr
+   61     | expr . NE expr
+   62     | expr . GE expr
+   63     | expr . '>' expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . '^' expr
+   69     | expr . '&' expr
+   70     | expr . '|' expr
 
-    '+'  偏移，并进入状态 82
-    '-'  偏移，并进入状态 83
-    '*'  偏移，并进入状态 84
-    '/'  偏移，并进入状态 85
-    '%'  偏移，并进入状态 86
-    '&'  偏移，并进入状态 87
-    '|'  偏移，并进入状态 88
-    '^'  偏移，并进入状态 89
+    '+'  偏移，并进入状态 84
+    '-'  偏移，并进入状态 85
+    '*'  偏移，并进入状态 86
+    '/'  偏移，并进入状态 87
+    '%'  偏移，并进入状态 88
+    '&'  偏移，并进入状态 89
+    '|'  偏移，并进入状态 90
+    '^'  偏移，并进入状态 91
+
+    GE   错误 (非相联的)
+    LE   错误 (非相联的)
+    '<'  错误 (非相联的)
+    '>'  错误 (非相联的)
+
+    $default  使用规则 59 以归约 (expr)
+
+
+状态 112
+
+   52 expr: expr . '+' expr
+   53     | expr . '-' expr
+   54     | expr . '*' expr
+   55     | expr . '/' expr
+   56     | expr . '%' expr
+   58     | expr . '<' expr
+   58     | expr '<' expr .
+   59     | expr . LE expr
+   60     | expr . EQUAL expr
+   61     | expr . NE expr
+   62     | expr . GE expr
+   63     | expr . '>' expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . '^' expr
+   69     | expr . '&' expr
+   70     | expr . '|' expr
+
+    '+'  偏移，并进入状态 84
+    '-'  偏移，并进入状态 85
+    '*'  偏移，并进入状态 86
+    '/'  偏移，并进入状态 87
+    '%'  偏移，并进入状态 88
+    '&'  偏移，并进入状态 89
+    '|'  偏移，并进入状态 90
+    '^'  偏移，并进入状态 91
 
     GE   错误 (非相联的)
     LE   错误 (非相联的)
@@ -1971,304 +2100,620 @@
     $default  使用规则 58 以归约 (expr)
 
 
-状态 109
-
-   47 expr: expr . '+' expr
-   47     | expr '+' expr .
-   48     | expr . '-' expr
-   49     | expr . '*' expr
-   50     | expr . '/' expr
-   51     | expr . '%' expr
-   53     | expr . '<' expr
-   54     | expr . LE expr
-   55     | expr . EQUAL expr
-   56     | expr . NE expr
-   57     | expr . GE expr
-   58     | expr . '>' expr
-   59     | expr . AND expr
-   60     | expr . OR expr
-   61     | expr . '^' expr
-   64     | expr . '&' expr
-   65     | expr . '|' expr
-
-    '*'  偏移，并进入状态 84
-    '/'  偏移，并进入状态 85
-    '%'  偏移，并进入状态 86
-    '&'  偏移，并进入状态 87
-    '|'  偏移，并进入状态 88
-    '^'  偏移，并进入状态 89
-
-    $default  使用规则 47 以归约 (expr)
-
-
-状态 110
-
-   47 expr: expr . '+' expr
-   48     | expr . '-' expr
-   48     | expr '-' expr .
-   49     | expr . '*' expr
-   50     | expr . '/' expr
-   51     | expr . '%' expr
-   53     | expr . '<' expr
-   54     | expr . LE expr
-   55     | expr . EQUAL expr
-   56     | expr . NE expr
-   57     | expr . GE expr
-   58     | expr . '>' expr
-   59     | expr . AND expr
-   60     | expr . OR expr
-   61     | expr . '^' expr
-   64     | expr . '&' expr
-   65     | expr . '|' expr
-
-    '*'  偏移，并进入状态 84
-    '/'  偏移，并进入状态 85
-    '%'  偏移，并进入状态 86
-    '&'  偏移，并进入状态 87
-    '|'  偏移，并进入状态 88
-    '^'  偏移，并进入状态 89
-
-    $default  使用规则 48 以归约 (expr)
-
-
-状态 111
-
-   47 expr: expr . '+' expr
-   48     | expr . '-' expr
-   49     | expr . '*' expr
-   49     | expr '*' expr .
-   50     | expr . '/' expr
-   51     | expr . '%' expr
-   53     | expr . '<' expr
-   54     | expr . LE expr
-   55     | expr . EQUAL expr
-   56     | expr . NE expr
-   57     | expr . GE expr
-   58     | expr . '>' expr
-   59     | expr . AND expr
-   60     | expr . OR expr
-   61     | expr . '^' expr
-   64     | expr . '&' expr
-   65     | expr . '|' expr
-
-    '&'  偏移，并进入状态 87
-    '|'  偏移，并进入状态 88
-    '^'  偏移，并进入状态 89
-
-    $default  使用规则 49 以归约 (expr)
-
-
-状态 112
-
-   47 expr: expr . '+' expr
-   48     | expr . '-' expr
-   49     | expr . '*' expr
-   50     | expr . '/' expr
-   50     | expr '/' expr .
-   51     | expr . '%' expr
-   53     | expr . '<' expr
-   54     | expr . LE expr
-   55     | expr . EQUAL expr
-   56     | expr . NE expr
-   57     | expr . GE expr
-   58     | expr . '>' expr
-   59     | expr . AND expr
-   60     | expr . OR expr
-   61     | expr . '^' expr
-   64     | expr . '&' expr
-   65     | expr . '|' expr
-
-    '&'  偏移，并进入状态 87
-    '|'  偏移，并进入状态 88
-    '^'  偏移，并进入状态 89
-
-    $default  使用规则 50 以归约 (expr)
-
-
 状态 113
 
-   47 expr: expr . '+' expr
-   48     | expr . '-' expr
-   49     | expr . '*' expr
-   50     | expr . '/' expr
-   51     | expr . '%' expr
-   51     | expr '%' expr .
-   53     | expr . '<' expr
-   54     | expr . LE expr
-   55     | expr . EQUAL expr
-   56     | expr . NE expr
-   57     | expr . GE expr
-   58     | expr . '>' expr
-   59     | expr . AND expr
-   60     | expr . OR expr
-   61     | expr . '^' expr
-   64     | expr . '&' expr
-   65     | expr . '|' expr
+   52 expr: expr . '+' expr
+   53     | expr . '-' expr
+   54     | expr . '*' expr
+   55     | expr . '/' expr
+   56     | expr . '%' expr
+   58     | expr . '<' expr
+   59     | expr . LE expr
+   60     | expr . EQUAL expr
+   61     | expr . NE expr
+   62     | expr . GE expr
+   63     | expr . '>' expr
+   63     | expr '>' expr .
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . '^' expr
+   69     | expr . '&' expr
+   70     | expr . '|' expr
 
-    '&'  偏移，并进入状态 87
-    '|'  偏移，并进入状态 88
-    '^'  偏移，并进入状态 89
+    '+'  偏移，并进入状态 84
+    '-'  偏移，并进入状态 85
+    '*'  偏移，并进入状态 86
+    '/'  偏移，并进入状态 87
+    '%'  偏移，并进入状态 88
+    '&'  偏移，并进入状态 89
+    '|'  偏移，并进入状态 90
+    '^'  偏移，并进入状态 91
 
-    $default  使用规则 51 以归约 (expr)
+    GE   错误 (非相联的)
+    LE   错误 (非相联的)
+    '<'  错误 (非相联的)
+    '>'  错误 (非相联的)
+
+    $default  使用规则 63 以归约 (expr)
 
 
 状态 114
 
-   47 expr: expr . '+' expr
-   48     | expr . '-' expr
-   49     | expr . '*' expr
-   50     | expr . '/' expr
-   51     | expr . '%' expr
-   53     | expr . '<' expr
-   54     | expr . LE expr
-   55     | expr . EQUAL expr
-   56     | expr . NE expr
-   57     | expr . GE expr
-   58     | expr . '>' expr
-   59     | expr . AND expr
-   60     | expr . OR expr
-   61     | expr . '^' expr
-   64     | expr . '&' expr
-   64     | expr '&' expr .
-   65     | expr . '|' expr
+   52 expr: expr . '+' expr
+   52     | expr '+' expr .
+   53     | expr . '-' expr
+   54     | expr . '*' expr
+   55     | expr . '/' expr
+   56     | expr . '%' expr
+   58     | expr . '<' expr
+   59     | expr . LE expr
+   60     | expr . EQUAL expr
+   61     | expr . NE expr
+   62     | expr . GE expr
+   63     | expr . '>' expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . '^' expr
+   69     | expr . '&' expr
+   70     | expr . '|' expr
 
-    $default  使用规则 64 以归约 (expr)
+    '*'  偏移，并进入状态 86
+    '/'  偏移，并进入状态 87
+    '%'  偏移，并进入状态 88
+    '&'  偏移，并进入状态 89
+    '|'  偏移，并进入状态 90
+    '^'  偏移，并进入状态 91
+
+    $default  使用规则 52 以归约 (expr)
 
 
 状态 115
 
-   47 expr: expr . '+' expr
-   48     | expr . '-' expr
-   49     | expr . '*' expr
-   50     | expr . '/' expr
-   51     | expr . '%' expr
-   53     | expr . '<' expr
-   54     | expr . LE expr
-   55     | expr . EQUAL expr
-   56     | expr . NE expr
-   57     | expr . GE expr
-   58     | expr . '>' expr
-   59     | expr . AND expr
-   60     | expr . OR expr
-   61     | expr . '^' expr
-   64     | expr . '&' expr
-   65     | expr . '|' expr
-   65     | expr '|' expr .
+   52 expr: expr . '+' expr
+   53     | expr . '-' expr
+   53     | expr '-' expr .
+   54     | expr . '*' expr
+   55     | expr . '/' expr
+   56     | expr . '%' expr
+   58     | expr . '<' expr
+   59     | expr . LE expr
+   60     | expr . EQUAL expr
+   61     | expr . NE expr
+   62     | expr . GE expr
+   63     | expr . '>' expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . '^' expr
+   69     | expr . '&' expr
+   70     | expr . '|' expr
 
-    $default  使用规则 65 以归约 (expr)
+    '*'  偏移，并进入状态 86
+    '/'  偏移，并进入状态 87
+    '%'  偏移，并进入状态 88
+    '&'  偏移，并进入状态 89
+    '|'  偏移，并进入状态 90
+    '^'  偏移，并进入状态 91
+
+    $default  使用规则 53 以归约 (expr)
 
 
 状态 116
 
-   47 expr: expr . '+' expr
-   48     | expr . '-' expr
-   49     | expr . '*' expr
-   50     | expr . '/' expr
-   51     | expr . '%' expr
-   53     | expr . '<' expr
-   54     | expr . LE expr
-   55     | expr . EQUAL expr
-   56     | expr . NE expr
-   57     | expr . GE expr
-   58     | expr . '>' expr
-   59     | expr . AND expr
-   60     | expr . OR expr
-   61     | expr . '^' expr
-   61     | expr '^' expr .
-   64     | expr . '&' expr
-   65     | expr . '|' expr
+   52 expr: expr . '+' expr
+   53     | expr . '-' expr
+   54     | expr . '*' expr
+   54     | expr '*' expr .
+   55     | expr . '/' expr
+   56     | expr . '%' expr
+   58     | expr . '<' expr
+   59     | expr . LE expr
+   60     | expr . EQUAL expr
+   61     | expr . NE expr
+   62     | expr . GE expr
+   63     | expr . '>' expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . '^' expr
+   69     | expr . '&' expr
+   70     | expr . '|' expr
 
-    $default  使用规则 61 以归约 (expr)
+    '&'  偏移，并进入状态 89
+    '|'  偏移，并进入状态 90
+    '^'  偏移，并进入状态 91
+
+    $default  使用规则 54 以归约 (expr)
 
 
 状态 117
 
-   31 ifstmt: IF expr stmtblock ELSE . stmtblock
+   52 expr: expr . '+' expr
+   53     | expr . '-' expr
+   54     | expr . '*' expr
+   55     | expr . '/' expr
+   55     | expr '/' expr .
+   56     | expr . '%' expr
+   58     | expr . '<' expr
+   59     | expr . LE expr
+   60     | expr . EQUAL expr
+   61     | expr . NE expr
+   62     | expr . GE expr
+   63     | expr . '>' expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . '^' expr
+   69     | expr . '&' expr
+   70     | expr . '|' expr
 
-    '{'  偏移，并进入状态 22
+    '&'  偏移，并进入状态 89
+    '|'  偏移，并进入状态 90
+    '^'  偏移，并进入状态 91
 
-    stmtblock  转到状态 121
+    $default  使用规则 55 以归约 (expr)
 
 
 状态 118
 
-   33 forstmt: FOR option_expr ';' option_expr . ';' option_expr stmtblock
+   52 expr: expr . '+' expr
+   53     | expr . '-' expr
+   54     | expr . '*' expr
+   55     | expr . '/' expr
+   56     | expr . '%' expr
+   56     | expr '%' expr .
+   58     | expr . '<' expr
+   59     | expr . LE expr
+   60     | expr . EQUAL expr
+   61     | expr . NE expr
+   62     | expr . GE expr
+   63     | expr . '>' expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . '^' expr
+   69     | expr . '&' expr
+   70     | expr . '|' expr
 
-    ';'  偏移，并进入状态 122
+    '&'  偏移，并进入状态 89
+    '|'  偏移，并进入状态 90
+    '^'  偏移，并进入状态 91
+
+    $default  使用规则 56 以归约 (expr)
 
 
 状态 119
 
-   69 actual_list: actual_list ',' . actual
+   52 expr: expr . '+' expr
+   53     | expr . '-' expr
+   54     | expr . '*' expr
+   55     | expr . '/' expr
+   56     | expr . '%' expr
+   58     | expr . '<' expr
+   59     | expr . LE expr
+   60     | expr . EQUAL expr
+   61     | expr . NE expr
+   62     | expr . GE expr
+   63     | expr . '>' expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . '^' expr
+   69     | expr . '&' expr
+   69     | expr '&' expr .
+   70     | expr . '|' expr
 
-    CONST_BOOL    偏移，并进入状态 37
-    CONST_INT     偏移，并进入状态 38
-    CONST_STRING  偏移，并进入状态 39
-    CONST_FLOAT   偏移，并进入状态 40
-    OBJECTID      偏移，并进入状态 41
-    '-'           偏移，并进入状态 42
-    '!'           偏移，并进入状态 43
-    '~'           偏移，并进入状态 44
-    '('           偏移，并进入状态 45
-
-    expr    转到状态 96
-    call    转到状态 58
-    actual  转到状态 123
+    $default  使用规则 69 以归约 (expr)
 
 
 状态 120
 
-   66 call: OBJECTID '(' option_actual_list ')' .
+   52 expr: expr . '+' expr
+   53     | expr . '-' expr
+   54     | expr . '*' expr
+   55     | expr . '/' expr
+   56     | expr . '%' expr
+   58     | expr . '<' expr
+   59     | expr . LE expr
+   60     | expr . EQUAL expr
+   61     | expr . NE expr
+   62     | expr . GE expr
+   63     | expr . '>' expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . '^' expr
+   69     | expr . '&' expr
+   70     | expr . '|' expr
+   70     | expr '|' expr .
 
-    $default  使用规则 66 以归约 (call)
+    $default  使用规则 70 以归约 (expr)
 
 
 状态 121
 
-   31 ifstmt: IF expr stmtblock ELSE stmtblock .
+   52 expr: expr . '+' expr
+   53     | expr . '-' expr
+   54     | expr . '*' expr
+   55     | expr . '/' expr
+   56     | expr . '%' expr
+   58     | expr . '<' expr
+   59     | expr . LE expr
+   60     | expr . EQUAL expr
+   61     | expr . NE expr
+   62     | expr . GE expr
+   63     | expr . '>' expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . '^' expr
+   66     | expr '^' expr .
+   69     | expr . '&' expr
+   70     | expr . '|' expr
 
-    $default  使用规则 31 以归约 (ifstmt)
+    $default  使用规则 66 以归约 (expr)
 
 
 状态 122
 
-   33 forstmt: FOR option_expr ';' option_expr ';' . option_expr stmtblock
+   30 ifstmt: IF expr stmtblock ELSE . stmtblock
 
-    CONST_BOOL    偏移，并进入状态 37
-    CONST_INT     偏移，并进入状态 38
-    CONST_STRING  偏移，并进入状态 39
-    CONST_FLOAT   偏移，并进入状态 40
-    OBJECTID      偏移，并进入状态 41
-    '-'           偏移，并进入状态 42
-    '!'           偏移，并进入状态 43
-    '~'           偏移，并进入状态 44
-    '('           偏移，并进入状态 45
+    '{'  偏移，并进入状态 22
 
-    $default  使用规则 34 以归约 (option_expr)
-
-    option_expr  转到状态 124
-    expr         转到状态 62
-    call         转到状态 58
+    stmtblock  转到状态 130
 
 
 状态 123
 
-   69 actual_list: actual_list ',' actual .
+   32 forstmt: FOR ';' ';' stmtblock .
 
-    $default  使用规则 69 以归约 (actual_list)
+    $default  使用规则 32 以归约 (forstmt)
 
 
 状态 124
 
-   33 forstmt: FOR option_expr ';' option_expr ';' option_expr . stmtblock
+   35 forstmt: FOR ';' ';' expr . stmtblock
+   52 expr: expr . '+' expr
+   53     | expr . '-' expr
+   54     | expr . '*' expr
+   55     | expr . '/' expr
+   56     | expr . '%' expr
+   58     | expr . '<' expr
+   59     | expr . LE expr
+   60     | expr . EQUAL expr
+   61     | expr . NE expr
+   62     | expr . GE expr
+   63     | expr . '>' expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . '^' expr
+   69     | expr . '&' expr
+   70     | expr . '|' expr
 
-    '{'  偏移，并进入状态 22
+    AND    偏移，并进入状态 76
+    OR     偏移，并进入状态 77
+    EQUAL  偏移，并进入状态 78
+    NE     偏移，并进入状态 79
+    GE     偏移，并进入状态 80
+    LE     偏移，并进入状态 81
+    '<'    偏移，并进入状态 82
+    '>'    偏移，并进入状态 83
+    '+'    偏移，并进入状态 84
+    '-'    偏移，并进入状态 85
+    '*'    偏移，并进入状态 86
+    '/'    偏移，并进入状态 87
+    '%'    偏移，并进入状态 88
+    '&'    偏移，并进入状态 89
+    '|'    偏移，并进入状态 90
+    '^'    偏移，并进入状态 91
+    '{'    偏移，并进入状态 22
 
-    stmtblock  转到状态 125
+    stmtblock  转到状态 131
 
 
 状态 125
 
-   33 forstmt: FOR option_expr ';' option_expr ';' option_expr stmtblock .
+   34 forstmt: FOR ';' expr ';' . stmtblock
+   37        | FOR ';' expr ';' . expr stmtblock
+
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+    '{'           偏移，并进入状态 22
+
+    stmtblock  转到状态 132
+    expr       转到状态 133
+    call       转到状态 55
+
+
+状态 126
+
+   33 forstmt: FOR expr ';' ';' . stmtblock
+   38        | FOR expr ';' ';' . expr stmtblock
+
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+    '{'           偏移，并进入状态 22
+
+    stmtblock  转到状态 134
+    expr       转到状态 135
+    call       转到状态 55
+
+
+状态 127
+
+   36 forstmt: FOR expr ';' expr . ';' stmtblock
+   39        | FOR expr ';' expr . ';' expr stmtblock
+   52 expr: expr . '+' expr
+   53     | expr . '-' expr
+   54     | expr . '*' expr
+   55     | expr . '/' expr
+   56     | expr . '%' expr
+   58     | expr . '<' expr
+   59     | expr . LE expr
+   60     | expr . EQUAL expr
+   61     | expr . NE expr
+   62     | expr . GE expr
+   63     | expr . '>' expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . '^' expr
+   69     | expr . '&' expr
+   70     | expr . '|' expr
+
+    AND    偏移，并进入状态 76
+    OR     偏移，并进入状态 77
+    EQUAL  偏移，并进入状态 78
+    NE     偏移，并进入状态 79
+    GE     偏移，并进入状态 80
+    LE     偏移，并进入状态 81
+    '<'    偏移，并进入状态 82
+    '>'    偏移，并进入状态 83
+    '+'    偏移，并进入状态 84
+    '-'    偏移，并进入状态 85
+    '*'    偏移，并进入状态 86
+    '/'    偏移，并进入状态 87
+    '%'    偏移，并进入状态 88
+    '&'    偏移，并进入状态 89
+    '|'    偏移，并进入状态 90
+    '^'    偏移，并进入状态 91
+    ';'    偏移，并进入状态 136
+
+
+状态 128
+
+   71 call: OBJECTID '(' actual_list ')' .
+
+    $default  使用规则 71 以归约 (call)
+
+
+状态 129
+
+   75 actual_list: actual_list ',' . actual
+
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+
+    expr    转到状态 101
+    call    转到状态 55
+    actual  转到状态 137
+
+
+状态 130
+
+   30 ifstmt: IF expr stmtblock ELSE stmtblock .
+
+    $default  使用规则 30 以归约 (ifstmt)
+
+
+状态 131
+
+   35 forstmt: FOR ';' ';' expr stmtblock .
+
+    $default  使用规则 35 以归约 (forstmt)
+
+
+状态 132
+
+   34 forstmt: FOR ';' expr ';' stmtblock .
+
+    $default  使用规则 34 以归约 (forstmt)
+
+
+状态 133
+
+   37 forstmt: FOR ';' expr ';' expr . stmtblock
+   52 expr: expr . '+' expr
+   53     | expr . '-' expr
+   54     | expr . '*' expr
+   55     | expr . '/' expr
+   56     | expr . '%' expr
+   58     | expr . '<' expr
+   59     | expr . LE expr
+   60     | expr . EQUAL expr
+   61     | expr . NE expr
+   62     | expr . GE expr
+   63     | expr . '>' expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . '^' expr
+   69     | expr . '&' expr
+   70     | expr . '|' expr
+
+    AND    偏移，并进入状态 76
+    OR     偏移，并进入状态 77
+    EQUAL  偏移，并进入状态 78
+    NE     偏移，并进入状态 79
+    GE     偏移，并进入状态 80
+    LE     偏移，并进入状态 81
+    '<'    偏移，并进入状态 82
+    '>'    偏移，并进入状态 83
+    '+'    偏移，并进入状态 84
+    '-'    偏移，并进入状态 85
+    '*'    偏移，并进入状态 86
+    '/'    偏移，并进入状态 87
+    '%'    偏移，并进入状态 88
+    '&'    偏移，并进入状态 89
+    '|'    偏移，并进入状态 90
+    '^'    偏移，并进入状态 91
+    '{'    偏移，并进入状态 22
+
+    stmtblock  转到状态 138
+
+
+状态 134
+
+   33 forstmt: FOR expr ';' ';' stmtblock .
 
     $default  使用规则 33 以归约 (forstmt)
+
+
+状态 135
+
+   38 forstmt: FOR expr ';' ';' expr . stmtblock
+   52 expr: expr . '+' expr
+   53     | expr . '-' expr
+   54     | expr . '*' expr
+   55     | expr . '/' expr
+   56     | expr . '%' expr
+   58     | expr . '<' expr
+   59     | expr . LE expr
+   60     | expr . EQUAL expr
+   61     | expr . NE expr
+   62     | expr . GE expr
+   63     | expr . '>' expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . '^' expr
+   69     | expr . '&' expr
+   70     | expr . '|' expr
+
+    AND    偏移，并进入状态 76
+    OR     偏移，并进入状态 77
+    EQUAL  偏移，并进入状态 78
+    NE     偏移，并进入状态 79
+    GE     偏移，并进入状态 80
+    LE     偏移，并进入状态 81
+    '<'    偏移，并进入状态 82
+    '>'    偏移，并进入状态 83
+    '+'    偏移，并进入状态 84
+    '-'    偏移，并进入状态 85
+    '*'    偏移，并进入状态 86
+    '/'    偏移，并进入状态 87
+    '%'    偏移，并进入状态 88
+    '&'    偏移，并进入状态 89
+    '|'    偏移，并进入状态 90
+    '^'    偏移，并进入状态 91
+    '{'    偏移，并进入状态 22
+
+    stmtblock  转到状态 139
+
+
+状态 136
+
+   36 forstmt: FOR expr ';' expr ';' . stmtblock
+   39        | FOR expr ';' expr ';' . expr stmtblock
+
+    CONST_BOOL    偏移，并进入状态 32
+    CONST_INT     偏移，并进入状态 33
+    CONST_STRING  偏移，并进入状态 34
+    CONST_FLOAT   偏移，并进入状态 35
+    OBJECTID      偏移，并进入状态 36
+    '-'           偏移，并进入状态 37
+    '!'           偏移，并进入状态 38
+    '~'           偏移，并进入状态 39
+    '('           偏移，并进入状态 40
+    '{'           偏移，并进入状态 22
+
+    stmtblock  转到状态 140
+    expr       转到状态 141
+    call       转到状态 55
+
+
+状态 137
+
+   75 actual_list: actual_list ',' actual .
+
+    $default  使用规则 75 以归约 (actual_list)
+
+
+状态 138
+
+   37 forstmt: FOR ';' expr ';' expr stmtblock .
+
+    $default  使用规则 37 以归约 (forstmt)
+
+
+状态 139
+
+   38 forstmt: FOR expr ';' ';' expr stmtblock .
+
+    $default  使用规则 38 以归约 (forstmt)
+
+
+状态 140
+
+   36 forstmt: FOR expr ';' expr ';' stmtblock .
+
+    $default  使用规则 36 以归约 (forstmt)
+
+
+状态 141
+
+   39 forstmt: FOR expr ';' expr ';' expr . stmtblock
+   52 expr: expr . '+' expr
+   53     | expr . '-' expr
+   54     | expr . '*' expr
+   55     | expr . '/' expr
+   56     | expr . '%' expr
+   58     | expr . '<' expr
+   59     | expr . LE expr
+   60     | expr . EQUAL expr
+   61     | expr . NE expr
+   62     | expr . GE expr
+   63     | expr . '>' expr
+   64     | expr . AND expr
+   65     | expr . OR expr
+   66     | expr . '^' expr
+   69     | expr . '&' expr
+   70     | expr . '|' expr
+
+    AND    偏移，并进入状态 76
+    OR     偏移，并进入状态 77
+    EQUAL  偏移，并进入状态 78
+    NE     偏移，并进入状态 79
+    GE     偏移，并进入状态 80
+    LE     偏移，并进入状态 81
+    '<'    偏移，并进入状态 82
+    '>'    偏移，并进入状态 83
+    '+'    偏移，并进入状态 84
+    '-'    偏移，并进入状态 85
+    '*'    偏移，并进入状态 86
+    '/'    偏移，并进入状态 87
+    '%'    偏移，并进入状态 88
+    '&'    偏移，并进入状态 89
+    '|'    偏移，并进入状态 90
+    '^'    偏移，并进入状态 91
+    '{'    偏移，并进入状态 22
+
+    stmtblock  转到状态 142
+
+
+状态 142
+
+   39 forstmt: FOR expr ';' expr ';' expr stmtblock .
+
+    $default  使用规则 39 以归约 (forstmt)
