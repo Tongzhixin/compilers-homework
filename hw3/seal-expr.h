@@ -25,12 +25,20 @@ public:
    }
    void check(Symbol a) {checkType();}
    void dump_type(ostream&, int);
+   bool isReturn() {
+		return false;
+	}
+	bool isSafe() {
+		return true;
+	}
+   void checkBreakContinue(){}
 
    virtual void dump_with_types(ostream&,int) = 0; 
 	virtual void dump(ostream&,int) = 0;
    virtual Expr copy_Expr() = 0;
    virtual Symbol checkType() = 0;
    virtual bool is_empty_Expr() = 0;
+   
 };
 
 class Call_class : public Expr_class {
