@@ -14,9 +14,6 @@ static Decl curr_decl = 0;
 typedef SymbolTable<Symbol, Symbol> ObjectEnvironment; // name, type
 ObjectEnvironment objectEnv;
 
-typedef std::map<Symbol, bool> InstallFuncMap;
-InstallFuncMap installFuncMap;
-
 typedef std::map<Symbol, Symbol> CallMap;
 CallMap callMap;
 
@@ -121,7 +118,6 @@ static void install_calls(Decls decls) {
             if (type != Int && type != String && type != Void && type != Float && type != Bool) {
                 semant_error(decls->nth(i)) << "Function returnType error." << std::endl;
             }             
-            installFuncMap[name] = false;
             callMap[name] = type;
             decls->nth(i)->checkPara();
         }
@@ -212,7 +208,6 @@ void CallDecl_class::checkPara() {
         funcParameter.push_back(paraType);
     }
     funcParaMap[callName] = funcParameter;
-
 }
 
 void CallDecl_class::check() {
@@ -232,10 +227,9 @@ void CallDecl_class::check() {
         if (objectEnv.lookup(paraName) != NULL) {
             semant_error(this) << "Function " << callName <<  "'s parameter has a duplicate name " << paraName << std::endl;
         }
-        objectEnv.addid(paraName, &paraType);
+        objectEnv.addid(paraName, new Symbol(paraType));
         localVarMap[paraName] = paraType;
-    }
-    
+    } 
     // check main function
     if (callName == Main) {
         if (paras->len() != 0) {
@@ -244,15 +238,13 @@ void CallDecl_class::check() {
         if (callMap[Main] != Void) {
             semant_error(this) << "main function should have return type Void." << std::endl;
         }
-    }
-    
+    }   
     // check stmtBlock
     // check variableDecls
     VariableDecls varDecls = body->getVariableDecls();
     for (int i=varDecls->first(); varDecls->more(i); i=varDecls->next(i)) {
         varDecls->nth(i)->check();
     }
-
     // check stmts
     // check return
     body->check(returnType);
@@ -297,7 +289,6 @@ void WhileStmt_class::check(Symbol type) {
     if (conditionType != Bool) {
         semant_error(this) << "condition type should be Bool, should not be" << conditionType << std::endl;
     }
-
     // check body
     body->check(type);
 }
