@@ -121,9 +121,9 @@ static void install_calls(Decls decls) {
             if (type != Int && type != String && type != Void && type != Float && type != Bool) {
                 semant_error(decls->nth(i)) << "Function returnType error." << std::endl;
             }             
-            //installFuncMap[name] = false;
+            installFuncMap[name] = false;
             callMap[name] = type;
-            //decls->nth(i)->check();
+            decls->nth(i)->checkPara();
         }
     }
 }
@@ -192,13 +192,28 @@ void IfStmt_class::checkBreakContinue() {
 }
 
 void BreakStmt_class::checkBreakContinue() {
-    semant_error(this) << "Break must be used in a loop sentence" << std::endl;
+    semant_error(this) << "break must be used in a loop sentence" << std::endl;
 }
 
 void ContinueStmt_class::checkBreakContinue() {
-    semant_error(this) << "Continue must be used in a loop sentence" << std::endl;
+    semant_error(this) << "continue must be used in a loop sentence" << std::endl;
 }
 
+void CallDecl_class::checkPara() {
+    Symbol callName = this->getName();
+    Variables paras = this->getVariables();
+    Symbol returnType = this->getType();
+    StmtBlock body = this->getBody();
+
+    FuncParameter funcParameter;
+    for (int i=paras->first(); paras->more(i); i=paras->next(i)) {
+        Symbol paraName = paras->nth(i)->getName();
+        Symbol paraType = paras->nth(i)->getType();
+        funcParameter.push_back(paraType);
+    }
+    funcParaMap[callName] = funcParameter;
+
+}
 
 void CallDecl_class::check() {
     Symbol callName = this->getName();
@@ -207,9 +222,8 @@ void CallDecl_class::check() {
     StmtBlock body = this->getBody();
 
     objectEnv.enterscope();
-
+    
     // check function parameters
-    FuncParameter funcParameter;
     for (int i=paras->first(); paras->more(i); i=paras->next(i)) {
         Symbol paraName = paras->nth(i)->getName();
         Symbol paraType = paras->nth(i)->getType();
@@ -220,17 +234,15 @@ void CallDecl_class::check() {
         }
         objectEnv.addid(paraName, &paraType);
         localVarMap[paraName] = paraType;
-        funcParameter.push_back(paraType);
     }
-    funcParaMap[callName] = funcParameter;
     
     // check main function
     if (callName == Main) {
         if (paras->len() != 0) {
-            semant_error(this) << "Main function doesn't have parameter(s)" << std::endl;
+            semant_error(this) << "main function doesn't have parameter(s)." << std::endl;
         }
         if (callMap[Main] != Void) {
-            semant_error(this) << "Main function should return Void type." << std::endl;
+            semant_error(this) << "main function should have return type Void." << std::endl;
         }
     }
     
@@ -245,7 +257,7 @@ void CallDecl_class::check() {
     // check return
     body->check(returnType);
     if (!body->isReturn()) {
-        semant_error(this) << "Function " << name << " must have at least one return statement." << std::endl;
+        semant_error(this) << "Function " << name << " must have an overall return statement." << std::endl;
     }
     // check break and continue
     body->checkBreakContinue();
@@ -315,11 +327,11 @@ void ReturnStmt_class::check(Symbol type) {
     Symbol valueType = value->checkType();
     if (value->is_empty_Expr()) {
         if (type != Void) {
-            semant_error(this) << "Return type error, should return " << type << ", not" << "Void" << std::endl;
+            semant_error(this) << "Returns " << "Void" << ", but need " << type << std::endl;
         }
     } else {
         if (type != valueType) {
-            semant_error(this) << "Return type error, should return " << type << ", not" << valueType << std::endl;
+            semant_error(this) << "Returns " << valueType << " , but need " << type << std::endl;
         }
     }
 }
@@ -349,7 +361,7 @@ Symbol Call_class::checkType(){
         return this->type;
     }
 
-    if (actuals->len() > 0){
+    if (actuals->len() > 0) {
         if (actuals->len() != int(funcParaMap[callName].size())) {
             semant_error(this) << "Wrong number of paras" << endl;
         }
@@ -357,7 +369,7 @@ Symbol Call_class::checkType(){
             Symbol sym = actuals->nth(i)->checkType();
             // check function call's paras fit funcdecl's paras
             if (sym != funcParaMap[callName][j]) {
-                semant_error(this) << "Function " << callName << "'s type " << sym << " cannot convert to declared type " << funcParaMap[callName][j] << endl;
+                semant_error(this) << "Function " << callName << ", type " << sym << " of parameter a does not conform to declared type " << funcParaMap[callName][j] << endl;
             }
             ++j;      
         }

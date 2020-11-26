@@ -17,6 +17,7 @@ public:
     virtual Symbol getName() = 0;
     virtual Symbol getType() = 0;
     virtual void check() = 0;
+    virtual void checkPara() = 0;
 };
 
 
@@ -53,6 +54,9 @@ public:
    void dump(ostream& stream, int n);
    void dump_with_types(ostream&,int);
    bool isCallDecl(){return false;};
+   void checkPara(){
+
+   }
 };
 
 class CallDecl_class : public Decl_class {
@@ -80,6 +84,7 @@ public:
    void dump(ostream& stream, int n);
    void dump_with_types(ostream&,int);  
    bool isCallDecl(){return true;}
+   void checkPara();
 };
 
 typedef class Decl_class *Decl;
