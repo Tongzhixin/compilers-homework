@@ -1,9 +1,9 @@
-终端机在文法中未使用
+Terminals unused in grammar
 
     UMINUS
 
 
-语法
+Grammar
 
     0 $accept: program $end
 
@@ -104,7 +104,7 @@
    75            | actual_list ',' actual
 
 
-终结语词，附有它们出现处的规则
+Terminals, with rules where they appear
 
     $end (0) 0
     '!' (33) 67
@@ -152,7 +152,7 @@
     minus1 (288)
 
 
-非终结语词，附有它们出现处的规则
+Nonterminals, with rules where they appear
 
     $accept (45)
         on left: 0
@@ -221,293 +221,293 @@
         on right: 71 75
 
 
-状态 0
+State 0
 
     0 $accept: . program $end
 
-    FUNC  偏移，并进入状态 1
-    VAR   偏移，并进入状态 2
+    FUNC  shift, and go to state 1
+    VAR   shift, and go to state 2
 
-    program       转到状态 3
-    decl_list     转到状态 4
-    decl          转到状态 5
-    calldecl      转到状态 6
-    variabledecl  转到状态 7
+    program       go to state 3
+    decl_list     go to state 4
+    decl          go to state 5
+    calldecl      go to state 6
+    variabledecl  go to state 7
 
 
-状态 1
+State 1
 
     7 calldecl: FUNC . OBJECTID '(' ')' TYPEID stmtblock
     8         | FUNC . OBJECTID '(' variable_list ')' TYPEID stmtblock
 
-    OBJECTID  偏移，并进入状态 8
+    OBJECTID  shift, and go to state 8
 
 
-状态 2
+State 2
 
    17 variabledecl: VAR . variable ';'
 
-    OBJECTID  偏移，并进入状态 9
+    OBJECTID  shift, and go to state 9
 
-    variable  转到状态 10
+    variable  go to state 10
 
 
-状态 3
+State 3
 
     0 $accept: program . $end
 
-    $end  偏移，并进入状态 11
+    $end  shift, and go to state 11
 
 
-状态 4
+State 4
 
     1 program: decl_list .
     3 decl_list: decl_list . decl
 
-    FUNC  偏移，并进入状态 1
-    VAR   偏移，并进入状态 2
+    FUNC  shift, and go to state 1
+    VAR   shift, and go to state 2
 
-    $default  使用规则 1 以归约 (program)
+    $default  reduce using rule 1 (program)
 
-    decl          转到状态 12
-    calldecl      转到状态 6
-    variabledecl  转到状态 7
+    decl          go to state 12
+    calldecl      go to state 6
+    variabledecl  go to state 7
 
 
-状态 5
+State 5
 
     2 decl_list: decl .
 
-    $default  使用规则 2 以归约 (decl_list)
+    $default  reduce using rule 2 (decl_list)
 
 
-状态 6
+State 6
 
     5 decl: calldecl .
 
-    $default  使用规则 5 以归约 (decl)
+    $default  reduce using rule 5 (decl)
 
 
-状态 7
+State 7
 
     4 decl: variabledecl .
 
-    $default  使用规则 4 以归约 (decl)
+    $default  reduce using rule 4 (decl)
 
 
-状态 8
+State 8
 
     7 calldecl: FUNC OBJECTID . '(' ')' TYPEID stmtblock
     8         | FUNC OBJECTID . '(' variable_list ')' TYPEID stmtblock
 
-    '('  偏移，并进入状态 13
+    '('  shift, and go to state 13
 
 
-状态 9
+State 9
 
     6 variable: OBJECTID . TYPEID
 
-    TYPEID  偏移，并进入状态 14
+    TYPEID  shift, and go to state 14
 
 
-状态 10
+State 10
 
    17 variabledecl: VAR variable . ';'
 
-    ';'  偏移，并进入状态 15
+    ';'  shift, and go to state 15
 
 
-状态 11
+State 11
 
     0 $accept: program $end .
 
-    $default  接受
+    $default  accept
 
 
-状态 12
+State 12
 
     3 decl_list: decl_list decl .
 
-    $default  使用规则 3 以归约 (decl_list)
+    $default  reduce using rule 3 (decl_list)
 
 
-状态 13
+State 13
 
     7 calldecl: FUNC OBJECTID '(' . ')' TYPEID stmtblock
     8         | FUNC OBJECTID '(' . variable_list ')' TYPEID stmtblock
 
-    OBJECTID  偏移，并进入状态 9
-    ')'       偏移，并进入状态 16
+    OBJECTID  shift, and go to state 9
+    ')'       shift, and go to state 16
 
-    variable       转到状态 17
-    variable_list  转到状态 18
+    variable       go to state 17
+    variable_list  go to state 18
 
 
-状态 14
+State 14
 
     6 variable: OBJECTID TYPEID .
 
-    $default  使用规则 6 以归约 (variable)
+    $default  reduce using rule 6 (variable)
 
 
-状态 15
+State 15
 
    17 variabledecl: VAR variable ';' .
 
-    $default  使用规则 17 以归约 (variabledecl)
+    $default  reduce using rule 17 (variabledecl)
 
 
-状态 16
+State 16
 
     7 calldecl: FUNC OBJECTID '(' ')' . TYPEID stmtblock
 
-    TYPEID  偏移，并进入状态 19
+    TYPEID  shift, and go to state 19
 
 
-状态 17
+State 17
 
     9 variable_list: variable .
 
-    $default  使用规则 9 以归约 (variable_list)
+    $default  reduce using rule 9 (variable_list)
 
 
-状态 18
+State 18
 
     8 calldecl: FUNC OBJECTID '(' variable_list . ')' TYPEID stmtblock
    10 variable_list: variable_list . ',' variable
 
-    ')'  偏移，并进入状态 20
-    ','  偏移，并进入状态 21
+    ')'  shift, and go to state 20
+    ','  shift, and go to state 21
 
 
-状态 19
+State 19
 
     7 calldecl: FUNC OBJECTID '(' ')' TYPEID . stmtblock
 
-    '{'  偏移，并进入状态 22
+    '{'  shift, and go to state 22
 
-    stmtblock  转到状态 23
+    stmtblock  go to state 23
 
 
-状态 20
+State 20
 
     8 calldecl: FUNC OBJECTID '(' variable_list ')' . TYPEID stmtblock
 
-    TYPEID  偏移，并进入状态 24
+    TYPEID  shift, and go to state 24
 
 
-状态 21
+State 21
 
    10 variable_list: variable_list ',' . variable
 
-    OBJECTID  偏移，并进入状态 9
+    OBJECTID  shift, and go to state 9
 
-    variable  转到状态 25
+    variable  go to state 25
 
 
-状态 22
+State 22
 
    11 stmtblock: '{' . variabledecl_list stmt_list '}'
    12          | '{' . variabledecl_list '}'
    13          | '{' . stmt_list '}'
    14          | '{' . '}'
 
-    IF            偏移，并进入状态 26
-    WHILE         偏移，并进入状态 27
-    FOR           偏移，并进入状态 28
-    BREAK         偏移，并进入状态 29
-    CONTINUE      偏移，并进入状态 30
-    RETURN        偏移，并进入状态 31
-    VAR           偏移，并进入状态 2
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
-    '{'           偏移，并进入状态 22
-    '}'           偏移，并进入状态 41
-    ';'           偏移，并进入状态 42
+    IF            shift, and go to state 26
+    WHILE         shift, and go to state 27
+    FOR           shift, and go to state 28
+    BREAK         shift, and go to state 29
+    CONTINUE      shift, and go to state 30
+    RETURN        shift, and go to state 31
+    VAR           shift, and go to state 2
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
+    '{'           shift, and go to state 22
+    '}'           shift, and go to state 41
+    ';'           shift, and go to state 42
 
-    stmtblock          转到状态 43
-    variabledecl_list  转到状态 44
-    variabledecl       转到状态 45
-    stmt_list          转到状态 46
-    stmt               转到状态 47
-    ifstmt             转到状态 48
-    whilestmt          转到状态 49
-    forstmt            转到状态 50
-    returnstmt         转到状态 51
-    continuestmt       转到状态 52
-    breakstmt          转到状态 53
-    expr               转到状态 54
-    call               转到状态 55
+    stmtblock          go to state 43
+    variabledecl_list  go to state 44
+    variabledecl       go to state 45
+    stmt_list          go to state 46
+    stmt               go to state 47
+    ifstmt             go to state 48
+    whilestmt          go to state 49
+    forstmt            go to state 50
+    returnstmt         go to state 51
+    continuestmt       go to state 52
+    breakstmt          go to state 53
+    expr               go to state 54
+    call               go to state 55
 
 
-状态 23
+State 23
 
     7 calldecl: FUNC OBJECTID '(' ')' TYPEID stmtblock .
 
-    $default  使用规则 7 以归约 (calldecl)
+    $default  reduce using rule 7 (calldecl)
 
 
-状态 24
+State 24
 
     8 calldecl: FUNC OBJECTID '(' variable_list ')' TYPEID . stmtblock
 
-    '{'  偏移，并进入状态 22
+    '{'  shift, and go to state 22
 
-    stmtblock  转到状态 56
+    stmtblock  go to state 56
 
 
-状态 25
+State 25
 
    10 variable_list: variable_list ',' variable .
 
-    $default  使用规则 10 以归约 (variable_list)
+    $default  reduce using rule 10 (variable_list)
 
 
-状态 26
+State 26
 
    29 ifstmt: IF . expr stmtblock
    30       | IF . expr stmtblock ELSE stmtblock
 
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
 
-    expr  转到状态 57
-    call  转到状态 55
+    expr  go to state 57
+    call  go to state 55
 
 
-状态 27
+State 27
 
    31 whilestmt: WHILE . expr stmtblock
 
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
 
-    expr  转到状态 58
-    call  转到状态 55
+    expr  go to state 58
+    call  go to state 55
 
 
-状态 28
+State 28
 
    32 forstmt: FOR . ';' ';' stmtblock
    33        | FOR . expr ';' ';' stmtblock
@@ -518,322 +518,322 @@
    38        | FOR . expr ';' ';' expr stmtblock
    39        | FOR . expr ';' expr ';' expr stmtblock
 
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
-    ';'           偏移，并进入状态 59
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
+    ';'           shift, and go to state 59
 
-    expr  转到状态 60
-    call  转到状态 55
+    expr  go to state 60
+    call  go to state 55
 
 
-状态 29
+State 29
 
    43 breakstmt: BREAK . ';'
 
-    ';'  偏移，并进入状态 61
+    ';'  shift, and go to state 61
 
 
-状态 30
+State 30
 
    42 continuestmt: CONTINUE . ';'
 
-    ';'  偏移，并进入状态 62
+    ';'  shift, and go to state 62
 
 
-状态 31
+State 31
 
    40 returnstmt: RETURN . ';'
    41           | RETURN . expr ';'
 
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
-    ';'           偏移，并进入状态 63
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
+    ';'           shift, and go to state 63
 
-    expr  转到状态 64
-    call  转到状态 55
+    expr  go to state 64
+    call  go to state 55
 
 
-状态 32
+State 32
 
    45 expr: CONST_BOOL .
 
-    $default  使用规则 45 以归约 (expr)
+    $default  reduce using rule 45 (expr)
 
 
-状态 33
+State 33
 
    46 expr: CONST_INT .
 
-    $default  使用规则 46 以归约 (expr)
+    $default  reduce using rule 46 (expr)
 
 
-状态 34
+State 34
 
    48 expr: CONST_STRING .
 
-    $default  使用规则 48 以归约 (expr)
+    $default  reduce using rule 48 (expr)
 
 
-状态 35
+State 35
 
    47 expr: CONST_FLOAT .
 
-    $default  使用规则 47 以归约 (expr)
+    $default  reduce using rule 47 (expr)
 
 
-状态 36
+State 36
 
    44 expr: OBJECTID . '=' expr
    51     | OBJECTID .
    71 call: OBJECTID . '(' actual_list ')'
    72     | OBJECTID . '(' ')'
 
-    '='  偏移，并进入状态 65
-    '('  偏移，并进入状态 66
+    '='  shift, and go to state 65
+    '('  shift, and go to state 66
 
-    $default  使用规则 51 以归约 (expr)
+    $default  reduce using rule 51 (expr)
 
 
-状态 37
+State 37
 
    57 expr: '-' . expr
 
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
 
-    expr  转到状态 67
-    call  转到状态 55
+    expr  go to state 67
+    call  go to state 55
 
 
-状态 38
+State 38
 
    67 expr: '!' . expr
 
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
 
-    expr  转到状态 68
-    call  转到状态 55
+    expr  go to state 68
+    call  go to state 55
 
 
-状态 39
+State 39
 
    68 expr: '~' . expr
 
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
 
-    expr  转到状态 69
-    call  转到状态 55
+    expr  go to state 69
+    call  go to state 55
 
 
-状态 40
+State 40
 
    50 expr: '(' . expr ')'
 
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
 
-    expr  转到状态 70
-    call  转到状态 55
+    expr  go to state 70
+    call  go to state 55
 
 
-状态 41
+State 41
 
    14 stmtblock: '{' '}' .
 
-    $default  使用规则 14 以归约 (stmtblock)
+    $default  reduce using rule 14 (stmtblock)
 
 
-状态 42
+State 42
 
    20 stmt: ';' .
 
-    $default  使用规则 20 以归约 (stmt)
+    $default  reduce using rule 20 (stmt)
 
 
-状态 43
+State 43
 
    28 stmt: stmtblock .
 
-    $default  使用规则 28 以归约 (stmt)
+    $default  reduce using rule 28 (stmt)
 
 
-状态 44
+State 44
 
    11 stmtblock: '{' variabledecl_list . stmt_list '}'
    12          | '{' variabledecl_list . '}'
    16 variabledecl_list: variabledecl_list . variabledecl
 
-    IF            偏移，并进入状态 26
-    WHILE         偏移，并进入状态 27
-    FOR           偏移，并进入状态 28
-    BREAK         偏移，并进入状态 29
-    CONTINUE      偏移，并进入状态 30
-    RETURN        偏移，并进入状态 31
-    VAR           偏移，并进入状态 2
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
-    '{'           偏移，并进入状态 22
-    '}'           偏移，并进入状态 71
-    ';'           偏移，并进入状态 42
+    IF            shift, and go to state 26
+    WHILE         shift, and go to state 27
+    FOR           shift, and go to state 28
+    BREAK         shift, and go to state 29
+    CONTINUE      shift, and go to state 30
+    RETURN        shift, and go to state 31
+    VAR           shift, and go to state 2
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
+    '{'           shift, and go to state 22
+    '}'           shift, and go to state 71
+    ';'           shift, and go to state 42
 
-    stmtblock     转到状态 43
-    variabledecl  转到状态 72
-    stmt_list     转到状态 73
-    stmt          转到状态 47
-    ifstmt        转到状态 48
-    whilestmt     转到状态 49
-    forstmt       转到状态 50
-    returnstmt    转到状态 51
-    continuestmt  转到状态 52
-    breakstmt     转到状态 53
-    expr          转到状态 54
-    call          转到状态 55
+    stmtblock     go to state 43
+    variabledecl  go to state 72
+    stmt_list     go to state 73
+    stmt          go to state 47
+    ifstmt        go to state 48
+    whilestmt     go to state 49
+    forstmt       go to state 50
+    returnstmt    go to state 51
+    continuestmt  go to state 52
+    breakstmt     go to state 53
+    expr          go to state 54
+    call          go to state 55
 
 
-状态 45
+State 45
 
    15 variabledecl_list: variabledecl .
 
-    $default  使用规则 15 以归约 (variabledecl_list)
+    $default  reduce using rule 15 (variabledecl_list)
 
 
-状态 46
+State 46
 
    13 stmtblock: '{' stmt_list . '}'
    19 stmt_list: stmt_list . stmt
 
-    IF            偏移，并进入状态 26
-    WHILE         偏移，并进入状态 27
-    FOR           偏移，并进入状态 28
-    BREAK         偏移，并进入状态 29
-    CONTINUE      偏移，并进入状态 30
-    RETURN        偏移，并进入状态 31
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
-    '{'           偏移，并进入状态 22
-    '}'           偏移，并进入状态 74
-    ';'           偏移，并进入状态 42
+    IF            shift, and go to state 26
+    WHILE         shift, and go to state 27
+    FOR           shift, and go to state 28
+    BREAK         shift, and go to state 29
+    CONTINUE      shift, and go to state 30
+    RETURN        shift, and go to state 31
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
+    '{'           shift, and go to state 22
+    '}'           shift, and go to state 74
+    ';'           shift, and go to state 42
 
-    stmtblock     转到状态 43
-    stmt          转到状态 75
-    ifstmt        转到状态 48
-    whilestmt     转到状态 49
-    forstmt       转到状态 50
-    returnstmt    转到状态 51
-    continuestmt  转到状态 52
-    breakstmt     转到状态 53
-    expr          转到状态 54
-    call          转到状态 55
+    stmtblock     go to state 43
+    stmt          go to state 75
+    ifstmt        go to state 48
+    whilestmt     go to state 49
+    forstmt       go to state 50
+    returnstmt    go to state 51
+    continuestmt  go to state 52
+    breakstmt     go to state 53
+    expr          go to state 54
+    call          go to state 55
 
 
-状态 47
+State 47
 
    18 stmt_list: stmt .
 
-    $default  使用规则 18 以归约 (stmt_list)
+    $default  reduce using rule 18 (stmt_list)
 
 
-状态 48
+State 48
 
    22 stmt: ifstmt .
 
-    $default  使用规则 22 以归约 (stmt)
+    $default  reduce using rule 22 (stmt)
 
 
-状态 49
+State 49
 
    23 stmt: whilestmt .
 
-    $default  使用规则 23 以归约 (stmt)
+    $default  reduce using rule 23 (stmt)
 
 
-状态 50
+State 50
 
    24 stmt: forstmt .
 
-    $default  使用规则 24 以归约 (stmt)
+    $default  reduce using rule 24 (stmt)
 
 
-状态 51
+State 51
 
    27 stmt: returnstmt .
 
-    $default  使用规则 27 以归约 (stmt)
+    $default  reduce using rule 27 (stmt)
 
 
-状态 52
+State 52
 
    26 stmt: continuestmt .
 
-    $default  使用规则 26 以归约 (stmt)
+    $default  reduce using rule 26 (stmt)
 
 
-状态 53
+State 53
 
    25 stmt: breakstmt .
 
-    $default  使用规则 25 以归约 (stmt)
+    $default  reduce using rule 25 (stmt)
 
 
-状态 54
+State 54
 
    21 stmt: expr . ';'
    52 expr: expr . '+' expr
@@ -853,40 +853,40 @@
    69     | expr . '&' expr
    70     | expr . '|' expr
 
-    AND    偏移，并进入状态 76
-    OR     偏移，并进入状态 77
-    EQUAL  偏移，并进入状态 78
-    NE     偏移，并进入状态 79
-    GE     偏移，并进入状态 80
-    LE     偏移，并进入状态 81
-    '<'    偏移，并进入状态 82
-    '>'    偏移，并进入状态 83
-    '+'    偏移，并进入状态 84
-    '-'    偏移，并进入状态 85
-    '*'    偏移，并进入状态 86
-    '/'    偏移，并进入状态 87
-    '%'    偏移，并进入状态 88
-    '&'    偏移，并进入状态 89
-    '|'    偏移，并进入状态 90
-    '^'    偏移，并进入状态 91
-    ';'    偏移，并进入状态 92
+    AND    shift, and go to state 76
+    OR     shift, and go to state 77
+    EQUAL  shift, and go to state 78
+    NE     shift, and go to state 79
+    GE     shift, and go to state 80
+    LE     shift, and go to state 81
+    '<'    shift, and go to state 82
+    '>'    shift, and go to state 83
+    '+'    shift, and go to state 84
+    '-'    shift, and go to state 85
+    '*'    shift, and go to state 86
+    '/'    shift, and go to state 87
+    '%'    shift, and go to state 88
+    '&'    shift, and go to state 89
+    '|'    shift, and go to state 90
+    '^'    shift, and go to state 91
+    ';'    shift, and go to state 92
 
 
-状态 55
+State 55
 
    49 expr: call .
 
-    $default  使用规则 49 以归约 (expr)
+    $default  reduce using rule 49 (expr)
 
 
-状态 56
+State 56
 
     8 calldecl: FUNC OBJECTID '(' variable_list ')' TYPEID stmtblock .
 
-    $default  使用规则 8 以归约 (calldecl)
+    $default  reduce using rule 8 (calldecl)
 
 
-状态 57
+State 57
 
    29 ifstmt: IF expr . stmtblock
    30       | IF expr . stmtblock ELSE stmtblock
@@ -907,28 +907,28 @@
    69     | expr . '&' expr
    70     | expr . '|' expr
 
-    AND    偏移，并进入状态 76
-    OR     偏移，并进入状态 77
-    EQUAL  偏移，并进入状态 78
-    NE     偏移，并进入状态 79
-    GE     偏移，并进入状态 80
-    LE     偏移，并进入状态 81
-    '<'    偏移，并进入状态 82
-    '>'    偏移，并进入状态 83
-    '+'    偏移，并进入状态 84
-    '-'    偏移，并进入状态 85
-    '*'    偏移，并进入状态 86
-    '/'    偏移，并进入状态 87
-    '%'    偏移，并进入状态 88
-    '&'    偏移，并进入状态 89
-    '|'    偏移，并进入状态 90
-    '^'    偏移，并进入状态 91
-    '{'    偏移，并进入状态 22
+    AND    shift, and go to state 76
+    OR     shift, and go to state 77
+    EQUAL  shift, and go to state 78
+    NE     shift, and go to state 79
+    GE     shift, and go to state 80
+    LE     shift, and go to state 81
+    '<'    shift, and go to state 82
+    '>'    shift, and go to state 83
+    '+'    shift, and go to state 84
+    '-'    shift, and go to state 85
+    '*'    shift, and go to state 86
+    '/'    shift, and go to state 87
+    '%'    shift, and go to state 88
+    '&'    shift, and go to state 89
+    '|'    shift, and go to state 90
+    '^'    shift, and go to state 91
+    '{'    shift, and go to state 22
 
-    stmtblock  转到状态 93
+    stmtblock  go to state 93
 
 
-状态 58
+State 58
 
    31 whilestmt: WHILE expr . stmtblock
    52 expr: expr . '+' expr
@@ -948,50 +948,50 @@
    69     | expr . '&' expr
    70     | expr . '|' expr
 
-    AND    偏移，并进入状态 76
-    OR     偏移，并进入状态 77
-    EQUAL  偏移，并进入状态 78
-    NE     偏移，并进入状态 79
-    GE     偏移，并进入状态 80
-    LE     偏移，并进入状态 81
-    '<'    偏移，并进入状态 82
-    '>'    偏移，并进入状态 83
-    '+'    偏移，并进入状态 84
-    '-'    偏移，并进入状态 85
-    '*'    偏移，并进入状态 86
-    '/'    偏移，并进入状态 87
-    '%'    偏移，并进入状态 88
-    '&'    偏移，并进入状态 89
-    '|'    偏移，并进入状态 90
-    '^'    偏移，并进入状态 91
-    '{'    偏移，并进入状态 22
+    AND    shift, and go to state 76
+    OR     shift, and go to state 77
+    EQUAL  shift, and go to state 78
+    NE     shift, and go to state 79
+    GE     shift, and go to state 80
+    LE     shift, and go to state 81
+    '<'    shift, and go to state 82
+    '>'    shift, and go to state 83
+    '+'    shift, and go to state 84
+    '-'    shift, and go to state 85
+    '*'    shift, and go to state 86
+    '/'    shift, and go to state 87
+    '%'    shift, and go to state 88
+    '&'    shift, and go to state 89
+    '|'    shift, and go to state 90
+    '^'    shift, and go to state 91
+    '{'    shift, and go to state 22
 
-    stmtblock  转到状态 94
+    stmtblock  go to state 94
 
 
-状态 59
+State 59
 
    32 forstmt: FOR ';' . ';' stmtblock
    34        | FOR ';' . expr ';' stmtblock
    35        | FOR ';' . ';' expr stmtblock
    37        | FOR ';' . expr ';' expr stmtblock
 
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
-    ';'           偏移，并进入状态 95
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
+    ';'           shift, and go to state 95
 
-    expr  转到状态 96
-    call  转到状态 55
+    expr  go to state 96
+    call  go to state 55
 
 
-状态 60
+State 60
 
    33 forstmt: FOR expr . ';' ';' stmtblock
    36        | FOR expr . ';' expr ';' stmtblock
@@ -1014,47 +1014,47 @@
    69     | expr . '&' expr
    70     | expr . '|' expr
 
-    AND    偏移，并进入状态 76
-    OR     偏移，并进入状态 77
-    EQUAL  偏移，并进入状态 78
-    NE     偏移，并进入状态 79
-    GE     偏移，并进入状态 80
-    LE     偏移，并进入状态 81
-    '<'    偏移，并进入状态 82
-    '>'    偏移，并进入状态 83
-    '+'    偏移，并进入状态 84
-    '-'    偏移，并进入状态 85
-    '*'    偏移，并进入状态 86
-    '/'    偏移，并进入状态 87
-    '%'    偏移，并进入状态 88
-    '&'    偏移，并进入状态 89
-    '|'    偏移，并进入状态 90
-    '^'    偏移，并进入状态 91
-    ';'    偏移，并进入状态 97
+    AND    shift, and go to state 76
+    OR     shift, and go to state 77
+    EQUAL  shift, and go to state 78
+    NE     shift, and go to state 79
+    GE     shift, and go to state 80
+    LE     shift, and go to state 81
+    '<'    shift, and go to state 82
+    '>'    shift, and go to state 83
+    '+'    shift, and go to state 84
+    '-'    shift, and go to state 85
+    '*'    shift, and go to state 86
+    '/'    shift, and go to state 87
+    '%'    shift, and go to state 88
+    '&'    shift, and go to state 89
+    '|'    shift, and go to state 90
+    '^'    shift, and go to state 91
+    ';'    shift, and go to state 97
 
 
-状态 61
+State 61
 
    43 breakstmt: BREAK ';' .
 
-    $default  使用规则 43 以归约 (breakstmt)
+    $default  reduce using rule 43 (breakstmt)
 
 
-状态 62
+State 62
 
    42 continuestmt: CONTINUE ';' .
 
-    $default  使用规则 42 以归约 (continuestmt)
+    $default  reduce using rule 42 (continuestmt)
 
 
-状态 63
+State 63
 
    40 returnstmt: RETURN ';' .
 
-    $default  使用规则 40 以归约 (returnstmt)
+    $default  reduce using rule 40 (returnstmt)
 
 
-状态 64
+State 64
 
    41 returnstmt: RETURN expr . ';'
    52 expr: expr . '+' expr
@@ -1074,66 +1074,66 @@
    69     | expr . '&' expr
    70     | expr . '|' expr
 
-    AND    偏移，并进入状态 76
-    OR     偏移，并进入状态 77
-    EQUAL  偏移，并进入状态 78
-    NE     偏移，并进入状态 79
-    GE     偏移，并进入状态 80
-    LE     偏移，并进入状态 81
-    '<'    偏移，并进入状态 82
-    '>'    偏移，并进入状态 83
-    '+'    偏移，并进入状态 84
-    '-'    偏移，并进入状态 85
-    '*'    偏移，并进入状态 86
-    '/'    偏移，并进入状态 87
-    '%'    偏移，并进入状态 88
-    '&'    偏移，并进入状态 89
-    '|'    偏移，并进入状态 90
-    '^'    偏移，并进入状态 91
-    ';'    偏移，并进入状态 98
+    AND    shift, and go to state 76
+    OR     shift, and go to state 77
+    EQUAL  shift, and go to state 78
+    NE     shift, and go to state 79
+    GE     shift, and go to state 80
+    LE     shift, and go to state 81
+    '<'    shift, and go to state 82
+    '>'    shift, and go to state 83
+    '+'    shift, and go to state 84
+    '-'    shift, and go to state 85
+    '*'    shift, and go to state 86
+    '/'    shift, and go to state 87
+    '%'    shift, and go to state 88
+    '&'    shift, and go to state 89
+    '|'    shift, and go to state 90
+    '^'    shift, and go to state 91
+    ';'    shift, and go to state 98
 
 
-状态 65
+State 65
 
    44 expr: OBJECTID '=' . expr
 
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
 
-    expr  转到状态 99
-    call  转到状态 55
+    expr  go to state 99
+    call  go to state 55
 
 
-状态 66
+State 66
 
    71 call: OBJECTID '(' . actual_list ')'
    72     | OBJECTID '(' . ')'
 
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
-    ')'           偏移，并进入状态 100
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
+    ')'           shift, and go to state 100
 
-    expr         转到状态 101
-    call         转到状态 55
-    actual       转到状态 102
-    actual_list  转到状态 103
+    expr         go to state 101
+    call         go to state 55
+    actual       go to state 102
+    actual_list  go to state 103
 
 
-状态 67
+State 67
 
    52 expr: expr . '+' expr
    53     | expr . '-' expr
@@ -1153,14 +1153,14 @@
    69     | expr . '&' expr
    70     | expr . '|' expr
 
-    '&'  偏移，并进入状态 89
-    '|'  偏移，并进入状态 90
-    '^'  偏移，并进入状态 91
+    '&'  shift, and go to state 89
+    '|'  shift, and go to state 90
+    '^'  shift, and go to state 91
 
-    $default  使用规则 57 以归约 (expr)
+    $default  reduce using rule 57 (expr)
 
 
-状态 68
+State 68
 
    52 expr: expr . '+' expr
    53     | expr . '-' expr
@@ -1180,14 +1180,14 @@
    69     | expr . '&' expr
    70     | expr . '|' expr
 
-    '&'  偏移，并进入状态 89
-    '|'  偏移，并进入状态 90
-    '^'  偏移，并进入状态 91
+    '&'  shift, and go to state 89
+    '|'  shift, and go to state 90
+    '^'  shift, and go to state 91
 
-    $default  使用规则 67 以归约 (expr)
+    $default  reduce using rule 67 (expr)
 
 
-状态 69
+State 69
 
    52 expr: expr . '+' expr
    53     | expr . '-' expr
@@ -1207,10 +1207,10 @@
    69     | expr . '&' expr
    70     | expr . '|' expr
 
-    $default  使用规则 68 以归约 (expr)
+    $default  reduce using rule 68 (expr)
 
 
-状态 70
+State 70
 
    50 expr: '(' expr . ')'
    52     | expr . '+' expr
@@ -1230,423 +1230,423 @@
    69     | expr . '&' expr
    70     | expr . '|' expr
 
-    AND    偏移，并进入状态 76
-    OR     偏移，并进入状态 77
-    EQUAL  偏移，并进入状态 78
-    NE     偏移，并进入状态 79
-    GE     偏移，并进入状态 80
-    LE     偏移，并进入状态 81
-    '<'    偏移，并进入状态 82
-    '>'    偏移，并进入状态 83
-    '+'    偏移，并进入状态 84
-    '-'    偏移，并进入状态 85
-    '*'    偏移，并进入状态 86
-    '/'    偏移，并进入状态 87
-    '%'    偏移，并进入状态 88
-    '&'    偏移，并进入状态 89
-    '|'    偏移，并进入状态 90
-    '^'    偏移，并进入状态 91
-    ')'    偏移，并进入状态 104
+    AND    shift, and go to state 76
+    OR     shift, and go to state 77
+    EQUAL  shift, and go to state 78
+    NE     shift, and go to state 79
+    GE     shift, and go to state 80
+    LE     shift, and go to state 81
+    '<'    shift, and go to state 82
+    '>'    shift, and go to state 83
+    '+'    shift, and go to state 84
+    '-'    shift, and go to state 85
+    '*'    shift, and go to state 86
+    '/'    shift, and go to state 87
+    '%'    shift, and go to state 88
+    '&'    shift, and go to state 89
+    '|'    shift, and go to state 90
+    '^'    shift, and go to state 91
+    ')'    shift, and go to state 104
 
 
-状态 71
+State 71
 
    12 stmtblock: '{' variabledecl_list '}' .
 
-    $default  使用规则 12 以归约 (stmtblock)
+    $default  reduce using rule 12 (stmtblock)
 
 
-状态 72
+State 72
 
    16 variabledecl_list: variabledecl_list variabledecl .
 
-    $default  使用规则 16 以归约 (variabledecl_list)
+    $default  reduce using rule 16 (variabledecl_list)
 
 
-状态 73
+State 73
 
    11 stmtblock: '{' variabledecl_list stmt_list . '}'
    19 stmt_list: stmt_list . stmt
 
-    IF            偏移，并进入状态 26
-    WHILE         偏移，并进入状态 27
-    FOR           偏移，并进入状态 28
-    BREAK         偏移，并进入状态 29
-    CONTINUE      偏移，并进入状态 30
-    RETURN        偏移，并进入状态 31
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
-    '{'           偏移，并进入状态 22
-    '}'           偏移，并进入状态 105
-    ';'           偏移，并进入状态 42
+    IF            shift, and go to state 26
+    WHILE         shift, and go to state 27
+    FOR           shift, and go to state 28
+    BREAK         shift, and go to state 29
+    CONTINUE      shift, and go to state 30
+    RETURN        shift, and go to state 31
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
+    '{'           shift, and go to state 22
+    '}'           shift, and go to state 105
+    ';'           shift, and go to state 42
 
-    stmtblock     转到状态 43
-    stmt          转到状态 75
-    ifstmt        转到状态 48
-    whilestmt     转到状态 49
-    forstmt       转到状态 50
-    returnstmt    转到状态 51
-    continuestmt  转到状态 52
-    breakstmt     转到状态 53
-    expr          转到状态 54
-    call          转到状态 55
+    stmtblock     go to state 43
+    stmt          go to state 75
+    ifstmt        go to state 48
+    whilestmt     go to state 49
+    forstmt       go to state 50
+    returnstmt    go to state 51
+    continuestmt  go to state 52
+    breakstmt     go to state 53
+    expr          go to state 54
+    call          go to state 55
 
 
-状态 74
+State 74
 
    13 stmtblock: '{' stmt_list '}' .
 
-    $default  使用规则 13 以归约 (stmtblock)
+    $default  reduce using rule 13 (stmtblock)
 
 
-状态 75
+State 75
 
    19 stmt_list: stmt_list stmt .
 
-    $default  使用规则 19 以归约 (stmt_list)
+    $default  reduce using rule 19 (stmt_list)
 
 
-状态 76
+State 76
 
    64 expr: expr AND . expr
 
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
 
-    expr  转到状态 106
-    call  转到状态 55
+    expr  go to state 106
+    call  go to state 55
 
 
-状态 77
+State 77
 
    65 expr: expr OR . expr
 
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
 
-    expr  转到状态 107
-    call  转到状态 55
+    expr  go to state 107
+    call  go to state 55
 
 
-状态 78
+State 78
 
    60 expr: expr EQUAL . expr
 
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
 
-    expr  转到状态 108
-    call  转到状态 55
+    expr  go to state 108
+    call  go to state 55
 
 
-状态 79
+State 79
 
    61 expr: expr NE . expr
 
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
 
-    expr  转到状态 109
-    call  转到状态 55
+    expr  go to state 109
+    call  go to state 55
 
 
-状态 80
+State 80
 
    62 expr: expr GE . expr
 
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
 
-    expr  转到状态 110
-    call  转到状态 55
+    expr  go to state 110
+    call  go to state 55
 
 
-状态 81
+State 81
 
    59 expr: expr LE . expr
 
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
 
-    expr  转到状态 111
-    call  转到状态 55
+    expr  go to state 111
+    call  go to state 55
 
 
-状态 82
+State 82
 
    58 expr: expr '<' . expr
 
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
 
-    expr  转到状态 112
-    call  转到状态 55
+    expr  go to state 112
+    call  go to state 55
 
 
-状态 83
+State 83
 
    63 expr: expr '>' . expr
 
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
 
-    expr  转到状态 113
-    call  转到状态 55
+    expr  go to state 113
+    call  go to state 55
 
 
-状态 84
+State 84
 
    52 expr: expr '+' . expr
 
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
 
-    expr  转到状态 114
-    call  转到状态 55
+    expr  go to state 114
+    call  go to state 55
 
 
-状态 85
+State 85
 
    53 expr: expr '-' . expr
 
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
 
-    expr  转到状态 115
-    call  转到状态 55
+    expr  go to state 115
+    call  go to state 55
 
 
-状态 86
+State 86
 
    54 expr: expr '*' . expr
 
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
 
-    expr  转到状态 116
-    call  转到状态 55
+    expr  go to state 116
+    call  go to state 55
 
 
-状态 87
+State 87
 
    55 expr: expr '/' . expr
 
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
 
-    expr  转到状态 117
-    call  转到状态 55
+    expr  go to state 117
+    call  go to state 55
 
 
-状态 88
+State 88
 
    56 expr: expr '%' . expr
 
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
 
-    expr  转到状态 118
-    call  转到状态 55
+    expr  go to state 118
+    call  go to state 55
 
 
-状态 89
+State 89
 
    69 expr: expr '&' . expr
 
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
 
-    expr  转到状态 119
-    call  转到状态 55
+    expr  go to state 119
+    call  go to state 55
 
 
-状态 90
+State 90
 
    70 expr: expr '|' . expr
 
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
 
-    expr  转到状态 120
-    call  转到状态 55
+    expr  go to state 120
+    call  go to state 55
 
 
-状态 91
+State 91
 
    66 expr: expr '^' . expr
 
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
 
-    expr  转到状态 121
-    call  转到状态 55
+    expr  go to state 121
+    call  go to state 55
 
 
-状态 92
+State 92
 
    21 stmt: expr ';' .
 
-    $default  使用规则 21 以归约 (stmt)
+    $default  reduce using rule 21 (stmt)
 
 
-状态 93
+State 93
 
    29 ifstmt: IF expr stmtblock .
    30       | IF expr stmtblock . ELSE stmtblock
 
-    ELSE  偏移，并进入状态 122
+    ELSE  shift, and go to state 122
 
-    $default  使用规则 29 以归约 (ifstmt)
+    $default  reduce using rule 29 (ifstmt)
 
 
-状态 94
+State 94
 
    31 whilestmt: WHILE expr stmtblock .
 
-    $default  使用规则 31 以归约 (whilestmt)
+    $default  reduce using rule 31 (whilestmt)
 
 
-状态 95
+State 95
 
    32 forstmt: FOR ';' ';' . stmtblock
    35        | FOR ';' ';' . expr stmtblock
 
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
-    '{'           偏移，并进入状态 22
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
+    '{'           shift, and go to state 22
 
-    stmtblock  转到状态 123
-    expr       转到状态 124
-    call       转到状态 55
+    stmtblock  go to state 123
+    expr       go to state 124
+    call       go to state 55
 
 
-状态 96
+State 96
 
    34 forstmt: FOR ';' expr . ';' stmtblock
    37        | FOR ';' expr . ';' expr stmtblock
@@ -1667,55 +1667,55 @@
    69     | expr . '&' expr
    70     | expr . '|' expr
 
-    AND    偏移，并进入状态 76
-    OR     偏移，并进入状态 77
-    EQUAL  偏移，并进入状态 78
-    NE     偏移，并进入状态 79
-    GE     偏移，并进入状态 80
-    LE     偏移，并进入状态 81
-    '<'    偏移，并进入状态 82
-    '>'    偏移，并进入状态 83
-    '+'    偏移，并进入状态 84
-    '-'    偏移，并进入状态 85
-    '*'    偏移，并进入状态 86
-    '/'    偏移，并进入状态 87
-    '%'    偏移，并进入状态 88
-    '&'    偏移，并进入状态 89
-    '|'    偏移，并进入状态 90
-    '^'    偏移，并进入状态 91
-    ';'    偏移，并进入状态 125
+    AND    shift, and go to state 76
+    OR     shift, and go to state 77
+    EQUAL  shift, and go to state 78
+    NE     shift, and go to state 79
+    GE     shift, and go to state 80
+    LE     shift, and go to state 81
+    '<'    shift, and go to state 82
+    '>'    shift, and go to state 83
+    '+'    shift, and go to state 84
+    '-'    shift, and go to state 85
+    '*'    shift, and go to state 86
+    '/'    shift, and go to state 87
+    '%'    shift, and go to state 88
+    '&'    shift, and go to state 89
+    '|'    shift, and go to state 90
+    '^'    shift, and go to state 91
+    ';'    shift, and go to state 125
 
 
-状态 97
+State 97
 
    33 forstmt: FOR expr ';' . ';' stmtblock
    36        | FOR expr ';' . expr ';' stmtblock
    38        | FOR expr ';' . ';' expr stmtblock
    39        | FOR expr ';' . expr ';' expr stmtblock
 
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
-    ';'           偏移，并进入状态 126
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
+    ';'           shift, and go to state 126
 
-    expr  转到状态 127
-    call  转到状态 55
+    expr  go to state 127
+    call  go to state 55
 
 
-状态 98
+State 98
 
    41 returnstmt: RETURN expr ';' .
 
-    $default  使用规则 41 以归约 (returnstmt)
+    $default  reduce using rule 41 (returnstmt)
 
 
-状态 99
+State 99
 
    44 expr: OBJECTID '=' expr .
    52     | expr . '+' expr
@@ -1735,34 +1735,34 @@
    69     | expr . '&' expr
    70     | expr . '|' expr
 
-    AND    偏移，并进入状态 76
-    OR     偏移，并进入状态 77
-    EQUAL  偏移，并进入状态 78
-    NE     偏移，并进入状态 79
-    GE     偏移，并进入状态 80
-    LE     偏移，并进入状态 81
-    '<'    偏移，并进入状态 82
-    '>'    偏移，并进入状态 83
-    '+'    偏移，并进入状态 84
-    '-'    偏移，并进入状态 85
-    '*'    偏移，并进入状态 86
-    '/'    偏移，并进入状态 87
-    '%'    偏移，并进入状态 88
-    '&'    偏移，并进入状态 89
-    '|'    偏移，并进入状态 90
-    '^'    偏移，并进入状态 91
+    AND    shift, and go to state 76
+    OR     shift, and go to state 77
+    EQUAL  shift, and go to state 78
+    NE     shift, and go to state 79
+    GE     shift, and go to state 80
+    LE     shift, and go to state 81
+    '<'    shift, and go to state 82
+    '>'    shift, and go to state 83
+    '+'    shift, and go to state 84
+    '-'    shift, and go to state 85
+    '*'    shift, and go to state 86
+    '/'    shift, and go to state 87
+    '%'    shift, and go to state 88
+    '&'    shift, and go to state 89
+    '|'    shift, and go to state 90
+    '^'    shift, and go to state 91
 
-    $default  使用规则 44 以归约 (expr)
+    $default  reduce using rule 44 (expr)
 
 
-状态 100
+State 100
 
    72 call: OBJECTID '(' ')' .
 
-    $default  使用规则 72 以归约 (call)
+    $default  reduce using rule 72 (call)
 
 
-状态 101
+State 101
 
    52 expr: expr . '+' expr
    53     | expr . '-' expr
@@ -1782,57 +1782,57 @@
    70     | expr . '|' expr
    73 actual: expr .
 
-    AND    偏移，并进入状态 76
-    OR     偏移，并进入状态 77
-    EQUAL  偏移，并进入状态 78
-    NE     偏移，并进入状态 79
-    GE     偏移，并进入状态 80
-    LE     偏移，并进入状态 81
-    '<'    偏移，并进入状态 82
-    '>'    偏移，并进入状态 83
-    '+'    偏移，并进入状态 84
-    '-'    偏移，并进入状态 85
-    '*'    偏移，并进入状态 86
-    '/'    偏移，并进入状态 87
-    '%'    偏移，并进入状态 88
-    '&'    偏移，并进入状态 89
-    '|'    偏移，并进入状态 90
-    '^'    偏移，并进入状态 91
+    AND    shift, and go to state 76
+    OR     shift, and go to state 77
+    EQUAL  shift, and go to state 78
+    NE     shift, and go to state 79
+    GE     shift, and go to state 80
+    LE     shift, and go to state 81
+    '<'    shift, and go to state 82
+    '>'    shift, and go to state 83
+    '+'    shift, and go to state 84
+    '-'    shift, and go to state 85
+    '*'    shift, and go to state 86
+    '/'    shift, and go to state 87
+    '%'    shift, and go to state 88
+    '&'    shift, and go to state 89
+    '|'    shift, and go to state 90
+    '^'    shift, and go to state 91
 
-    $default  使用规则 73 以归约 (actual)
+    $default  reduce using rule 73 (actual)
 
 
-状态 102
+State 102
 
    74 actual_list: actual .
 
-    $default  使用规则 74 以归约 (actual_list)
+    $default  reduce using rule 74 (actual_list)
 
 
-状态 103
+State 103
 
    71 call: OBJECTID '(' actual_list . ')'
    75 actual_list: actual_list . ',' actual
 
-    ')'  偏移，并进入状态 128
-    ','  偏移，并进入状态 129
+    ')'  shift, and go to state 128
+    ','  shift, and go to state 129
 
 
-状态 104
+State 104
 
    50 expr: '(' expr ')' .
 
-    $default  使用规则 50 以归约 (expr)
+    $default  reduce using rule 50 (expr)
 
 
-状态 105
+State 105
 
    11 stmtblock: '{' variabledecl_list stmt_list '}' .
 
-    $default  使用规则 11 以归约 (stmtblock)
+    $default  reduce using rule 11 (stmtblock)
 
 
-状态 106
+State 106
 
    52 expr: expr . '+' expr
    53     | expr . '-' expr
@@ -1852,26 +1852,26 @@
    69     | expr . '&' expr
    70     | expr . '|' expr
 
-    AND    偏移，并进入状态 76
-    EQUAL  偏移，并进入状态 78
-    NE     偏移，并进入状态 79
-    GE     偏移，并进入状态 80
-    LE     偏移，并进入状态 81
-    '<'    偏移，并进入状态 82
-    '>'    偏移，并进入状态 83
-    '+'    偏移，并进入状态 84
-    '-'    偏移，并进入状态 85
-    '*'    偏移，并进入状态 86
-    '/'    偏移，并进入状态 87
-    '%'    偏移，并进入状态 88
-    '&'    偏移，并进入状态 89
-    '|'    偏移，并进入状态 90
-    '^'    偏移，并进入状态 91
+    AND    shift, and go to state 76
+    EQUAL  shift, and go to state 78
+    NE     shift, and go to state 79
+    GE     shift, and go to state 80
+    LE     shift, and go to state 81
+    '<'    shift, and go to state 82
+    '>'    shift, and go to state 83
+    '+'    shift, and go to state 84
+    '-'    shift, and go to state 85
+    '*'    shift, and go to state 86
+    '/'    shift, and go to state 87
+    '%'    shift, and go to state 88
+    '&'    shift, and go to state 89
+    '|'    shift, and go to state 90
+    '^'    shift, and go to state 91
 
-    $default  使用规则 64 以归约 (expr)
+    $default  reduce using rule 64 (expr)
 
 
-状态 107
+State 107
 
    52 expr: expr . '+' expr
    53     | expr . '-' expr
@@ -1891,27 +1891,27 @@
    69     | expr . '&' expr
    70     | expr . '|' expr
 
-    AND    偏移，并进入状态 76
-    OR     偏移，并进入状态 77
-    EQUAL  偏移，并进入状态 78
-    NE     偏移，并进入状态 79
-    GE     偏移，并进入状态 80
-    LE     偏移，并进入状态 81
-    '<'    偏移，并进入状态 82
-    '>'    偏移，并进入状态 83
-    '+'    偏移，并进入状态 84
-    '-'    偏移，并进入状态 85
-    '*'    偏移，并进入状态 86
-    '/'    偏移，并进入状态 87
-    '%'    偏移，并进入状态 88
-    '&'    偏移，并进入状态 89
-    '|'    偏移，并进入状态 90
-    '^'    偏移，并进入状态 91
+    AND    shift, and go to state 76
+    OR     shift, and go to state 77
+    EQUAL  shift, and go to state 78
+    NE     shift, and go to state 79
+    GE     shift, and go to state 80
+    LE     shift, and go to state 81
+    '<'    shift, and go to state 82
+    '>'    shift, and go to state 83
+    '+'    shift, and go to state 84
+    '-'    shift, and go to state 85
+    '*'    shift, and go to state 86
+    '/'    shift, and go to state 87
+    '%'    shift, and go to state 88
+    '&'    shift, and go to state 89
+    '|'    shift, and go to state 90
+    '^'    shift, and go to state 91
 
-    $default  使用规则 65 以归约 (expr)
+    $default  reduce using rule 65 (expr)
 
 
-状态 108
+State 108
 
    52 expr: expr . '+' expr
    53     | expr . '-' expr
@@ -1931,26 +1931,26 @@
    69     | expr . '&' expr
    70     | expr . '|' expr
 
-    GE   偏移，并进入状态 80
-    LE   偏移，并进入状态 81
-    '<'  偏移，并进入状态 82
-    '>'  偏移，并进入状态 83
-    '+'  偏移，并进入状态 84
-    '-'  偏移，并进入状态 85
-    '*'  偏移，并进入状态 86
-    '/'  偏移，并进入状态 87
-    '%'  偏移，并进入状态 88
-    '&'  偏移，并进入状态 89
-    '|'  偏移，并进入状态 90
-    '^'  偏移，并进入状态 91
+    GE   shift, and go to state 80
+    LE   shift, and go to state 81
+    '<'  shift, and go to state 82
+    '>'  shift, and go to state 83
+    '+'  shift, and go to state 84
+    '-'  shift, and go to state 85
+    '*'  shift, and go to state 86
+    '/'  shift, and go to state 87
+    '%'  shift, and go to state 88
+    '&'  shift, and go to state 89
+    '|'  shift, and go to state 90
+    '^'  shift, and go to state 91
 
-    EQUAL  错误 (非相联的)
-    NE     错误 (非相联的)
+    EQUAL  error (nonassociative)
+    NE     error (nonassociative)
 
-    $default  使用规则 60 以归约 (expr)
+    $default  reduce using rule 60 (expr)
 
 
-状态 109
+State 109
 
    52 expr: expr . '+' expr
    53     | expr . '-' expr
@@ -1970,26 +1970,26 @@
    69     | expr . '&' expr
    70     | expr . '|' expr
 
-    GE   偏移，并进入状态 80
-    LE   偏移，并进入状态 81
-    '<'  偏移，并进入状态 82
-    '>'  偏移，并进入状态 83
-    '+'  偏移，并进入状态 84
-    '-'  偏移，并进入状态 85
-    '*'  偏移，并进入状态 86
-    '/'  偏移，并进入状态 87
-    '%'  偏移，并进入状态 88
-    '&'  偏移，并进入状态 89
-    '|'  偏移，并进入状态 90
-    '^'  偏移，并进入状态 91
+    GE   shift, and go to state 80
+    LE   shift, and go to state 81
+    '<'  shift, and go to state 82
+    '>'  shift, and go to state 83
+    '+'  shift, and go to state 84
+    '-'  shift, and go to state 85
+    '*'  shift, and go to state 86
+    '/'  shift, and go to state 87
+    '%'  shift, and go to state 88
+    '&'  shift, and go to state 89
+    '|'  shift, and go to state 90
+    '^'  shift, and go to state 91
 
-    EQUAL  错误 (非相联的)
-    NE     错误 (非相联的)
+    EQUAL  error (nonassociative)
+    NE     error (nonassociative)
 
-    $default  使用规则 61 以归约 (expr)
+    $default  reduce using rule 61 (expr)
 
 
-状态 110
+State 110
 
    52 expr: expr . '+' expr
    53     | expr . '-' expr
@@ -2009,24 +2009,24 @@
    69     | expr . '&' expr
    70     | expr . '|' expr
 
-    '+'  偏移，并进入状态 84
-    '-'  偏移，并进入状态 85
-    '*'  偏移，并进入状态 86
-    '/'  偏移，并进入状态 87
-    '%'  偏移，并进入状态 88
-    '&'  偏移，并进入状态 89
-    '|'  偏移，并进入状态 90
-    '^'  偏移，并进入状态 91
+    '+'  shift, and go to state 84
+    '-'  shift, and go to state 85
+    '*'  shift, and go to state 86
+    '/'  shift, and go to state 87
+    '%'  shift, and go to state 88
+    '&'  shift, and go to state 89
+    '|'  shift, and go to state 90
+    '^'  shift, and go to state 91
 
-    GE   错误 (非相联的)
-    LE   错误 (非相联的)
-    '<'  错误 (非相联的)
-    '>'  错误 (非相联的)
+    GE   error (nonassociative)
+    LE   error (nonassociative)
+    '<'  error (nonassociative)
+    '>'  error (nonassociative)
 
-    $default  使用规则 62 以归约 (expr)
+    $default  reduce using rule 62 (expr)
 
 
-状态 111
+State 111
 
    52 expr: expr . '+' expr
    53     | expr . '-' expr
@@ -2046,24 +2046,24 @@
    69     | expr . '&' expr
    70     | expr . '|' expr
 
-    '+'  偏移，并进入状态 84
-    '-'  偏移，并进入状态 85
-    '*'  偏移，并进入状态 86
-    '/'  偏移，并进入状态 87
-    '%'  偏移，并进入状态 88
-    '&'  偏移，并进入状态 89
-    '|'  偏移，并进入状态 90
-    '^'  偏移，并进入状态 91
+    '+'  shift, and go to state 84
+    '-'  shift, and go to state 85
+    '*'  shift, and go to state 86
+    '/'  shift, and go to state 87
+    '%'  shift, and go to state 88
+    '&'  shift, and go to state 89
+    '|'  shift, and go to state 90
+    '^'  shift, and go to state 91
 
-    GE   错误 (非相联的)
-    LE   错误 (非相联的)
-    '<'  错误 (非相联的)
-    '>'  错误 (非相联的)
+    GE   error (nonassociative)
+    LE   error (nonassociative)
+    '<'  error (nonassociative)
+    '>'  error (nonassociative)
 
-    $default  使用规则 59 以归约 (expr)
+    $default  reduce using rule 59 (expr)
 
 
-状态 112
+State 112
 
    52 expr: expr . '+' expr
    53     | expr . '-' expr
@@ -2083,24 +2083,24 @@
    69     | expr . '&' expr
    70     | expr . '|' expr
 
-    '+'  偏移，并进入状态 84
-    '-'  偏移，并进入状态 85
-    '*'  偏移，并进入状态 86
-    '/'  偏移，并进入状态 87
-    '%'  偏移，并进入状态 88
-    '&'  偏移，并进入状态 89
-    '|'  偏移，并进入状态 90
-    '^'  偏移，并进入状态 91
+    '+'  shift, and go to state 84
+    '-'  shift, and go to state 85
+    '*'  shift, and go to state 86
+    '/'  shift, and go to state 87
+    '%'  shift, and go to state 88
+    '&'  shift, and go to state 89
+    '|'  shift, and go to state 90
+    '^'  shift, and go to state 91
 
-    GE   错误 (非相联的)
-    LE   错误 (非相联的)
-    '<'  错误 (非相联的)
-    '>'  错误 (非相联的)
+    GE   error (nonassociative)
+    LE   error (nonassociative)
+    '<'  error (nonassociative)
+    '>'  error (nonassociative)
 
-    $default  使用规则 58 以归约 (expr)
+    $default  reduce using rule 58 (expr)
 
 
-状态 113
+State 113
 
    52 expr: expr . '+' expr
    53     | expr . '-' expr
@@ -2120,24 +2120,24 @@
    69     | expr . '&' expr
    70     | expr . '|' expr
 
-    '+'  偏移，并进入状态 84
-    '-'  偏移，并进入状态 85
-    '*'  偏移，并进入状态 86
-    '/'  偏移，并进入状态 87
-    '%'  偏移，并进入状态 88
-    '&'  偏移，并进入状态 89
-    '|'  偏移，并进入状态 90
-    '^'  偏移，并进入状态 91
+    '+'  shift, and go to state 84
+    '-'  shift, and go to state 85
+    '*'  shift, and go to state 86
+    '/'  shift, and go to state 87
+    '%'  shift, and go to state 88
+    '&'  shift, and go to state 89
+    '|'  shift, and go to state 90
+    '^'  shift, and go to state 91
 
-    GE   错误 (非相联的)
-    LE   错误 (非相联的)
-    '<'  错误 (非相联的)
-    '>'  错误 (非相联的)
+    GE   error (nonassociative)
+    LE   error (nonassociative)
+    '<'  error (nonassociative)
+    '>'  error (nonassociative)
 
-    $default  使用规则 63 以归约 (expr)
+    $default  reduce using rule 63 (expr)
 
 
-状态 114
+State 114
 
    52 expr: expr . '+' expr
    52     | expr '+' expr .
@@ -2157,17 +2157,17 @@
    69     | expr . '&' expr
    70     | expr . '|' expr
 
-    '*'  偏移，并进入状态 86
-    '/'  偏移，并进入状态 87
-    '%'  偏移，并进入状态 88
-    '&'  偏移，并进入状态 89
-    '|'  偏移，并进入状态 90
-    '^'  偏移，并进入状态 91
+    '*'  shift, and go to state 86
+    '/'  shift, and go to state 87
+    '%'  shift, and go to state 88
+    '&'  shift, and go to state 89
+    '|'  shift, and go to state 90
+    '^'  shift, and go to state 91
 
-    $default  使用规则 52 以归约 (expr)
+    $default  reduce using rule 52 (expr)
 
 
-状态 115
+State 115
 
    52 expr: expr . '+' expr
    53     | expr . '-' expr
@@ -2187,17 +2187,17 @@
    69     | expr . '&' expr
    70     | expr . '|' expr
 
-    '*'  偏移，并进入状态 86
-    '/'  偏移，并进入状态 87
-    '%'  偏移，并进入状态 88
-    '&'  偏移，并进入状态 89
-    '|'  偏移，并进入状态 90
-    '^'  偏移，并进入状态 91
+    '*'  shift, and go to state 86
+    '/'  shift, and go to state 87
+    '%'  shift, and go to state 88
+    '&'  shift, and go to state 89
+    '|'  shift, and go to state 90
+    '^'  shift, and go to state 91
 
-    $default  使用规则 53 以归约 (expr)
+    $default  reduce using rule 53 (expr)
 
 
-状态 116
+State 116
 
    52 expr: expr . '+' expr
    53     | expr . '-' expr
@@ -2217,14 +2217,14 @@
    69     | expr . '&' expr
    70     | expr . '|' expr
 
-    '&'  偏移，并进入状态 89
-    '|'  偏移，并进入状态 90
-    '^'  偏移，并进入状态 91
+    '&'  shift, and go to state 89
+    '|'  shift, and go to state 90
+    '^'  shift, and go to state 91
 
-    $default  使用规则 54 以归约 (expr)
+    $default  reduce using rule 54 (expr)
 
 
-状态 117
+State 117
 
    52 expr: expr . '+' expr
    53     | expr . '-' expr
@@ -2244,14 +2244,14 @@
    69     | expr . '&' expr
    70     | expr . '|' expr
 
-    '&'  偏移，并进入状态 89
-    '|'  偏移，并进入状态 90
-    '^'  偏移，并进入状态 91
+    '&'  shift, and go to state 89
+    '|'  shift, and go to state 90
+    '^'  shift, and go to state 91
 
-    $default  使用规则 55 以归约 (expr)
+    $default  reduce using rule 55 (expr)
 
 
-状态 118
+State 118
 
    52 expr: expr . '+' expr
    53     | expr . '-' expr
@@ -2271,14 +2271,14 @@
    69     | expr . '&' expr
    70     | expr . '|' expr
 
-    '&'  偏移，并进入状态 89
-    '|'  偏移，并进入状态 90
-    '^'  偏移，并进入状态 91
+    '&'  shift, and go to state 89
+    '|'  shift, and go to state 90
+    '^'  shift, and go to state 91
 
-    $default  使用规则 56 以归约 (expr)
+    $default  reduce using rule 56 (expr)
 
 
-状态 119
+State 119
 
    52 expr: expr . '+' expr
    53     | expr . '-' expr
@@ -2298,10 +2298,10 @@
    69     | expr '&' expr .
    70     | expr . '|' expr
 
-    $default  使用规则 69 以归约 (expr)
+    $default  reduce using rule 69 (expr)
 
 
-状态 120
+State 120
 
    52 expr: expr . '+' expr
    53     | expr . '-' expr
@@ -2321,10 +2321,10 @@
    70     | expr . '|' expr
    70     | expr '|' expr .
 
-    $default  使用规则 70 以归约 (expr)
+    $default  reduce using rule 70 (expr)
 
 
-状态 121
+State 121
 
    52 expr: expr . '+' expr
    53     | expr . '-' expr
@@ -2344,26 +2344,26 @@
    69     | expr . '&' expr
    70     | expr . '|' expr
 
-    $default  使用规则 66 以归约 (expr)
+    $default  reduce using rule 66 (expr)
 
 
-状态 122
+State 122
 
    30 ifstmt: IF expr stmtblock ELSE . stmtblock
 
-    '{'  偏移，并进入状态 22
+    '{'  shift, and go to state 22
 
-    stmtblock  转到状态 130
+    stmtblock  go to state 130
 
 
-状态 123
+State 123
 
    32 forstmt: FOR ';' ';' stmtblock .
 
-    $default  使用规则 32 以归约 (forstmt)
+    $default  reduce using rule 32 (forstmt)
 
 
-状态 124
+State 124
 
    35 forstmt: FOR ';' ';' expr . stmtblock
    52 expr: expr . '+' expr
@@ -2383,70 +2383,70 @@
    69     | expr . '&' expr
    70     | expr . '|' expr
 
-    AND    偏移，并进入状态 76
-    OR     偏移，并进入状态 77
-    EQUAL  偏移，并进入状态 78
-    NE     偏移，并进入状态 79
-    GE     偏移，并进入状态 80
-    LE     偏移，并进入状态 81
-    '<'    偏移，并进入状态 82
-    '>'    偏移，并进入状态 83
-    '+'    偏移，并进入状态 84
-    '-'    偏移，并进入状态 85
-    '*'    偏移，并进入状态 86
-    '/'    偏移，并进入状态 87
-    '%'    偏移，并进入状态 88
-    '&'    偏移，并进入状态 89
-    '|'    偏移，并进入状态 90
-    '^'    偏移，并进入状态 91
-    '{'    偏移，并进入状态 22
+    AND    shift, and go to state 76
+    OR     shift, and go to state 77
+    EQUAL  shift, and go to state 78
+    NE     shift, and go to state 79
+    GE     shift, and go to state 80
+    LE     shift, and go to state 81
+    '<'    shift, and go to state 82
+    '>'    shift, and go to state 83
+    '+'    shift, and go to state 84
+    '-'    shift, and go to state 85
+    '*'    shift, and go to state 86
+    '/'    shift, and go to state 87
+    '%'    shift, and go to state 88
+    '&'    shift, and go to state 89
+    '|'    shift, and go to state 90
+    '^'    shift, and go to state 91
+    '{'    shift, and go to state 22
 
-    stmtblock  转到状态 131
+    stmtblock  go to state 131
 
 
-状态 125
+State 125
 
    34 forstmt: FOR ';' expr ';' . stmtblock
    37        | FOR ';' expr ';' . expr stmtblock
 
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
-    '{'           偏移，并进入状态 22
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
+    '{'           shift, and go to state 22
 
-    stmtblock  转到状态 132
-    expr       转到状态 133
-    call       转到状态 55
+    stmtblock  go to state 132
+    expr       go to state 133
+    call       go to state 55
 
 
-状态 126
+State 126
 
    33 forstmt: FOR expr ';' ';' . stmtblock
    38        | FOR expr ';' ';' . expr stmtblock
 
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
-    '{'           偏移，并进入状态 22
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
+    '{'           shift, and go to state 22
 
-    stmtblock  转到状态 134
-    expr       转到状态 135
-    call       转到状态 55
+    stmtblock  go to state 134
+    expr       go to state 135
+    call       go to state 55
 
 
-状态 127
+State 127
 
    36 forstmt: FOR expr ';' expr . ';' stmtblock
    39        | FOR expr ';' expr . ';' expr stmtblock
@@ -2467,73 +2467,73 @@
    69     | expr . '&' expr
    70     | expr . '|' expr
 
-    AND    偏移，并进入状态 76
-    OR     偏移，并进入状态 77
-    EQUAL  偏移，并进入状态 78
-    NE     偏移，并进入状态 79
-    GE     偏移，并进入状态 80
-    LE     偏移，并进入状态 81
-    '<'    偏移，并进入状态 82
-    '>'    偏移，并进入状态 83
-    '+'    偏移，并进入状态 84
-    '-'    偏移，并进入状态 85
-    '*'    偏移，并进入状态 86
-    '/'    偏移，并进入状态 87
-    '%'    偏移，并进入状态 88
-    '&'    偏移，并进入状态 89
-    '|'    偏移，并进入状态 90
-    '^'    偏移，并进入状态 91
-    ';'    偏移，并进入状态 136
+    AND    shift, and go to state 76
+    OR     shift, and go to state 77
+    EQUAL  shift, and go to state 78
+    NE     shift, and go to state 79
+    GE     shift, and go to state 80
+    LE     shift, and go to state 81
+    '<'    shift, and go to state 82
+    '>'    shift, and go to state 83
+    '+'    shift, and go to state 84
+    '-'    shift, and go to state 85
+    '*'    shift, and go to state 86
+    '/'    shift, and go to state 87
+    '%'    shift, and go to state 88
+    '&'    shift, and go to state 89
+    '|'    shift, and go to state 90
+    '^'    shift, and go to state 91
+    ';'    shift, and go to state 136
 
 
-状态 128
+State 128
 
    71 call: OBJECTID '(' actual_list ')' .
 
-    $default  使用规则 71 以归约 (call)
+    $default  reduce using rule 71 (call)
 
 
-状态 129
+State 129
 
    75 actual_list: actual_list ',' . actual
 
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
 
-    expr    转到状态 101
-    call    转到状态 55
-    actual  转到状态 137
+    expr    go to state 101
+    call    go to state 55
+    actual  go to state 137
 
 
-状态 130
+State 130
 
    30 ifstmt: IF expr stmtblock ELSE stmtblock .
 
-    $default  使用规则 30 以归约 (ifstmt)
+    $default  reduce using rule 30 (ifstmt)
 
 
-状态 131
+State 131
 
    35 forstmt: FOR ';' ';' expr stmtblock .
 
-    $default  使用规则 35 以归约 (forstmt)
+    $default  reduce using rule 35 (forstmt)
 
 
-状态 132
+State 132
 
    34 forstmt: FOR ';' expr ';' stmtblock .
 
-    $default  使用规则 34 以归约 (forstmt)
+    $default  reduce using rule 34 (forstmt)
 
 
-状态 133
+State 133
 
    37 forstmt: FOR ';' expr ';' expr . stmtblock
    52 expr: expr . '+' expr
@@ -2553,35 +2553,35 @@
    69     | expr . '&' expr
    70     | expr . '|' expr
 
-    AND    偏移，并进入状态 76
-    OR     偏移，并进入状态 77
-    EQUAL  偏移，并进入状态 78
-    NE     偏移，并进入状态 79
-    GE     偏移，并进入状态 80
-    LE     偏移，并进入状态 81
-    '<'    偏移，并进入状态 82
-    '>'    偏移，并进入状态 83
-    '+'    偏移，并进入状态 84
-    '-'    偏移，并进入状态 85
-    '*'    偏移，并进入状态 86
-    '/'    偏移，并进入状态 87
-    '%'    偏移，并进入状态 88
-    '&'    偏移，并进入状态 89
-    '|'    偏移，并进入状态 90
-    '^'    偏移，并进入状态 91
-    '{'    偏移，并进入状态 22
+    AND    shift, and go to state 76
+    OR     shift, and go to state 77
+    EQUAL  shift, and go to state 78
+    NE     shift, and go to state 79
+    GE     shift, and go to state 80
+    LE     shift, and go to state 81
+    '<'    shift, and go to state 82
+    '>'    shift, and go to state 83
+    '+'    shift, and go to state 84
+    '-'    shift, and go to state 85
+    '*'    shift, and go to state 86
+    '/'    shift, and go to state 87
+    '%'    shift, and go to state 88
+    '&'    shift, and go to state 89
+    '|'    shift, and go to state 90
+    '^'    shift, and go to state 91
+    '{'    shift, and go to state 22
 
-    stmtblock  转到状态 138
+    stmtblock  go to state 138
 
 
-状态 134
+State 134
 
    33 forstmt: FOR expr ';' ';' stmtblock .
 
-    $default  使用规则 33 以归约 (forstmt)
+    $default  reduce using rule 33 (forstmt)
 
 
-状态 135
+State 135
 
    38 forstmt: FOR expr ';' ';' expr . stmtblock
    52 expr: expr . '+' expr
@@ -2601,77 +2601,77 @@
    69     | expr . '&' expr
    70     | expr . '|' expr
 
-    AND    偏移，并进入状态 76
-    OR     偏移，并进入状态 77
-    EQUAL  偏移，并进入状态 78
-    NE     偏移，并进入状态 79
-    GE     偏移，并进入状态 80
-    LE     偏移，并进入状态 81
-    '<'    偏移，并进入状态 82
-    '>'    偏移，并进入状态 83
-    '+'    偏移，并进入状态 84
-    '-'    偏移，并进入状态 85
-    '*'    偏移，并进入状态 86
-    '/'    偏移，并进入状态 87
-    '%'    偏移，并进入状态 88
-    '&'    偏移，并进入状态 89
-    '|'    偏移，并进入状态 90
-    '^'    偏移，并进入状态 91
-    '{'    偏移，并进入状态 22
+    AND    shift, and go to state 76
+    OR     shift, and go to state 77
+    EQUAL  shift, and go to state 78
+    NE     shift, and go to state 79
+    GE     shift, and go to state 80
+    LE     shift, and go to state 81
+    '<'    shift, and go to state 82
+    '>'    shift, and go to state 83
+    '+'    shift, and go to state 84
+    '-'    shift, and go to state 85
+    '*'    shift, and go to state 86
+    '/'    shift, and go to state 87
+    '%'    shift, and go to state 88
+    '&'    shift, and go to state 89
+    '|'    shift, and go to state 90
+    '^'    shift, and go to state 91
+    '{'    shift, and go to state 22
 
-    stmtblock  转到状态 139
+    stmtblock  go to state 139
 
 
-状态 136
+State 136
 
    36 forstmt: FOR expr ';' expr ';' . stmtblock
    39        | FOR expr ';' expr ';' . expr stmtblock
 
-    CONST_BOOL    偏移，并进入状态 32
-    CONST_INT     偏移，并进入状态 33
-    CONST_STRING  偏移，并进入状态 34
-    CONST_FLOAT   偏移，并进入状态 35
-    OBJECTID      偏移，并进入状态 36
-    '-'           偏移，并进入状态 37
-    '!'           偏移，并进入状态 38
-    '~'           偏移，并进入状态 39
-    '('           偏移，并进入状态 40
-    '{'           偏移，并进入状态 22
+    CONST_BOOL    shift, and go to state 32
+    CONST_INT     shift, and go to state 33
+    CONST_STRING  shift, and go to state 34
+    CONST_FLOAT   shift, and go to state 35
+    OBJECTID      shift, and go to state 36
+    '-'           shift, and go to state 37
+    '!'           shift, and go to state 38
+    '~'           shift, and go to state 39
+    '('           shift, and go to state 40
+    '{'           shift, and go to state 22
 
-    stmtblock  转到状态 140
-    expr       转到状态 141
-    call       转到状态 55
+    stmtblock  go to state 140
+    expr       go to state 141
+    call       go to state 55
 
 
-状态 137
+State 137
 
    75 actual_list: actual_list ',' actual .
 
-    $default  使用规则 75 以归约 (actual_list)
+    $default  reduce using rule 75 (actual_list)
 
 
-状态 138
+State 138
 
    37 forstmt: FOR ';' expr ';' expr stmtblock .
 
-    $default  使用规则 37 以归约 (forstmt)
+    $default  reduce using rule 37 (forstmt)
 
 
-状态 139
+State 139
 
    38 forstmt: FOR expr ';' ';' expr stmtblock .
 
-    $default  使用规则 38 以归约 (forstmt)
+    $default  reduce using rule 38 (forstmt)
 
 
-状态 140
+State 140
 
    36 forstmt: FOR expr ';' expr ';' stmtblock .
 
-    $default  使用规则 36 以归约 (forstmt)
+    $default  reduce using rule 36 (forstmt)
 
 
-状态 141
+State 141
 
    39 forstmt: FOR expr ';' expr ';' expr . stmtblock
    52 expr: expr . '+' expr
@@ -2691,29 +2691,29 @@
    69     | expr . '&' expr
    70     | expr . '|' expr
 
-    AND    偏移，并进入状态 76
-    OR     偏移，并进入状态 77
-    EQUAL  偏移，并进入状态 78
-    NE     偏移，并进入状态 79
-    GE     偏移，并进入状态 80
-    LE     偏移，并进入状态 81
-    '<'    偏移，并进入状态 82
-    '>'    偏移，并进入状态 83
-    '+'    偏移，并进入状态 84
-    '-'    偏移，并进入状态 85
-    '*'    偏移，并进入状态 86
-    '/'    偏移，并进入状态 87
-    '%'    偏移，并进入状态 88
-    '&'    偏移，并进入状态 89
-    '|'    偏移，并进入状态 90
-    '^'    偏移，并进入状态 91
-    '{'    偏移，并进入状态 22
+    AND    shift, and go to state 76
+    OR     shift, and go to state 77
+    EQUAL  shift, and go to state 78
+    NE     shift, and go to state 79
+    GE     shift, and go to state 80
+    LE     shift, and go to state 81
+    '<'    shift, and go to state 82
+    '>'    shift, and go to state 83
+    '+'    shift, and go to state 84
+    '-'    shift, and go to state 85
+    '*'    shift, and go to state 86
+    '/'    shift, and go to state 87
+    '%'    shift, and go to state 88
+    '&'    shift, and go to state 89
+    '|'    shift, and go to state 90
+    '^'    shift, and go to state 91
+    '{'    shift, and go to state 22
 
-    stmtblock  转到状态 142
+    stmtblock  go to state 142
 
 
-状态 142
+State 142
 
    39 forstmt: FOR expr ';' expr ';' expr stmtblock .
 
-    $default  使用规则 39 以归约 (forstmt)
+    $default  reduce using rule 39 (forstmt)

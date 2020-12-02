@@ -252,6 +252,7 @@
     forstmt : FOR ';' ';' stmtblock { $$ = forstmt(no_expr(), no_expr(), no_expr(), $4); }
     | FOR expr ';' ';' stmtblock { $$ = forstmt($2, no_expr(), no_expr(), $5); }
     | FOR ';' expr ';' stmtblock { $$ = forstmt(no_expr(), $3 , no_expr(), $5); }
+    // error
     | FOR ';' ';' expr stmtblock { $$ = forstmt(no_expr(), $4, no_expr(), $5); }
     | FOR expr ';' expr ';' stmtblock { $$ = forstmt($2, $4, no_expr(), $6); }
     | FOR ';' expr ';' expr stmtblock { $$ = forstmt(no_expr(), $3, $5, $6); }
