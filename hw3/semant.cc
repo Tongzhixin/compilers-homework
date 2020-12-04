@@ -389,8 +389,7 @@ Symbol Assign_class::checkType(){
     Symbol valueType = this->value->checkType();
     if (lvalueType != valueType) {
         semant_error(this) << "Right type does not match left." << std::endl;
-    }
-    // question
+    }  
     this->setType(valueType);
     return this->type;
 }
@@ -401,9 +400,8 @@ Symbol Add_class::checkType(){
 
     if (e1Type == e2Type) {
         if ( e1Type != Int && e1Type != Float ) {
-            semant_error(this) << "Value should be int or float type. Now the type is" << e1Type << std::endl;
-            // question
-            this->setType(Float);
+            semant_error(this) << "Value should be int or float type. Now the type is" << e1Type << std::endl;            
+            this->setType(Void);
             return this->type;
         }
     } else if ((e1Type == Float && e2Type == Int)||(e1Type == Int && e2Type == Float)) {
@@ -411,7 +409,7 @@ Symbol Add_class::checkType(){
         return type;
     } else {
         semant_error(this) << "Two value should have same type or a int and another float." << std::endl;
-        this->setType(Float);
+        this->setType(Void);
         return type;
     }
     this->setType(e1Type);
@@ -424,9 +422,8 @@ Symbol Minus_class::checkType(){
 
     if (e1Type == e2Type) {
         if ( e1Type != Int && e1Type != Float ) {
-            semant_error(this) << "Value should be int or float type. Now the type is" << e1Type << std::endl;
-            // question
-            this->setType(Float);
+            semant_error(this) << "Value should be int or float type. Now the type is" << e1Type << std::endl;            
+            this->setType(Void);
             return this->type;
         }
     } else if ((e1Type == Float && e2Type == Int)||(e1Type == Int && e2Type == Float)) {
@@ -434,7 +431,7 @@ Symbol Minus_class::checkType(){
         return type;
     } else {
         semant_error(this) << "Two value should have same type or a int and another float." << std::endl;
-        this->setType(Float);
+        this->setType(Void);
         return type;
     }
     this->setType(e1Type);
@@ -447,9 +444,8 @@ Symbol Multi_class::checkType(){
 
     if (e1Type == e2Type) {
         if ( e1Type != Int && e1Type != Float ) {
-            semant_error(this) << "Value should be int or float type. Now the type is" << e1Type << std::endl;
-            // question
-            this->setType(Float);
+            semant_error(this) << "Value should be int or float type. Now the type is" << e1Type << std::endl;            
+            this->setType(Void);
             return this->type;
         }
     } else if ((e1Type == Float && e2Type == Int)||(e1Type == Int && e2Type == Float)) {
@@ -457,7 +453,7 @@ Symbol Multi_class::checkType(){
         return type;
     } else {
         semant_error(this) << "Two value should have same type or a int and another float." << std::endl;
-        this->setType(Float);
+        this->setType(Void);
         return type;
     }
     this->setType(e1Type);
@@ -470,9 +466,8 @@ Symbol Divide_class::checkType(){
 
     if (e1Type == e2Type) {
         if ( e1Type != Int && e1Type != Float ) {
-            semant_error(this) << "Value should be int or float type. Now the type is" << e1Type << std::endl;
-            // question
-            this->setType(Float);
+            semant_error(this) << "Value should be int or float type. Now the type is" << e1Type << std::endl;            
+            this->setType(Void);
             return this->type;
         }
     } else if ((e1Type == Float && e2Type == Int)||(e1Type == Int && e2Type == Float)) {
@@ -480,7 +475,7 @@ Symbol Divide_class::checkType(){
         return type;
     } else {
         semant_error(this) << "Two value should have same type or a int and another float." << std::endl;
-        this->setType(Float);
+        this->setType(Void);
         return type;
     }
     this->setType(e1Type);
@@ -493,9 +488,8 @@ Symbol Mod_class::checkType(){
 
     if (e1Type == e2Type) {
         if ( e1Type != Int && e1Type != Float ) {
-            semant_error(this) << "Value should be int or float type. Now the type is" << e1Type << std::endl;
-            // question
-            this->setType(Float);
+            semant_error(this) << "Value should be int or float type. Now the type is" << e1Type << std::endl;            
+            this->setType(Void);
             return this->type;
         }
     } else if ((e1Type == Float && e2Type == Int)||(e1Type == Int && e2Type == Float)) {
@@ -503,7 +497,7 @@ Symbol Mod_class::checkType(){
         return type;
     } else {
         semant_error(this) << "Two value should have same type or a int and another float." << std::endl;
-        this->setType(Float);
+        this->setType(Void);
         return type;
     }
     this->setType(e1Type);
@@ -513,8 +507,9 @@ Symbol Mod_class::checkType(){
 Symbol Neg_class::checkType(){
     Symbol e1Type = this->e1->checkType();
     if (e1Type != Int && e1Type != Float) {
-        semant_error(this)<<"Neg expr should have a Int or Float value"<<endl;
-        // question
+        semant_error(this)<<"Neg expr should have a Int or Float value"<<endl;        
+        this->setType(Void);
+        return this->type;
     }
     this->setType(e1Type);
     return this->type;
@@ -695,14 +690,21 @@ Symbol Const_bool_class::checkType(){
 }
 
 Symbol Object_class::checkType(){
-    if (objectEnv.lookup(this->var) == NULL) {
+    if (objectEnv.lookup(this->var) == nullptr && globalVarMap[this->var] == nullptr) {
         semant_error(this) << "Object "<< this->var <<" has not been defined." << endl;
         this->setType(Void);
         return this->type;
     }
-    Symbol varType = localVarMap[this->var];
-    this->setType(varType);
-    return this->type;
+    if (localVarMap[this->var] != nullptr) {
+        Symbol varType = localVarMap[this->var];
+        this->setType(varType);
+        return this->type;
+    } else {
+        Symbol varType = globalVarMap[this->var];
+        this->setType(varType);
+        return this->type;
+    }
+    
 }
 
 Symbol No_expr_class::checkType(){

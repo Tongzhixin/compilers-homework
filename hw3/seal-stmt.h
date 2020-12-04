@@ -87,7 +87,7 @@ public:
 	void dump(ostream& stream, int n);
 	void dump_with_types(ostream&,int);
 	bool isReturn() {
-		return thenexpr->isReturn()||elseexpr->isReturn();
+		return false;
 	}
 	bool isSafe() {
 		return false;
@@ -114,7 +114,7 @@ public:
 	void dump(ostream& stream, int n);
 	void dump_with_types(ostream&,int);
 	bool isReturn() {
-		return body->isReturn();
+		return false;
 	}
 	bool isSafe() {
 		return true;
@@ -142,7 +142,7 @@ public:
 	void dump(ostream& stream, int n);
 	void dump_with_types(ostream&,int);
 	bool isReturn() {
-		return body->isReturn();
+		return false;
 	}
 	bool isSafe() {
 		return true;
